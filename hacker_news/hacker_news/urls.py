@@ -23,9 +23,6 @@ from .views import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('hacker_news.urls')), 
-]
-
-urlpatterns += [
+    #path('', include('hacker_news.urls')), 
     path('', home, name='home'),
 ]
