@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>News</title>
+</head>
+<body>
+    <h1>News</h1>
+    <ul>
+        {% for submission in submissions %}
+            <li><a href="{{ submission.get_absolute_url }}">{{ submission.title }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

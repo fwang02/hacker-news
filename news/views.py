@@ -1,6 +1,21 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .models import Submission
+from .forms import SubmissionForm
 
-# Create your views here.
-def index(request):
-    return HttpResponse("Hello, world. You're at the news index.")
+def news(request):
+    submissions = Submission.objects.all().order_by('-created')
+    return render(request, 'news.html', {'submissions': submissions})
+
+def submit(request):
+    if request.method == 'POST':
+        form = SubmissionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('news')
+    else:
+        form = SubmissionForm()
+    return render(request, 'submit.html', {'form': form})
+
+def newest(request):
+    submissions = Submission.objects.all().order_by('-created')
+    return render(request, 'newest.html', {'submissions': submissions})
