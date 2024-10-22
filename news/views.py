@@ -3,6 +3,7 @@ from .models import Submission
 from .forms import SubmissionForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
 
 
 def news(request):
@@ -33,7 +34,14 @@ def create_account(request):
         password = request.POST['password']
         if User.objects.filter(username=username).exists():
             return render(request, 'create_account.html', {'error': 'That username is taken. Please choose another.'})
-        user = User.objects.create_user(username=username, password=password)
-        auth_login(request, user)
-        return render(request, 'create_account.html', {'success': True})
+        try:
+            user = User.objects.create_user(username=username, password=password)
+            auth_login(request, user)
+            return redirect('news')
+        except Exception as e:
+            return render(request, 'create_account.html', {'error': str(e)})
     return render(request, 'create_account.html')
+
+def logout(request):
+    auth_logout(request)
+    return redirect('news')

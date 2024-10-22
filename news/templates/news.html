@@ -12,7 +12,14 @@
 </head>
 <body>
     <h1>News</h1>
-    <a href="{% url 'login' %}"><button class="login-button">Login</button></a>
+    <div class="login-button">
+        {% if user.is_authenticated %}
+            <span>{{ user.username }}</span>
+            <a href="{% url 'logout' %}"><button>Logout</button></a>
+        {% else %}
+            <a href="{% url 'login' %}"><button>Login</button></a>
+        {% endif %}
+    </div>
     <ul>
         {% for submission in submissions %}
             <li><a href="{{ submission.get_absolute_url }}">{{ submission.title }}</a></li>

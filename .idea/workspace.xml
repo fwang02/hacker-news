@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="40b7e414-c9ef-4251-a1bc-401d5efe12ff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news/templates/create_account.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/create_account.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news/templates/news.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/news.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/news/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/news/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/views.py" afterDir="false" />
     </list>
@@ -135,7 +136,7 @@
       <workItem from="1729602484081" duration="4838000" />
       <workItem from="1729608714992" duration="915000" />
       <workItem from="1729609651407" duration="110000" />
-      <workItem from="1729609848574" duration="4375000" />
+      <workItem from="1729609848574" duration="5416000" />
     </task>
     <servers />
   </component>
