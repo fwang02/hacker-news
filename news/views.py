@@ -4,6 +4,8 @@ from .forms import SubmissionForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import authenticate
+from django.contrib import messages
 
 
 def news(request):
@@ -13,6 +15,17 @@ def news(request):
 def login(request):
     return render(request, 'login.html')
 
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            auth_login(request, user)  # Corrected function call
+            return redirect('/news')
+        else:
+            messages.error(request, 'Bad login')
+    return render(request, 'login.html')
 def submit(request):
     if request.method == 'POST':
         form = SubmissionForm(request.POST)
