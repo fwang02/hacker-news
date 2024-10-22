@@ -1,0 +1,14 @@
+/* static/news/styles.css */
+.login-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.username {
+    margin-right: 10px;
+}
+
+.separator {
+    margin: 0 10px;
+}
