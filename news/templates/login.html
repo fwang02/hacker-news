@@ -26,8 +26,9 @@
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" required>
                 </div>
-                <button type="submit">Log In</button>
+                <button type="submit" class="login-button">Log In</button>
             </form>
+            <a href="{% url 'password_reset' %}" class="forgot-password">Forgot your password?</a>
         </div>
         <div class="block">
             <h2>Create Account</h2>

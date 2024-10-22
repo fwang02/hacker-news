@@ -1,8 +1,11 @@
 /* static/news/styles.css */
 .login-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    margin-bottom: 10px; /* Adjust the value as needed */
+}
+
+.forgot-password {
+    display: block;
+    margin-top: 10px; /* Adjust the value as needed */
 }
 
 .username {
