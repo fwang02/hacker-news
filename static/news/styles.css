@@ -1,0 +1,36 @@
+/* static/news/styles.css */
+.login-button {
+    margin-bottom: 10px; /* Adjust the value as needed */
+}
+
+.forgot-password {
+    display: block;
+    margin-top: 10px; /* Adjust the value as needed */
+}
+
+.username {
+    margin-right: 10px;
+}
+
+.separator {
+    margin: 0 10px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.block {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 200px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
