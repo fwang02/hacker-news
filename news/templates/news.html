@@ -1,13 +1,25 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>News</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 </head>
 <body>
+    <div class="top-bar">
+        <div class="title">Hacker News</div>
+        <div class="nav-links">
+            <a href="#">new</a>
+            <a href="#">threads</a>
+            <a href="#">comments</a>
+            <a href="#">ask</a>
+            <a href="#">submit</a>
+        </div>
+    </div>
     <h1>News</h1>
     <ul>
         {% for submission in submissions %}
-            <li><a href="{{ submission.get_absolute_url }}">{{ submission.title }}</a></li>
+            <li><a href="{{ submission.url }}" target="_blank">{{ submission.title }}</a></li>
         {% endfor %}
     </ul>
 </body>

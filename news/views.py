@@ -3,7 +3,7 @@ from .models import Submission
 from .forms import SubmissionForm
 
 def news(request):
-    submissions = Submission.objects.all().order_by('-created')
+    submissions = Submission.objects.all().order_by('title')
     return render(request, 'news.html', {'submissions': submissions})
 
 def submit(request):
