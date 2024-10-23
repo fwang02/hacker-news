@@ -1,36 +1,132 @@
-/* static/news/styles.css */
-.login-button {
-    margin-bottom: 10px; /* Adjust the value as needed */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f6f6ef;
+    color: #333;
 }
 
-.forgot-password {
-    display: block;
-    margin-top: 10px; /* Adjust the value as needed */
+header {
+    background-color: #ff6600;
+    padding: 5px 0;
 }
 
-.username {
-    margin-right: 10px;
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.separator {
+ul.nav-left {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+ul.nav-left li {
     margin: 0 10px;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
+.nav-left li a {
+    color: #fff;
+    text-decoration: none;
+    white-space: nowrap; /* Prevents text from wrapping to the next line */
 }
 
-.block {
-    border: 1px solid #ccc;
-    padding: 20px;
-    width: 200px;
+.nav-left li a.hacker-news {
+    font-weight: bold; /* Only "Hacker News" is bold */
+}
+
+a.logo {
+    display: inline-block;
+    background-color: #ff6600; /* Color de fondo naranja */
+    color: #fff; /* Color de la "Y" en blanco */
+    padding: 5px 10px; /* Espaciado interno */
+    font-weight: bold;
+    font-size: 16px;
     text-align: center;
-    margin-bottom: 20px;
+    border: 1px solid #fff; /* Línea de borde blanco */
+    border-radius: 3px; /* Bordes ligeramente redondeados */
 }
 
-.form-group {
-    margin-bottom: 15px;
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    margin-left: 10px; /* Adds space between the "submit" link and the search form */
+}
+
+.search-form input {
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.search-form button {
+    padding: 5px 10px;
+    background-color: #f6f6ef;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+.nav-right .login {
+    margin-left: auto; /* Pushes the login button to the right */
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.nav-right span {
+    color: #fff;
+    font-size: 14px;
+}
+
+.nav-right span a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+/* Main Content */
+main {
+    width: 85%;
+    margin: 20px auto;
+}
+
+.news-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.news-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+}
+
+.news-title a {
+    font-size: 18px;
+    text-decoration: none;
+    color: #000;
+}
+
+.news-details {
+    font-size: 12px;
+    color: #888;
 }

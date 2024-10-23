@@ -1,14 +1,47 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>News</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker News</title>
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
 </head>
 <body>
-    <h1>News</h1>
-    <ul>
-        {% for submission in submissions %}
-            <li><a href="{{ submission.get_absolute_url }}">{{ submission.title }}</a></li>
-        {% endfor %}
-    </ul>
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <ul class="nav-left">
+                <li><a href="#" class="logo">Y</a></li>
+                <li><a href="#" class="hacker-news">Hacker News</a></li>
+                <li><a href="#">new</a></li>
+                <li><a href="#">threads</a></li>
+                <li><a href="#">comments</a></li>
+                <li><a href="#">ask</a></li>
+                <li><a href="#">submit</a></li>
+            </ul>
+            <!-- Search bar and login section -->
+            <div class="nav-right">
+                <form class="search-form">
+                    <input type="text" placeholder="Search">
+                    <button type="submit">Search</button>
+                </form>
+                <a href="#" class="login">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Section -->
+    <main>
+        <section class="news-list">
+            <ul>
+                <!-- Each submission should have this structure -->
+                <li class="news-item">
+                    <span class="news-title"><a href="#">Title of the news</a></span>
+                    <span class="news-details">X points by author | X comments</span>
+                </li>
+            </ul>
+        </section>
+    </main>
 </body>
 </html>
