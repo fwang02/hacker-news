@@ -62,7 +62,7 @@ a.logo {
     color: #fff; /* White text color when clicked */
 }
 
-.nav-left li a.hacker-news {
+.nav-left li a.head {
     font-weight: bold; /* Only "Hacker News" is bold */
 }
 
@@ -139,4 +139,43 @@ main {
 .news-details {
     font-size: 12px;
     color: #888;
+}
+
+
+/*submit*/
+
+/*form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}*/
+
+form p {
+    display: flex;
+    align-items: center; /* Alinea los elementos en el centro verticalmente */
+    margin-bottom: 15px; /* Espacio entre los campos */
+}
+
+form label {
+    width: 70px; /* Espacio reservado para el label, ajusta según el diseño que necesites */
+    margin-right: 10px; /* Espacio entre el label y el campo */
+    font-weight: normal;
+    color: #777;
+}
+
+form input, form textarea {
+    width: 100%; /* Los campos de texto llenan el espacio disponible */
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-sizing: border-box; /* Asegura que el padding no altere el ancho */
+}
+
+p {
+    margin-bottom: 30px; /* Increase the bottom margin to 30px */
+}
+
+.content-wrapper {
+    margin: 0 20px; /* Add left and right margin */
 }
