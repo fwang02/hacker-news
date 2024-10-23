@@ -1,14 +1,29 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit</title>
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
 </head>
 <body>
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <ul class="nav-left">
+                <li><a href="#" class="logo">Y</a></li>
+                <li><a href="#" class="head">Submit</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <h1>Submit a new submission</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Submit</button>
     </form>
+    <p>Leave url blank to submit a question for discussion. If there is no url, text will appear at the top of the thread. If there is a url, text is optional.</p>
 </body>
 </html>
