@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="40b7e414-c9ef-4251-a1bc-401d5efe12ff" name="Changes" comment="">
+    <list default="true" id="40b7e414-c9ef-4251-a1bc-401d5efe12ff" name="Changes" comment="desde 0">
+      <change beforePath="$PROJECT_DIR$/.idea/hacker-news.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/hacker-news.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hacker_news/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/hacker_news/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/templates/create_account.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +137,9 @@
       <workItem from="1729608714992" duration="915000" />
       <workItem from="1729609651407" duration="110000" />
       <workItem from="1729609848574" duration="6095000" />
-      <workItem from="1729674671734" duration="3013000" />
+      <workItem from="1729674671734" duration="3079000" />
+      <workItem from="1729701950406" duration="384000" />
+      <workItem from="1729714610816" duration="298000" />
     </task>
     <task id="LOCAL-00001" summary="Revert &quot;modelos creados&quot;&#10;&#10;This reverts commit e9432f58">
       <option name="closed" value="true" />
@@ -150,7 +149,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729677306461</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="desde 0">
+      <option name="closed" value="true" />
+      <created>1729677760827</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1729677760827</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -181,6 +188,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Revert &quot;modelos creados&quot;&#10;&#10;This reverts commit e9432f58" />
-    <option name="LAST_COMMIT_MESSAGE" value="Revert &quot;modelos creados&quot;&#10;&#10;This reverts commit e9432f58" />
+    <MESSAGE value="desde 0" />
+    <option name="LAST_COMMIT_MESSAGE" value="desde 0" />
   </component>
 </project>
