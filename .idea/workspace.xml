@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="40b7e414-c9ef-4251-a1bc-401d5efe12ff" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/news/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/news/styles.css" afterDir="false" />
-    </list>
+    <list default="true" id="40b7e414-c9ef-4251-a1bc-401d5efe12ff" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,6 +29,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -56,31 +52,33 @@
 }</component>
   <component name="ProjectId" id="2nYnqQZKH17I5EbvNPtmYVl31C1" />
   <component name="ProjectLevelVcsManager">
+    <OptionsSetting value="false" id="Update" />
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Django Server.hacker-news.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Feature/#24__Login__user&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/angel/PycharmProjects&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Django Server.hacker-news.executor": "Run",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
+    "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/angel/PycharmProjects",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\angel\PycharmProjects\hacker-news\news\templates" />
@@ -135,7 +133,8 @@
       <workItem from="1729602484081" duration="4838000" />
       <workItem from="1729608714992" duration="915000" />
       <workItem from="1729609651407" duration="110000" />
-      <workItem from="1729609848574" duration="9811000" />
+      <workItem from="1729609848574" duration="6095000" />
+      <workItem from="1729674671734" duration="2270000" />
     </task>
     <servers />
   </component>
@@ -164,5 +163,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
 </project>
