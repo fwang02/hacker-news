@@ -1,7 +1,15 @@
+/* General styles */
+
+html {
+    background-color: #fff; /* Fondo blanco fuera del body */
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f6f6ef;
     color: #333;
+    width: 85%; /* Adjust the width of the body */
+    margin: 10px auto 0 auto; /* Add top margin and center the body on the page */
 }
 
 header {
@@ -27,28 +35,38 @@ ul.nav-left li {
     margin: 0 10px;
 }
 
-.nav-left li a {
-    color: #fff;
+/* Logo "Y" styles */
+a.logo {
+    display: inline-block;
+    background-color: #ff6600; /* Orange background color */
+    color: #fff !important; /* Always white color for "Y" */
+    padding: 5px 10px; /* Internal spacing */
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    border: 1px solid #fff; /* White border line */
+    border-radius: 3px; /* Slightly rounded borders */
+}
+
+/* Link styles */
+.nav-left li a,
+.nav-right .login {
+    color: #000; /* Black text color by default */
     text-decoration: none;
     white-space: nowrap; /* Prevents text from wrapping to the next line */
+    margin-right: 10px; /* Adds margin to the right */
+}
+
+.nav-left li a:active,
+.nav-right .login:active {
+    color: #fff; /* White text color when clicked */
 }
 
 .nav-left li a.hacker-news {
     font-weight: bold; /* Only "Hacker News" is bold */
 }
 
-a.logo {
-    display: inline-block;
-    background-color: #ff6600; /* Color de fondo naranja */
-    color: #fff; /* Color de la "Y" en blanco */
-    padding: 5px 10px; /* Espaciado interno */
-    font-weight: bold;
-    font-size: 16px;
-    text-align: center;
-    border: 1px solid #fff; /* Línea de borde blanco */
-    border-radius: 3px; /* Bordes ligeramente redondeados */
-}
-
+/* Additional styles */
 .nav-left {
     display: flex;
     align-items: center;
@@ -81,14 +99,6 @@ a.logo {
     cursor: pointer;
     margin-left: 5px;
     font-size: 14px;
-}
-
-.nav-right .login {
-    margin-left: auto; /* Pushes the login button to the right */
-    color: #fff;
-    text-decoration: none;
-    font-size: 14px;
-    margin-right: 10px;
 }
 
 .nav-right span {
