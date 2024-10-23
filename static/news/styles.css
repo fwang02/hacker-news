@@ -175,3 +175,7 @@ form input, form textarea {
 p {
     margin-bottom: 30px; /* Increase the bottom margin to 30px */
 }
+
+.content-wrapper {
+    margin: 0 20px; /* Add left and right margin */
+}
