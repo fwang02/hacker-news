@@ -6,9 +6,7 @@ class Submission(models.Model):
     url = models.URLField()
     description = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-
     def __str__(self):
         return self.title
-
     def get_absolute_url(self):
         return f"/news/{self.id}"
