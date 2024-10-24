@@ -6,9 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="40b7e414-c9ef-4251-a1bc-401d5efe12ff" name="Changes" comment="merge de develop">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/news/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/templates/submit.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/submit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +141,7 @@
       <workItem from="1729674671734" duration="3079000" />
       <workItem from="1729701950406" duration="384000" />
       <workItem from="1729714610816" duration="4392000" />
-      <workItem from="1729756872896" duration="2993000" />
+      <workItem from="1729756872896" duration="5322000" />
     </task>
     <task id="LOCAL-00001" summary="Revert &quot;modelos creados&quot;&#10;&#10;This reverts commit e9432f58">
       <option name="closed" value="true" />
