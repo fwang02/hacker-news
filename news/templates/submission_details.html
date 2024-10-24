@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ submission.title }}</title>
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <ul class="nav-left">
+                <li><a href="#" class="logo">Y</a></li>
+                <li><a href="#" class="head">Hacker News</a></li>
+                <li><a href="#">new</a></li>
+                <li><a href="#">threads</a></li>
+                <li><a href="#">comments</a></li>
+                <li><a href="#">ask</a></li>
+                <li><a href="/submit">submit</a></li>
+            </ul>
+            <!-- Search bar and login section -->
+            <div class="nav-right">
+                <form class="search-form">
+                    <label>
+                        <input type="text" placeholder="Search">
+                    </label>
+                    <button type="submit">Search</button>
+                </form>
+                <a href="#" class="login">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Wrapper -->
+    <div class="content-wrapper">
+        <h1>{{ submission.title }}</h1>
+        <p><a href="{{ submission.url }}">{{ submission.url }}</a></p>
+        <p>{{ submission.created|date:"F j, Y, g:i a" }}</p>
+        <hr>
+
+        <div class="submission-text">
+            <p>{{ submission.text }}</p>
+        </div>
+
+        <div class="comments-section">
+            <h2>Comments ({{ submission.comment_set.count }})</h2>
+            <form method="post">
+                {% csrf_token %}
+                <textarea name="comment" placeholder="Add a comment..." rows="4" required></textarea>
+                <button type="submit">Submit Comment</button>
+            </form>
+            <ul>
+                {% for comment in submission.comment_set.all %}
+                    <li>
+                        <strong>{{ comment.user }}:</strong> {{ comment.text }} <br>
+                        <small>{{ comment.created|date:"F j, Y, g:i a" }}</small>
+                    </li>
+                {% empty %}
+                    <li>No comments yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

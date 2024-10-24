@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
-from .models import Submission
-from .forms import SubmissionForm
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Submission, Comment
+from .forms import SubmissionForm, CommentForm
 
 def news(request):
     submissions = Submission.objects.all().order_by('-created')
@@ -19,3 +19,17 @@ def submit(request):
 def newest(request):
     submissions = Submission.objects.all().order_by('-created')
     return render(request, 'newest.html', {'submissions': submissions})
+
+def submission_details(request, submission_id):
+    submission = get_object_or_404(Submission, id=submission_id)
+    comments = submission.comments.all()  
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.submission = submission 
+            comment.save()
+            return redirect('submission_detail', submission_id=submission.id)
+    else:
+        form = CommentForm()
+    return render(request, 'submission_details.html', {'submission': submission, 'comments': comments, 'form': form})

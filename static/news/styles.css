@@ -179,3 +179,51 @@ p {
 .content-wrapper {
     margin: 0 20px; /* Add left and right margin */
 }
+
+/* Submission Details Styles */
+.content-wrapper h1 {
+    font-size: 24px; /* Size for the main submission title */
+    margin-bottom: 10px; /* Space below the title */
+}
+
+.content-wrapper h2 {
+    font-size: 20px; /* Size for the comments section title */
+    margin-top: 20px; /* Space above the comments section */
+}
+
+.content-wrapper h3 {
+    font-size: 18px; /* Size for the add comment section title */
+    margin-top: 20px; /* Space above the add comment section */
+}
+
+.comments-list {
+    list-style-type: none; /* Remove bullet points from comments */
+    padding: 0; /* Remove default padding */
+}
+
+.comment {
+    border-bottom: 1px solid #ddd; /* Line between comments */
+    padding: 10px 0; /* Space above and below comments */
+}
+
+.comment strong {
+    color: #333; /* Color for comment author's name */
+}
+
+.comment em {
+    color: #888; /* Color for the comment date */
+    font-size: 12px; /* Smaller font size for date */
+}
+
+button[type="submit"] {
+    background-color: #ff6600; /* Orange background color for buttons */
+    color: #fff; /* White text for buttons */
+    border: none; /* Remove default border */
+    padding: 10px 15px; /* Internal padding for button */
+    cursor: pointer; /* Change cursor on hover */
+    border-radius: 3px; /* Rounded corners */
+}
+
+button[type="submit"]:hover {
+    background-color: #e65c00; /* Darker orange on hover */
+}

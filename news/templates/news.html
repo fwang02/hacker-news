@@ -35,11 +35,18 @@
     <main>
         <section class="news-list">
             <ul>
-                <!-- Each submission should have this structure -->
-                <li class="news-item">
-                    <span class="news-title"><a href="#">Title of the news</a></span>
-                    <span class="news-details">X points by author | X comments</span>
-                </li>
+                {% for submission in submissions %}
+                    <div class="news-item">
+                        <div class="news-title">
+                            <a href="{{ submission.get_absolute_url }}">{{ submission.title }}</a>
+                        </div>
+                        <div class="news-details">
+                            <a href="{{ submission.get_absolute_url }}">{{ submission.created }}</a>
+                            | 
+                            <a href="{{ submission.get_absolute_url }}#comments">{{ submission.comment_set.count }} comments</a>
+                        </div>
+                    </div>
+                {% endfor %}
             </ul>
         </section>
     </main>

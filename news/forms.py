@@ -1,5 +1,6 @@
 from django import forms
 from .models import Submission
+from .models import Comment
 
 class SubmissionForm(forms.ModelForm):
     class Meta:
@@ -15,3 +16,11 @@ class SubmissionForm(forms.ModelForm):
         super(SubmissionForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.label_suffix = ''  # Remove the colon
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
+        widgets = {
+            'text': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Write your comment...'}),
+        }
