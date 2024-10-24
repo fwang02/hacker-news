@@ -23,13 +23,14 @@ def newest(request):
 def submission_details(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id)
     comments = submission.comments.all()  
+    print("Comentarios:", comments)
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.submission = submission 
             comment.save()
-            return redirect('submission_detail', submission_id=submission.id)
+            return redirect(f'/news/{submission_id}#comments')
     else:
         form = CommentForm()
     return render(request, 'submission_details.html', {'submission': submission, 'comments': comments, 'form': form})

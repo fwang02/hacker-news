@@ -14,10 +14,15 @@
             <ul class="nav-left">
                 <li><a href="#" class="logo">Y</a></li>
                 <li><a href="#" class="head">Hacker News</a></li>
+                |
                 <li><a href="#">new</a></li>
+                |
                 <li><a href="#">threads</a></li>
+                |
                 <li><a href="#">comments</a></li>
+                |
                 <li><a href="#">ask</a></li>
+                |
                 <li><a href="/submit">submit</a></li>
             </ul>
             <!-- Search bar and login section -->
@@ -33,34 +38,26 @@
         </nav>
     </header>
 
-    <!-- Main Content Wrapper -->
-    <div class="content-wrapper">
-        <h1>{{ submission.title }}</h1>
-        <p><a href="{{ submission.url }}">{{ submission.url }}</a></p>
-        <p>{{ submission.created|date:"F j, Y, g:i a" }}</p>
-        <hr>
-
-        <div class="submission-text">
-            <p>{{ submission.text }}</p>
-        </div>
-
-        <div class="comments-section">
-            <h2>Comments ({{ submission.comment_set.count }})</h2>
-            <form method="post">
-                {% csrf_token %}
-                <textarea name="comment" placeholder="Add a comment..." rows="4" required></textarea>
-                <button type="submit">Submit Comment</button>
-            </form>
-            <ul>
-                {% for comment in submission.comment_set.all %}
-                    <li>
-                        <strong>{{ comment.user }}:</strong> {{ comment.text }} <br>
-                        <small>{{ comment.created|date:"F j, Y, g:i a" }}</small>
-                    </li>
-                {% empty %}
-                    <li>No comments yet.</li>
-                {% endfor %}
-            </ul>
+    <div class="submission-detail">
+        <h1>{{ submission.title }} (<a href="{{ submission.url }}" target="_blank">{{ submission.url }}</a>)</h1>
+        <p>{{ submission.created }}</p>
+    
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add Comment</button>
+        </form>
+    
+        <div id="comments">
+            {% for comment in comments %}
+                <div class="comment">
+                    <strong>{{ comment.author }}</strong> <span class="comment-date">{{ comment.created }}</span>
+                    <p>{{ comment.text }}</p>
+                    <hr>
+                </div>
+            {% empty %}
+                <p>No comments yet.</p>
+            {% endfor %}
         </div>
     </div>
 </body>

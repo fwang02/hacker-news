@@ -15,8 +15,7 @@ class Comment(models.Model):
     submission = models.ForeignKey(Submission, related_name='comments', on_delete=models.CASCADE)
     text = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
     def __str__(self):
-        return f"Comment on {self.submission.title}"
+        return "self.text"
     class Meta:
         ordering = ['created']
