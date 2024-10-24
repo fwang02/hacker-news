@@ -1,36 +1,181 @@
-/* static/news/styles.css */
-.login-button {
-    margin-bottom: 10px; /* Adjust the value as needed */
+/* General styles */
+
+html {
+    background-color: #fff; /* Fondo blanco fuera del body */
 }
 
-.forgot-password {
-    display: block;
-    margin-top: 10px; /* Adjust the value as needed */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f6f6ef;
+    color: #333;
+    width: 85%; /* Adjust the width of the body */
+    margin: 10px auto 0 auto; /* Add top margin and center the body on the page */
 }
 
-.username {
-    margin-right: 10px;
+header {
+    background-color: #ff6600;
+    padding: 5px 0;
 }
 
-.separator {
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+ul.nav-left {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+ul.nav-left li {
     margin: 0 10px;
 }
 
-.container {
+/* Logo "Y" styles */
+a.logo {
+    display: inline-block;
+    background-color: #ff6600; /* Orange background color */
+    color: #fff !important; /* Always white color for "Y" */
+    padding: 5px 10px; /* Internal spacing */
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    border: 1px solid #fff; /* White border line */
+    border-radius: 3px; /* Slightly rounded borders */
+}
+
+/* Link styles */
+.nav-left li a,
+.nav-right .login {
+    color: #000; /* Black text color by default */
+    text-decoration: none;
+    white-space: nowrap; /* Prevents text from wrapping to the next line */
+    margin-right: 10px; /* Adds margin to the right */
+}
+
+.nav-left li a:active,
+.nav-right .login:active {
+    color: #fff; /* White text color when clicked */
+}
+
+.nav-left li a.head {
+    font-weight: bold; /* Only "Hacker News" is bold */
+}
+
+/* Additional styles */
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    margin-left: 10px; /* Adds space between the "submit" link and the search form */
+}
+
+.search-form input {
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.search-form button {
+    padding: 5px 10px;
+    background-color: #f6f6ef;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+.nav-right span {
+    color: #fff;
+    font-size: 14px;
+}
+
+.nav-right span a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+/* Main Content */
+main {
+    width: 85%;
+    margin: 20px auto;
+}
+
+.news-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.news-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+}
+
+.news-title a {
+    font-size: 18px;
+    text-decoration: none;
+    color: #000;
+}
+
+.news-details {
+    font-size: 12px;
+    color: #888;
+}
+
+
+/*submit*/
+
+/*form {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
+    align-items: flex-start;
+}*/
+
+form p {
+    display: flex;
+    align-items: center; /* Alinea los elementos en el centro verticalmente */
+    margin-bottom: 15px; /* Espacio entre los campos */
 }
 
-.block {
-    border: 1px solid #ccc;
-    padding: 20px;
-    width: 200px;
-    text-align: center;
-    margin-bottom: 20px;
+form label {
+    width: 70px; /* Espacio reservado para el label, ajusta según el diseño que necesites */
+    margin-right: 10px; /* Espacio entre el label y el campo */
+    font-weight: normal;
+    color: #777;
 }
 
-.form-group {
-    margin-bottom: 15px;
+form input, form textarea {
+    width: 100%; /* Los campos de texto llenan el espacio disponible */
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-sizing: border-box; /* Asegura que el padding no altere el ancho */
+}
+
+p {
+    margin-bottom: 30px; /* Increase the bottom margin to 30px */
+}
+
+.content-wrapper {
+    margin: 0 20px; /* Add left and right margin */
 }

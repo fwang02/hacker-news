@@ -4,4 +4,14 @@ from .models import Submission
 class SubmissionForm(forms.ModelForm):
     class Meta:
         model = Submission
-        fields = ['title', 'url', 'description']
+        fields = ['title', 'url', 'text']
+        labels = {
+            'title': 'title',
+            'url': 'url',
+            'text': 'text',  # Cambia este texto
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(SubmissionForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.label_suffix = ''  # Remove the colon
