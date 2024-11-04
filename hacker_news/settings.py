@@ -133,6 +133,9 @@ LOGOUT_REDIRECT_URL = '/'
 CSRF_COOKIE_SECURE = True  # Ensure this is set to True in production
 CSRF_USE_SESSIONS = True
 
+CSRF_TRUSTED_ORIGINS = ['https://projecte-asw-cdd22f32d84c.herokuapp.com']
+
+
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
          'APP': {
