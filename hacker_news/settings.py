@@ -134,7 +134,7 @@ CSRF_COOKIE_SECURE = True  # Ensure this is set to True in production
 CSRF_USE_SESSIONS = True
 
 CSRF_TRUSTED_ORIGINS = ['https://projecte-asw-cdd22f32d84c.herokuapp.com']
-
+SESSION_COOKIE_SECURE = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
