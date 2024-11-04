@@ -135,6 +135,8 @@ CSRF_USE_SESSIONS = True
 
 CSRF_TRUSTED_ORIGINS = ['https://projecte-asw-cdd22f32d84c.herokuapp.com']
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
