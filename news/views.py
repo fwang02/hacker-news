@@ -35,8 +35,8 @@ def submit(request):
 
 def newest(request):
     submissions = Submission.objects.all().order_by('-created')
-    return render(request, 'newest.html', {'submissions': submissions})
+    return render(request, 'news.html', {'submissions': submissions})
 
 def ask(request):
     submissions = Submission_ASK.objects.all()
-    return render(request, 'news.html', {'submissions': submissions, 'is_ask_page': True})
+    return render(request, 'news.html', {'submissions': submissions})
