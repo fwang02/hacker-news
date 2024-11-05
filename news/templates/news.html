@@ -12,58 +12,8 @@
 </head>
 <body>
     <!-- Header Section -->
-    <header>
-        <nav>
-            <ul class="nav-left">
-                <li><a href="#" class="logo">Y</a></li>
-                <li><a href="#" class="head">Hacker News</a></li>
-                <li><a href="#">new</a></li>
-                <li><a href="#">threads</a></li>
-                <li><a href="#">comments</a></li>
-                <li><a href="#">ask</a></li>
-                {% if user.is_authenticated %} 
-                    <li><a href="{% url 'submit' %}">submit</a></li>
-                {% else %}
-                    <li><a href="#" onclick="function showLoginPrompt() {
-                        alert('Please login to submit a post');                    
-                    }
-                    showLoginPrompt()">submit</a></li>
-                {% endif %}
-            </ul>
-            <!-- Search bar and login section -->
-             <div class="nav-right">
-                 <form class="search-form">
-                    <input type="text" placeholder="Search">
-                    <button type="submit">Search</button>
-                 </form>
-                 {% if user.is_authenticated %}
-                     <span>Welcome, {{ user.username }}</span>
-                     <a href="{% url 'account_logout' %}">logout</a>
-                     {% with user.socialaccount_set.first as social_account %}
-                         {% if social_account %}
-                             <img src="{{ social_account.extra_data.picture }}" alt="Avatar" class="avatar">
-                         {% endif %}
-                     {% endwith %}
-                 {% else %}
-                     <div id="g_id_onload"
-                          data-client_id="70954103751-9ktlsv9q03hlpm9g49l6776qd9rpfjtg.apps.googleusercontent.com"
-                          data-context="signin"
-                          data-ux_mode="popup"
-                          data-login_uri="{% url 'google_login_by_token' %}"
-                          data-auto_prompt="false">
-                     </div>
-                     <div class="g_id_signin"
-                          data-type="standard"
-                          data-shape="pill"
-                          data-theme="outline"
-                          data-text="signin_with"
-                          data-size="large"
-                          data-logo_alignment="left">
-                     </div>
-                 {% endif %}
-             </div>
-        </nav>
-    </header>
+    {% include "header.html" %}
+
 
 
     <!-- Main Content Section -->
