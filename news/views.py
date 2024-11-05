@@ -39,4 +39,4 @@ def newest(request):
 
 def ask(request):
     submissions = Submission_ASK.objects.all()
-    return render(request, 'news.html', {'submissions': submissions})
+    return render(request, 'news.html', {'submissions': submissions, 'is_ask_page': True})

@@ -48,7 +48,10 @@ a.logo {
     border-radius: 3px; /* Slightly rounded borders */
 }
 
+
+
 /* Link styles */
+
 .nav-left li a,
 .nav-right .login {
     color: #000; /* Black text color by default */
@@ -57,13 +60,17 @@ a.logo {
     margin-right: 10px; /* Adds margin to the right */
 }
 
-.nav-left li a:active,
+.nav-left li a.active {
+    color: white !important;
+}
+
 .nav-right .login:active {
     color: #fff; /* White text color when clicked */
 }
 
 .nav-left li a.head {
     font-weight: bold; /* Only "Hacker News" is bold */
+    color: #000; /* Ensure "Hacker News" remains black */
 }
 
 /* Additional styles */

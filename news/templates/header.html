@@ -3,11 +3,13 @@
     <nav>
         <ul class="nav-left">
             <li><a href="/news" class="logo">Y</a></li>
-            <li><a href="/news" class="head {% if request.path == '/news/' %}active{% endif %}">Hacker News</a></li>
+            <li><a href="/news" class="head {% if request.path == '/news/' %}head{% endif %}">Hacker News</a></li>
             <li><a href="/newest" class="{% if request.path == '/newest/' %}active{% endif %}">new</a></li>
             <li><a href="#">threads</a></li>
             <li><a href="#">comments</a></li>
-            <li><a href="{% url 'ask' %}" class="{% if request.path == '/ask/' %}active{% endif %}">ask</a></li>            {% if user.is_authenticated %}
+            <li><a href="/ask" class="{% if request.path == '/ask/' %}active{% endif %}">ask</a></li>
+
+            {% if user.is_authenticated %}
                 <li><a href="{% url 'submit' %}">submit</a></li>
             {% else %}
                 <li><a href="#" onclick="function showLoginPrompt() {
