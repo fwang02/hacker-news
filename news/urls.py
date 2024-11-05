@@ -4,7 +4,4 @@ from . import views
 urlpatterns = [
     path('', views.news, name='news'),
 
-    path('newest/', views.newest, name='newest'),
-
-
 ]
