@@ -1,12 +1,14 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Submission
 from .models import Submission_URL, Submission_ASK
 from .forms import SubmissionForm
 
 def news(request):
-    submissions = Submission.objects.all().order_by('-created')
+    submissions = Submission.objects.all().order_by('title')
     return render(request, 'news.html', {'submissions': submissions})
 
+@login_required
 def submit(request):
     if request.method == "POST":
         form = SubmissionForm(request.POST)
