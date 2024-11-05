@@ -23,6 +23,8 @@ from news import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('news/', include('news.urls')),
+    path('ask/', views.ask, name='ask'),  # Add the /ask route here
+
     path('submit/', views.submit, name='submit'),  # Define el endpoint para /submit
     path('accounts/', include('allauth.urls')),  # Define el endpoint para /login
     path('', lambda request: redirect('news/', permanent=False)),
