@@ -21,7 +21,7 @@
     <!-- Main Content Wrapper -->
     <div class="content-wrapper">
         <h1>Submit a new submission</h1>
-        <form method="post">
+        <form method="post" action="{% url 'submit' %}">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Submit</button>
