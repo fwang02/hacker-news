@@ -69,7 +69,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
     "django.template.preview.state": "SHOW_EDITOR",
-    "git-widget-placeholder": "Feature/#2__View__submissions",
+    "git-widget-placeholder": "Feature/#4__Add__new__ask-type__submission",
     "last_opened_file_path": "C:/Users/angel/PycharmProjects",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
@@ -164,7 +164,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729726817742</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="merge de develop">
+      <option name="closed" value="true" />
+      <created>1730834964335</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1730834964335</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
