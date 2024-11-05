@@ -38,5 +38,5 @@ def newest(request):
     return render(request, 'newest.html', {'submissions': submissions})
 
 def ask(request):
-    submissions = Submission.objects.filter(submission_ask=True)
+    submissions = Submission_ASK.objects.all()
     return render(request, 'news.html', {'submissions': submissions})
