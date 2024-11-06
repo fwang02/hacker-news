@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from .forms import ProfileForm
 from news.models import Submission  # Assuming you have a Submission model in the news app
 
-@login_required
 def profile(request):
     user_id = request.GET.get('id')
     user = get_object_or_404(User, username=user_id) if user_id else request.user
