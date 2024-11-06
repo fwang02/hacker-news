@@ -1,17 +1,19 @@
-/* users/profile_styles.css */
-.profile-container {
-    border-radius: 5px;
-}
-
 .profile-info {
-    margin-bottom: 1px !important; /* Ajusta este valor según sea necesario */
+    display: grid;
+    grid-template-columns: 1px 1fr; /* Ajusta 100px según el ancho necesario para las etiquetas */
+    gap: 1px; /* Espacio entre etiqueta y valor, ajusta si es necesario */
+    align-items: center;
 }
 
-.form-group {
-    display: flex;
-    align-items: flex-start; /* Alinea los elementos al principio verticalmente */
+.label {
+    text-align: right; /* Alinea las etiquetas a la derecha para que estén pegadas al borde de su columna */
 }
 
-.form-group label {
-    margin-right: 10px; /* Ajusta el espacio entre el label y el textbox */
+.profile-value {
+    text-align: left; /* Alinea los valores a la izquierda para que empiecen en el mismo punto */
+}
+
+
+.profile-info .profile-value {
+    margin-left: 82px; /* Ajusta este valor para alinear con el cuadro de texto */
 }
