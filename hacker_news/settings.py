@@ -87,7 +87,7 @@ INSTALLED_APPS = [
     'users',
 ]
 
-SITE_ID = 2
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -135,13 +135,20 @@ SOCIALACCOUNT_AUTO_SIGNUP = True
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-CSRF_COOKIE_SECURE = True  # Ensure this is set to True in production
+ # Ensure this is set to True in production
 CSRF_USE_SESSIONS = False
 
-CSRF_TRUSTED_ORIGINS = ['https://projecte-asw-cdd22f32d84c.herokuapp.com']
-SESSION_COOKIE_SECURE = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
+if IS_HEROKU_APP:
+    CSRF_TRUSTED_ORIGINS = ['https://projecte-asw-cdd22f32d84c.herokuapp.com']
+    SESSION_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    CSRF_COOKIE_SECURE = True
+else :
+    SESSION_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = False
+    CSRF_COOKIE_SECURE = False
+    print("Not in Heroku")
 
 
 SOCIALACCOUNT_PROVIDERS = {
