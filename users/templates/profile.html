@@ -28,17 +28,18 @@
                     <a href="#">comments</a>
                 </div>
                 <div class="links-container">
-                    <a href="{% url 'users:submissions' %}?id={{ user.username }}">upvoted submissions</a>
+                    <a href="#">upvoted submissions</a>
                     <span class="separator">/</span>
                     <a href="#">comments</a>
                 </div>
                 <div class="links-container">
-                    <a href="{% url 'users:submissions' %}?id={{ user.username }}">favorite submissions</a>
+                    <a href="#">favorite submissions</a>
                     <span class="separator">/</span>
                     <a href="#">comments</a>
                     <span class="publicly-visible"><em>(publicly visible)</em></span>
                 </div>
-
+                <br>
+                <br>
                 <button type="submit">Update</button>
             </form>
         </div>

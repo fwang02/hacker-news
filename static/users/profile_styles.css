@@ -27,11 +27,11 @@
 
 /* Estilo para el separador / */
 .links-container .separator {
-    color: #777; /* Color del separador */
+    color: #777 !important; /* Color del separador */
 }
 
 /* Estilo para el texto "(publicly visible)" */
 .links-container .publicly-visible {
     font-style: italic; /* Estilo cursiva */
-    color: #000; /* Puedes ajustar el color si lo deseas */
+    color: #777; /* Puedes ajustar el color si lo deseas */
 }
