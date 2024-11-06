@@ -25,8 +25,11 @@
                 <button type="submit">Search</button>
             </form>
             {% if user.is_authenticated %}
-                <span>Welcome, {{ user.username }}</span>
-                <a href="{% url 'account_logout' %}">logout</a>
+                <div class="user-actions">
+                    <a href="/user?id={{ user.username }}" class="username-link">{{ user.username }}</a>
+                    <span class="separator">|</span>
+                    <a href="{% url 'account_logout' %}">logout</a>
+                </div>
                 {% with user.socialaccount_set.first as social_account %}
                     {% if social_account %}
                         <img src="{{ social_account.extra_data.picture }}" alt="Avatar" class="avatar">

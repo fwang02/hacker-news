@@ -198,3 +198,30 @@ p {
     margin: 0 20px; /* Add left and right margin */
 }
 
+
+
+.username-link {
+    color: #000; /* Black text color by default */
+    text-decoration: none;
+}
+/*
+.username-link:hover {
+    text-decoration: underline;
+}
+*/
+.user-actions {
+    display: flex;
+    align-items: center;
+}
+
+.username-link {
+    color: #000; /* Black text color by default */
+    text-decoration: none;
+    margin-right: 10px; /* Space between username and separator */
+    padding: 5px 10px; /* Match the padding of other elements */
+}
+
+.separator {
+    margin: 0 10px; /* Space around the separator */
+    color: #000  !important; /* Black color for the separator */
+}
