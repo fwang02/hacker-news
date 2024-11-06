@@ -3,6 +3,7 @@
     grid-template-columns: 1px 1fr; /* Ajusta 100px según el ancho necesario para las etiquetas */
     gap: 1px; /* Espacio entre etiqueta y valor, ajusta si es necesario */
     align-items: center;
+    color: #777;
 }
 
 .label {
@@ -11,6 +12,7 @@
 
 .profile-value {
     text-align: left; /* Alinea los valores a la izquierda para que empiecen en el mismo punto */
+    color: #000;
 }
 
 
