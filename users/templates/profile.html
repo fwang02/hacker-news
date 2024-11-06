@@ -12,27 +12,27 @@
     {% include "header.html" %}
     <main>
         <div class="profile-container">
-            <p class="profile-info">username: <span class="profile-value">{{ username }}</span></p>
-<p class="profile-info">created:</p> <!-- TODO: user.profile.created -->
-<p class="profile-info">karma: <span class="profile-value">{{ user.profile.karma }}</span></p>
+    <p class="profile-info">username: <span class="profile-value">{{ username }}</span></p>
+    <p class="profile-info">created:</p>
+    <p class="profile-info">karma: <span class="profile-value">{{ user.profile.karma }}</span></p>
 
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <a href="{% url 'users:submissions' %}?id={{ user.username }}">submissions</a>
-                <br>
-                <a>comments</a>
-                <br>
-                <a>hidden</a>
-                <br>
-                <a>upvoted submissions</a> <span> / </span> <a>comments</a>
-                <br>
-                <a>favorite submissions</a> <span> / </span> <a>comments</a> <span><em> (publicly visible)</em></span>
-                <br>
-                <br>
-                <button type="submit">Update</button>
-            </form>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <!-- Contenedor para los enlaces -->
+        <div class="links-container">
+            <a href="{% url 'users:submissions' %}?id={{ user.username }}">submissions</a>
+            <a>comments</a>
+            <a>hidden</a>
+            <a>upvoted submissions</a> <span> / </span> <a>comments</a>
+            <a>favorite submissions</a> <span> / </span> <a>comments</a> <span><em> (publicly visible)</em></span>
         </div>
+
+        <button type="submit">Update</button>
+    </form>
+</div>
+
     </main>
 </body>
 </html>

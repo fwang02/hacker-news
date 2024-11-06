@@ -1,21 +1,31 @@
 .profile-info {
     display: grid;
-    grid-template-columns: 1px 1fr; /* Ajusta 100px según el ancho necesario para las etiquetas */
-    gap: 1px; /* Espacio entre etiqueta y valor, ajusta si es necesario */
+    grid-template-columns: 77px 1fr; /* Ajusta 100px según el ancho necesario para las etiquetas */
+    gap: 10px; /* Espacio entre la etiqueta y el valor */
     align-items: center;
     color: #777;
+    margin-bottom: 5px; /* Ajusta según sea necesario */
 }
 
 .label {
-    text-align: right; /* Alinea las etiquetas a la derecha para que estén pegadas al borde de su columna */
+    text-align: right; /* Alinea las etiquetas a la derecha */
 }
 
 .profile-value {
-    text-align: left; /* Alinea los valores a la izquierda para que empiecen en el mismo punto */
+    text-align: left;
     color: #000;
 }
 
+/* Contenedor de enlaces */
+.links-container {
+    margin-left: 80px; /* Igual a la primera columna de .profile-info para alinear con los valores */
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column; /* Alinea los enlaces verticalmente */
+    gap: 5px; /* Espacio entre enlaces */
+}
 
-.profile-info .profile-value {
-    margin-left: 82px; /* Ajusta este valor para alinear con el cuadro de texto */
+.links-container a {
+    color: #000;
+    text-decoration: none;
 }
