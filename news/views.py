@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Submission
 from .models import Submission_URL, Submission_ASK
 from .forms import SubmissionForm
@@ -13,26 +13,25 @@ def submit(request):
     if request.method == "POST":
         form = SubmissionForm(request.POST)
         if form.is_valid():
-            submission = form.save(commit=False)
-            if submission.url:
+            submission_data = form.save(commit=False)
+            submission_data.author = request.user  # Link the submission with the current user
+            if submission_data.url:
                 Submission_URL.objects.create(
-                    title=submission.title,
-                    url=submission.url,
-                    text=submission.text,
-                    created=submission.created
+                    title=submission_data.title,
+                    url=submission_data.url,
+                    text=submission_data.text,
+                    author=submission_data.author
                 )
             else:
                 Submission_ASK.objects.create(
-                    title=submission.title,
-                    text=submission.text,
-                    created=submission.created
+                    title=submission_data.title,
+                    text=submission_data.text,
+                    author=submission_data.author
                 )
-            return redirect('news')  # Redirigir a la página principal
+            return redirect('news')  # Redirect to the main page
     else:
         form = SubmissionForm()
     return render(request, 'submit.html', {'form': form})
-"""TODO: Linkar con usuario"""
-
 def newest(request):
     submissions = Submission.objects.all().order_by('-created')
     return render(request, 'news.html', {'submissions': submissions})
@@ -40,3 +39,8 @@ def newest(request):
 def ask(request):
     submissions = Submission_ASK.objects.all()
     return render(request, 'news.html', {'submissions': submissions})
+
+
+def detail(request, submission_id):
+    submission = get_object_or_404(Submission, id=submission_id)
+    return render(request, 'detail.html', {'submission': submission})

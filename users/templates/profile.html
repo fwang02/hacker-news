@@ -18,6 +18,7 @@
                 {{ form.as_p }}
                 <button type="submit">Update</button>
             </form>
+            <a href="{% url 'users:submissions' %}?id={{ user.username }}">Submissions</a>
         </div>
     </main>
 </body>
