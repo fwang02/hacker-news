@@ -28,7 +28,7 @@ def submit(request):
                     text=submission_data.text,
                     author=submission_data.author
                 )
-            return redirect('news')  # Redirect to the main page
+            return redirect('news:news')  # Redirect to the main page
     else:
         form = SubmissionForm()
     return render(request, 'submit.html', {'form': form})
