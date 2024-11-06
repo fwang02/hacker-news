@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>User Profile</title>
-</head>
-<body>
-    <h1>Welcome, {{ username }}!</h1>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="profile-container">
+    <h2>{{ user.username }}</h2>
+    <p>Karma: {{ user.profile.karma }}</p>
+    <p>About: {{ user.profile.about }}</p>
+
+    <div class="profile-links">
+        <!-- Enlaces para navegar por el contenido del usuario -->
+        <a>Submissions</a> |
+        <a>Comments</a> |
+        <a>Favorites</a>
+
+        {% if user == request.user %}
+            <!-- Enlaces adicionales visibles solo para el usuario logueado -->
+            | <a>Hidden</a>
+            | <a>Upvoted Submissions / Comments</a>
+            | <a>Edit Profile</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
