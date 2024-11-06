@@ -6,8 +6,8 @@ from .forms import SubmissionForm
 
 def news(request):
     submissions = Submission.objects.all().order_by('title')
-    return render(request, 'news.html', {'submissions': submissions})
-
+    logged_in_username = request.user.username if request.user.is_authenticated else None
+    return render(request, 'news.html', {'submissions': submissions, 'logged_in_username': logged_in_username})
 @login_required
 def submit(request):
     if request.method == "POST":
@@ -34,12 +34,13 @@ def submit(request):
     return render(request, 'submit.html', {'form': form})
 def newest(request):
     submissions = Submission.objects.all().order_by('-created')
-    return render(request, 'news.html', {'submissions': submissions})
+    logged_in_username = request.user.username if request.user.is_authenticated else None
+    return render(request, 'news.html', {'submissions': submissions, 'logged_in_username': logged_in_username})
 
 def ask(request):
     submissions = Submission_ASK.objects.all()
-    return render(request, 'news.html', {'submissions': submissions})
-
+    logged_in_username = request.user.username if request.user.is_authenticated else None
+    return render(request, 'news.html', {'submissions': submissions, 'logged_in_username': logged_in_username})
 
 def detail(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id)

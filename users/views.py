@@ -17,9 +17,9 @@ def profile(request):
                 return redirect('users:profile')
         else:
             form = ProfileForm(instance=user.profile)
-        return render(request, 'profile.html', {'form': form, 'username': user.username})
+        return render(request, 'profile.html', {'form': form, 'username': user.username, 'logged_in_username': request.user.username})
     else:
-        return render(request, 'profile_public.html', {'user': user})
+        return render(request, 'profile_public.html', {'user': user, 'logged_in_username': request.user.username})
 
 def submissions(request):
     user_id = request.GET.get('id')

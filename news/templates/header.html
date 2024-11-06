@@ -26,7 +26,8 @@
             </form>
             {% if user.is_authenticated %}
                 <div class="user-actions">
-                    <a href="/user/" class="username-link{% if request.path == '/user/' %} active{% endif %}">{{ user.username }}</a>                       <span class="separator">|</span>
+                    <a href="/user/" class="username-link{% if request.path == '/user/' %} active{% endif %}">{{ logged_in_username }}</a>
+                    <span class="separator">|</span>
                     <a href="{% url 'account_logout' %}">logout</a>
                 </div>
                 {% with user.socialaccount_set.first as social_account %}
