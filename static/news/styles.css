@@ -221,6 +221,11 @@ p {
     padding: 5px 10px; /* Match the padding of other elements */
 }
 
+.username-link.active {
+    color: white !important;
+    text-decoration: none !important;
+}
+
 .separator {
     margin: 0 10px; /* Space around the separator */
     color: #000  !important; /* Black color for the separator */
