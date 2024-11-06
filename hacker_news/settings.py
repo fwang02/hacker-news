@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'news',
+    'users',
 ]
 
 SITE_ID = 2
@@ -109,7 +110,7 @@ ROOT_URLCONF = 'hacker_news.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'users/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

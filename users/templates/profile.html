@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'users/profile_styles.css' %}">
+</head>
+<body>
+    {% include "header.html" %}
+    <main>
+        <div class="profile-container">
+            <p class="profile-info">username: {{ username }}</p>
+            <p class="profile-info">created: </p> <!--  TODO: user.profile.created -->
+            <p class="profile-info">karma: {{ user.profile.karma }}</p>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <a href="{% url 'users:submissions' %}?id={{ user.username }}">submissions</a>
+                <br>
+                <a>comments</a>
+                <br>
+                <a>hidden</a>
+                <br>
+                <a>upvoted submissions</a> <span> / </span> <a>comments</a>
+                <br>
+                <a>favorite submissions</a> <span> / </span> <a>comments</a> <span><em> (publicly visible)</em></span>
+                <br>
+                <br>
+                <button type="submit">Update</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
