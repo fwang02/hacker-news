@@ -16,9 +16,19 @@
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
+                <a href="{% url 'users:submissions' %}?id={{ user.username }}">submissions</a>
+                <br>
+                <a>comments</a>
+                <br>
+                <a>hidden</a>
+                <br>
+                <a>upvoted submissions</a> <span> / </span> <a>comments</a>
+                <br>
+                <a>favorite submissions</a> <span> / </span> <a>comments</a> <span><em> (publicly visible)</em></span>
+                <br>
+                <br>
                 <button type="submit">Update</button>
             </form>
-            <a href="{% url 'users:submissions' %}?id={{ user.username }}">Submissions</a>
         </div>
     </main>
 </body>
