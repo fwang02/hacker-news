@@ -28,5 +28,7 @@ urlpatterns = [
 
     path('submit/', views.submit, name='submit'),  # Define el endpoint para /submit
     path('accounts/', include('allauth.urls')),  # Define el endpoint para /login
+    path('user/', include('users.urls')),  # Add this line
+
     path('', lambda request: redirect('news/', permanent=False)),
 ]
