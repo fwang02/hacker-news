@@ -26,7 +26,7 @@
                             <a href="{{ submission.url }}">{{ submission.title }}</a>
                             <small>({{ submission.url|domain }})</small>
                         </span>
-                        <span class="news-details">X points by author | X comments</span>
+                        <span class="news-details">X points by {{ submission.author }} | X comments</span>
                     </li>
                 {% endfor %}
             </ul>
