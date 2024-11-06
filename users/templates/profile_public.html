@@ -1,22 +1,49 @@
 {% load static %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>User Profile</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
     <link rel="stylesheet" href="{% static 'users/profile_styles.css' %}">
 </head>
 <body>
-    <div class="profile-info">
-        <div class="label">Username:</div>
-        <div class="profile-value">{{ user.username }}</div>
-        <div class="label">Email:</div>
-        <div class="profile-value">{{ user.email }}</div>
-        <!-- Agrega más campos según sea necesario -->
-    </div>
-    <div class="links-container">
-        <span class="publicly-visible">(publicly visible)</span>
-    </div>
+    {% include "header.html" %}
+    <main>
+
+
+
+        <div class="profile-container">
+            <p class="profile-info">username: <span class="profile-value">{{ user.username }}</span></p>
+            <p class="profile-info">created:</p> <!-- TODO: user.profile.created -->
+            <p class="profile-info">karma: <span class="profile-value">{{ user.profile.karma }}</span></p>
+
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <!-- Contenedor para los enlaces -->
+                <div class="links-container">
+                    <a href="{% url 'users:submissions' %}?id={{ user.username }}">submissions</a>
+                </div>
+                <div class="links-container">
+                    <a href="#">comments</a>
+                </div>
+                <div class="links-container">
+                    <a href="#">favorite submissions</a>
+                    <span class="separator">/</span>
+                    <a href="#">comments</a>
+                    <span class="publicly-visible"><em>(publicly visible)</em></span>
+                </div>
+                <br>
+                <br>
+            </form>
+        </div>
+
+    </main>
 </body>
 </html>
