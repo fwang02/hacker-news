@@ -6,13 +6,15 @@
     <title>User Profile</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'users/profile_styles.css' %}">
 </head>
 <body>
     {% include "header.html" %}
     <main>
         <div class="profile-container">
-            <h2>{{ username }}</h2>
-            <p>Karma: {{ user.profile.karma }}</p>
+            <p class="profile-info">username: {{ username }}</p>
+            <p class="profile-info">created: </p> <!--  TODO: user.profile.created -->
+            <p class="profile-info">karma: {{ user.profile.karma }}</p>
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}

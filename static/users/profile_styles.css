@@ -1,0 +1,17 @@
+/* users/profile_styles.css */
+.profile-container {
+    border-radius: 5px;
+}
+
+.profile-info {
+    margin-bottom: 1px !important; /* Ajusta este valor según sea necesario */
+}
+
+.form-group {
+    display: flex;
+    align-items: flex-start; /* Alinea los elementos al principio verticalmente */
+}
+
+.form-group label {
+    margin-right: 10px; /* Ajusta el espacio entre el label y el textbox */
+}
