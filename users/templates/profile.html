@@ -1,23 +1,43 @@
-{% extends "base.html" %}
+{% load socialaccount %}
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker News</title>
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <!-- Header Section -->
+    {% include "header.html" %}
 
-{% block content %}
-<div class="profile-container">
-    <h2>{{ user.username }}</h2>
-    <p>Karma: {{ user.profile.karma }}</p>
-    <p>About: {{ user.profile.about }}</p>
 
-    <div class="profile-links">
-        <!-- Enlaces para navegar por el contenido del usuario -->
-        <a>Submissions</a> |
-        <a>Comments</a> |
-        <a>Favorites</a>
 
-        {% if user == request.user %}
-            <!-- Enlaces adicionales visibles solo para el usuario logueado -->
-            | <a>Hidden</a>
-            | <a>Upvoted Submissions / Comments</a>
-            | <a>Edit Profile</a>
-        {% endif %}
-    </div>
-</div>
-{% endblock %}
+    <!-- Main Content Section -->
+    <main>
+        <div class="profile-container">
+            <h2>{{ user.username }}</h2>
+            <p>Karma: {{ user.profile.karma }}</p>
+            <p>About: {{ user.profile.about }}</p>
+
+            <div class="profile-links">
+                <!-- Enlaces para navegar por el contenido del usuario -->
+                <a>Submissions</a> |
+                <a>Comments</a> |
+                <a>Favorites</a>
+
+                {% if user == request.user %}
+                    <!-- Enlaces adicionales visibles solo para el usuario logueado -->
+                    | <a>Hidden</a>
+                    | <a>Upvoted Submissions / Comments</a>
+                    | <a>Edit Profile</a>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+
