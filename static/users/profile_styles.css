@@ -16,16 +16,22 @@
     color: #000;
 }
 
-/* Contenedor de enlaces */
+/* Contenedor de enlaces (alinear en fila) */
 .links-container {
-    margin-left: 80px; /* Igual a la primera columna de .profile-info para alinear con los valores */
+    margin-left: 77px; /* Igual a la primera columna de .profile-info para alinear con los valores */
     margin-top: 10px;
     display: flex;
-    flex-direction: column; /* Alinea los enlaces verticalmente */
-    gap: 5px; /* Espacio entre enlaces */
+    align-items: center; /* Alinea los enlaces horizontalmente */
+    gap: 10px; /* Espacio entre los enlaces */
 }
 
-.links-container a {
-    color: #000;
-    text-decoration: none;
+/* Estilo para el separador / */
+.links-container .separator {
+    color: #777; /* Color del separador */
+}
+
+/* Estilo para el texto "(publicly visible)" */
+.links-container .publicly-visible {
+    font-style: italic; /* Estilo cursiva */
+    color: #000; /* Puedes ajustar el color si lo deseas */
 }
