@@ -39,8 +39,14 @@ def submit(request):
     else:
         form = SubmissionForm()
     return render(request, 'submit.html', {'form': form})
+
 def newest(request):
-    submissions = Submission.objects.all().order_by('-created')
+    if request.user.is_authenticated:
+        hidden_submissions = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
+        submissions = Submission.objects.exclude(id__in=hidden_submissions).order_by('-created')
+    else:
+        submissions = Submission.objects.all().order_by('-created')
+
     logged_in_username = request.user.username if request.user.is_authenticated else None
     return render(request, 'news.html', {'submissions': submissions, 'logged_in_username': logged_in_username})
 
