@@ -47,3 +47,8 @@ def hidden_submissions(request):
     submissions = Submission.objects.filter(id__in=hidden_submissions_ids)
     print(f"Submissions: {submissions}")  # Debugging print statement
     return render(request, 'hidden.html', {'submissions': submissions, 'username': request.user.username})
+
+@login_required
+def unhide_submission(request, submission_id):
+    HiddenSubmission.objects.filter(user=request.user, submission_id=submission_id).delete()
+    return redirect('users:hidden_submissions')
