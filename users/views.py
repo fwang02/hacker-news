@@ -32,6 +32,8 @@ def profile(request):
 
 
 
+
+
 def submissions(request):
     user_id = request.GET.get('id')
     user = get_object_or_404(User, username=user_id)
