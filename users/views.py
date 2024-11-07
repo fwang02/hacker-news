@@ -4,21 +4,14 @@ from django.contrib.auth.models import User
 from .forms import ProfileForm
 from news.models import Submission, HiddenSubmission  # Assuming you have a Submission model in the news app
 
+
 def profile(request):
     user_id = request.GET.get('id')
+    # `user` es el perfil consultado, mientras que `logged_in_user` es el usuario autenticado
     user = get_object_or_404(User, username=user_id) if user_id else request.user
+    logged_in_user = request.user  # Usuario autenticado, siempre será el mismo
 
-    # Verificar si el usuario está autenticado
-    if request.user.is_authenticated:
-        logged_in_username = request.user.username
-    else:
-        logged_in_username = None  # Si no está logueado, es None
-
-    print(f"User is authenticated: {request.user.is_authenticated}")
-    print(f"User: {request.user}")
-
-    # Pasar la variable 'logged_in_username' al contexto
-    if request.user == user:
+    if logged_in_user == user:
         if request.method == 'POST':
             form = ProfileForm(request.POST, instance=user.profile)
             if form.is_valid():
@@ -26,10 +19,16 @@ def profile(request):
                 return redirect('users:profile')
         else:
             form = ProfileForm(instance=user.profile)
-        return render(request, 'profile.html', {'form': form, 'username': user.username, 'logged_in_username': logged_in_username})
+        return render(request, 'profile.html', {
+            'form': form,
+            'user': user,  # El perfil visualizado
+            'logged_in_user': logged_in_user  # El usuario autenticado
+        })
     else:
-        return render(request, 'profile_public.html', {'user': user, 'logged_in_username': logged_in_username})
-
+        return render(request, 'profile_public.html', {
+            'user': user,
+            'logged_in_user': logged_in_user  # El usuario autenticado
+        })
 
 
 
@@ -43,9 +42,7 @@ def submissions(request):
 @login_required
 def hidden_submissions(request):
     hidden_submissions_ids = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
-    print(f"Hidden Submissions IDs: {hidden_submissions_ids}")  # Debugging print statement
     submissions = Submission.objects.filter(id__in=hidden_submissions_ids)
-    print(f"Submissions: {submissions}")  # Debugging print statement
     return render(request, 'hidden.html', {'submissions': submissions, 'username': request.user.username})
 
 @login_required
