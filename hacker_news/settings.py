@@ -140,15 +140,14 @@ CSRF_USE_SESSIONS = False
 
 if IS_HEROKU_APP:
     CSRF_TRUSTED_ORIGINS = ['https://projecte-asw-cdd22f32d84c.herokuapp.com']
-    SESSION_COOKIE_SECURE = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
     CSRF_COOKIE_SECURE = True
 else :
     SESSION_COOKIE_SECURE = False
     SECURE_SSL_REDIRECT = False
     CSRF_COOKIE_SECURE = False
-    print("Not in Heroku")
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Ensure this option is active
 

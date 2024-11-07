@@ -8,7 +8,7 @@
             <li><a href="#">comments</a></li>
             <li><a href="/ask" class="{% if request.path == '/ask/' %}active{% endif %}">ask</a></li>
 
-            {% if logged_in_username %}
+            {% if user.is_authenticated %}
                 <li><a href="{% url 'submit' %}">submit</a></li>
             {% else %}
                 <li><a href="#" onclick="function showLoginPrompt() {
@@ -17,17 +17,15 @@
                 showLoginPrompt()">submit</a></li>
             {% endif %}
         </ul>
-
         <!-- Search bar and login section -->
         <div class="nav-right">
-            <p>Logged in username: {{ logged_in_username }}</p> <!-- Agrega esto para depurar -->
             <form class="search-form">
                 <input type="text" placeholder="Search">
                 <button type="submit">Search</button>
             </form>
-            {% if logged_in_username %}
+            {% if user.is_authenticated %}
                 <div class="user-actions">
-                    <a href="/user/" class="username-link{% if request.path == '/user/' %} active{% endif %}">{{ logged_in_username }}</a>
+                    <a href="/user/" class="username-link{% if request.path == '/user/' %} active{% endif %}">{{ user.username }}</a>
                     <span class="separator">|</span>
                     <a href="{% url 'account_logout' %}">logout</a>
                 </div>
