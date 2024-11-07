@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Submission
+from .models import Submission, HiddenSubmission
 from .models import Submission_URL, Submission_ASK
 from .forms import SubmissionForm
 
@@ -48,3 +48,9 @@ def ask(request):
 def detail(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id)
     return render(request, 'detail.html', {'submission': submission})
+
+@login_required
+def hide_submission(request, submission_id):
+    submission = get_object_or_404(Submission, id=submission_id)
+    HiddenSubmission.objects.get_or_create(user=request.user, submission=submission)
+    return redirect('news:news')

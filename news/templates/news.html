@@ -29,7 +29,7 @@
                         <span class="news-details">
                             X points
                             by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
-                            | <a href="#" class="submissions-link">hide</a>
+                            | <a href="{% url 'news:hide_submission' submission.id %}" class="submissions-link">hide</a>
                             | X comments
                         </span>
                     </li>
