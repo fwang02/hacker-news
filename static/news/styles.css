@@ -231,10 +231,10 @@ p {
     color: #000  !important; /* Black color for the separator */
 }
 
-a.author-link {
+a.submissions-link {
     text-decoration: none; /* Remove underline */
     color: inherit; /* Use the same color as the surrounding text */
 }
-a.author-link:hover {
+a.submissions-link:hover {
     text-decoration: underline; /* Optional: Add underline on hover */
 }

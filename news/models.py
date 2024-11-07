@@ -16,3 +16,7 @@ class Submission_URL(Submission):
 
 class Submission_ASK(Submission):
     pass
+
+class HiddenSubmission(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
