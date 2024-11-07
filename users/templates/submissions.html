@@ -24,6 +24,14 @@
                 <ul>
                     {% for submission in submissions %}
                         <li class="news-item">
+                            <div class="icon-container">
+                                {% if submission.author == request.user %}
+                                    <span class="red-asterisk">*</span>
+                                     <span class="triangle-icon hidden "></span>
+                                {% else %}
+                                    <span class="triangle-icon"></span>
+                                {% endif %}
+                            </div>
                             <span class="news-title">
                                 <a href="{{ submission.url }}">{{ submission.title }}</a>
                                 <small>({{ submission.url|domain }})</small>
