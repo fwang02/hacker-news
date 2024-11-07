@@ -1,0 +1,40 @@
+{% load socialaccount %}
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker News</title>
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <!-- Header Section -->
+    {% include "header.html" %}
+
+
+
+    <!-- Main Content Section -->
+    <main>
+        <section class="news-list">
+            <ul>
+                {% for submission in submissions %}
+                    <li class="news-item">
+                        <span class="news-title">
+                            <a href="{{ submission.url }}">{{ submission.title }}</a>
+                            <small>({{ submission.url|domain }})</small>
+                        </span>
+                        <span class="news-details">
+                            X points
+                            by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
+                            | X comments
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

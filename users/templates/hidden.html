@@ -6,8 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Submissions</title>
-    {% load static %}
+    <title>Hidden Submissions</title>
     <link rel="stylesheet" href="{% static 'news/styles.css' %}">
 </head>
 <body>
@@ -17,8 +16,7 @@
     <!-- Main Content Section -->
     <main>
         <div class="submissions-container">
-            <h2>{{ username }}' submissions </h2>
-
+            <h2>{{ username }}'s Hidden Submissions</h2>
 
             <section class="news-list">
                 <ul>
@@ -29,7 +27,10 @@
                                 <small>({{ submission.url|domain }})</small>
                             </span>
                             <span class="news-details">
-                                X points by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a> | X comments
+                                X points
+                                by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
+                                | <a href="{% url 'users:unhide_submission' submission.id %}" class="submissions-link">unhide</a>
+                                | X comments
                             </span>
                         </li>
                     {% endfor %}
