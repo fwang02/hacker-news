@@ -22,6 +22,8 @@
             <ul>
                 {% for submission in submissions %}
                     <li class="news-item">
+                        <!-- Add triangle button -->
+                        <span class="triangle-icon"></span>
                         <span class="news-title">
                             <a href="{{ submission.url }}">{{ submission.title }}</a>
                             <small>({{ submission.url|domain }})</small>
