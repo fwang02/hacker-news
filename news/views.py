@@ -53,7 +53,7 @@ def newest(request):
 def ask(request):
     submissions = Submission_ASK.objects.all()
     logged_in_username = request.user.username if request.user.is_authenticated else None
-    return render(request, 'news.html', {'submissions': submissions, 'logged_in_username': logged_in_username})
+    return render(request, 'ask.html', {'submissions': submissions, 'logged_in_username': logged_in_username})
 
 def detail(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id)
