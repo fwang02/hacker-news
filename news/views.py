@@ -4,13 +4,17 @@ from .models import Submission, HiddenSubmission
 from .models import Submission_URL, Submission_ASK
 from .forms import SubmissionForm
 
-def news(request):
-    submissions = Submission.objects.all().order_by('title')
-    logged_in_username = request.user.username if request.user.is_authenticated else None
-    print(f"User is authenticated: {request.user.is_authenticated}")
-    print(f"User: {request.user}")
 
+def news(request):
+    if request.user.is_authenticated:
+        hidden_submissions = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
+        submissions = Submission.objects.exclude(id__in=hidden_submissions).order_by('title')
+    else:
+        submissions = Submission.objects.all().order_by('title')
+
+    logged_in_username = request.user.username if request.user.is_authenticated else None
     return render(request, 'news.html', {'submissions': submissions, 'logged_in_username': logged_in_username})
+
 @login_required
 def submit(request):
     if request.method == "POST":
