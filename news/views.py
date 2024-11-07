@@ -7,6 +7,9 @@ from .forms import SubmissionForm
 def news(request):
     submissions = Submission.objects.all().order_by('title')
     logged_in_username = request.user.username if request.user.is_authenticated else None
+    print(f"User is authenticated: {request.user.is_authenticated}")
+    print(f"User: {request.user}")
+
     return render(request, 'news.html', {'submissions': submissions, 'logged_in_username': logged_in_username})
 @login_required
 def submit(request):
