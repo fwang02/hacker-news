@@ -23,18 +23,28 @@
                 <input type="text" placeholder="Search">
                 <button type="submit">Search</button>
             </form>
-            {% if user.is_authenticated %}
+        
+        
+        
+        
+                        <!-- Verificamos si el usuario autenticado está disponible -->
+            {% if request.user.is_authenticated %}
+                <p>logged_in_user.is_authenticated</p>
                 <div class="user-actions">
-                    <a href="/user/" class="username-link{% if request.path == '/user/' %} active{% endif %}">{{ user.username }}</a>
+                    <a href="/user/" class="username-link{% if request.path == '/user/' %} active{% endif %}">{{ request.user.username }}</a>
                     <span class="separator">|</span>
                     <a href="{% url 'account_logout' %}">logout</a>
                 </div>
-                {% with user.socialaccount_set.first as social_account %}
+                {% with request.user.socialaccount_set.first as social_account %}
                     {% if social_account %}
                         <img src="{{ social_account.extra_data.picture }}" alt="Avatar" class="avatar">
                     {% endif %}
                 {% endwith %}
+
             {% else %}
+                <p>else</p>
+                <!-- FEIYANGGGG PODEMOS CAMBIARLO A UN LINK NORMAL ES QUE SINO NO ME IMPRIMER ESTO SI NO ES EN /news/templates/ ???-->
+                
                 <div id="g_id_onload"
                      data-client_id="70954103751-9ktlsv9q03hlpm9g49l6776qd9rpfjtg.apps.googleusercontent.com"
                      data-context="signin"
@@ -51,6 +61,10 @@
                      data-logo_alignment="left">
                 </div>
             {% endif %}
+        
+        
+        
+        
         </div>
     </nav>
 </header>

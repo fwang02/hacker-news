@@ -1,3 +1,6 @@
+{% load socialaccount %}
+{% load static %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +12,7 @@
     <link rel="stylesheet" href="{% static 'users/profile_styles.css' %}">
 </head>
 <body>
-    {% include "header.html" with logged_in_username=logged_in_username %}
+    {% include "header.html" %}
     <main>
         <div class="profile-container">
             <p class="profile-info">username: <span class="profile-value">{{ username }}</span></p>
