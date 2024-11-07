@@ -1,6 +1,6 @@
 .profile-info {
     display: grid;
-    grid-template-columns: 77px 1fr; /* Ajusta 100px según el ancho necesario para las etiquetas */
+    grid-template-columns: 75px 1fr; /* Ajusta 100px según el ancho necesario para las etiquetas */
     gap: 10px; /* Espacio entre la etiqueta y el valor */
     align-items: center;
     color: #777;
@@ -18,11 +18,11 @@
 
 /* Contenedor de enlaces (alinear en fila) */
 .links-container {
-    margin-left: 77px; /* Igual a la primera columna de .profile-info para alinear con los valores */
+    margin-left: 85px; /* Igual a la primera columna de .profile-info para alinear con los valores */
     margin-top: 10px;
     display: flex;
     align-items: center; /* Alinea los enlaces horizontalmente */
-    gap: 10px; /* Espacio entre los enlaces */
+    gap: 5px; /* Espacio entre los enlaces */
 }
 
 /* Estilo para el separador / */

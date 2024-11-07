@@ -150,6 +150,7 @@ else :
     CSRF_COOKIE_SECURE = False
     print("Not in Heroku")
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Ensure this option is active
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
