@@ -64,3 +64,11 @@ def hide_submission(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id)
     HiddenSubmission.objects.get_or_create(user=request.user, submission=submission)
     return redirect('news:news')
+
+#eliminar submission propia
+@login_required
+def delete_submission(request, submission_id):
+    submission = get_object_or_404(Submission, id=submission_id)
+    if submission.author == request.user:
+        submission.delete()
+    return redirect('news:news')

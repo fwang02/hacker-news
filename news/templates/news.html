@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hacker News</title>
     <link rel="stylesheet" href="{% static 'news/styles.css' %}">
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
 </head>
 <body>
     <!-- Header Section -->
@@ -25,7 +25,8 @@
                         <div class="icon-container">
                             {% if submission.author == request.user %}
                                 <span class="red-asterisk">*</span>
-                                 <span class="triangle-icon hidden "></span>
+                                <span class="triangle-icon hidden "></span>
+                                
                             {% else %}
                                 <span class="triangle-icon"></span>
                             {% endif %}
@@ -39,6 +40,9 @@
                             by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
                             | <a href="{% url 'news:hide_submission' submission.id %}" class="submissions-link">hide</a>
                             | X comments
+                            {% if submission.author == request.user %}
+                                | <a href="{% url 'news:delete_submission' submission.id %}" class="submissions-link" onclick="confirmDelete(event)">delete</a>
+                            {% endif %}
                         </span>
                     </li>
                 {% endfor %}

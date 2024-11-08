@@ -151,23 +151,38 @@ else :
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Ensure this option is active
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': GOOGLE_OAUTH_CLIENT_ID,
-            'secret': GOOGLE_OAUTH_CLIENT_SECRET,
-        },
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        },
-        'OAUTH_PKCE_ENABLED': True,
-        'FETCH_USERINFO' : True
+if IS_HEROKU_APP:
+    SOCIALACCOUNT_PROVIDERS = {
+        'google': {
+            'APP': {
+                'client_id': GOOGLE_OAUTH_CLIENT_ID,
+                'secret': GOOGLE_OAUTH_CLIENT_SECRET,
+            },
+            'SCOPE': [
+                'profile',
+                'email',
+            ],
+            'AUTH_PARAMS': {
+                'access_type': 'online',
+            },
+            'OAUTH_PKCE_ENABLED': True,
+            'FETCH_USERINFO' : True
+        }
     }
-}
+else:
+    SOCIALACCOUNT_PROVIDERS = {
+        'google': {
+            'SCOPE': [
+                'profile',
+                'email',
+            ],
+            'AUTH_PARAMS': {
+                'access_type': 'online',
+            },
+            'OAUTH_PKCE_ENABLED': False,
+            'FETCH_USERINFO' : True
+        }
+    }
 
 
 # Database
