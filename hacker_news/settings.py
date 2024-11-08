@@ -153,6 +153,10 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Ensure this option is 
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
+        'APP': {
+            'client_id': GOOGLE_OAUTH_CLIENT_ID,
+            'secret': GOOGLE_OAUTH_CLIENT_SECRET,
+        },
         'SCOPE': [
             'profile',
             'email',
