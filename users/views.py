@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .forms import ProfileForm
+from django.shortcuts import render, redirect, get_object_or_404
+
 from news.models import Submission, HiddenSubmission  # Assuming you have a Submission model in the news app
+from .forms import ProfileForm
+from .utils import calculate_account_age
 
 
 def profile(request):
@@ -10,6 +12,7 @@ def profile(request):
     # `user` es el perfil consultado, mientras que `logged_in_user` es el usuario autenticado
     user = get_object_or_404(User, username=user_id) if user_id else request.user
     logged_in_user = request.user  # Usuario autenticado, siempre será el mismo
+    account_age = calculate_account_age(user.date_joined)
 
     if logged_in_user == user:
         if request.method == 'POST':
@@ -19,10 +22,12 @@ def profile(request):
                 return redirect('users:profile')
         else:
             form = ProfileForm(instance=user.profile)
+
         return render(request, 'profile.html', {
             'form': form,
             'user': user,  # El perfil visualizado
-            'logged_in_user': logged_in_user  # El usuario autenticado
+            'logged_in_user': logged_in_user, # El usuario autenticado
+            'account_age': account_age
         })
     else:
         return render(request, 'profile_public.html', {
