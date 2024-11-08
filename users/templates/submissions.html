@@ -9,6 +9,7 @@
     <title>User Submissions</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+    <script src="{% static 'js/scripts.js' %}"></script>
 </head>
 <body>
     <!-- Header Section -->
@@ -17,7 +18,7 @@
     <!-- Main Content Section -->
     <main>
         <div class="submissions-container">
-            <h2>{{ username }}' submissions </h2>
+            <h2>{{ username }}'s submissions </h2>
 
 
             <section class="news-list">
@@ -38,6 +39,9 @@
                             </span>
                             <span class="news-details">
                                 X points by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a> | X comments
+                                {% if submission.author == request.user %}
+                                    | <a href="{% url 'news:delete_submission' submission.id %}" class="submissions-link" onclick="confirmDelete(event)">delete</a>
+                                {% endif %}
                             </span>
                         </li>
                     {% endfor %}
