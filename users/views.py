@@ -32,7 +32,8 @@ def profile(request):
     else:
         return render(request, 'profile_public.html', {
             'user': user,
-            'logged_in_user': logged_in_user  # El usuario autenticado
+            'logged_in_user': logged_in_user,  # El usuario autenticado
+            'account_age': account_age
         })
 
 
