@@ -1,0 +1,47 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+</head>
+<body>
+    <!-- Header Section -->
+    {% include "header.html" %}
+
+    <!-- Main Content Section -->
+    <main>
+        <section class="news-list">
+            <h1>Search Results</h1>
+            <ul>
+                {% for submission in results %}
+                    <li class="news-item">
+                        <div class="icon-container">
+                            {% if submission.author == request.user %}
+                                <span class="red-asterisk">*</span>
+                                <span class="triangle-icon hidden"></span>
+                            {% else %}
+                                <span class="triangle-icon"></span>
+                            {% endif %}
+                        </div>
+                        <span class="news-title">
+                            <a href="{{ submission.url }}">{{ submission.title }}</a>
+                            <small>({{ submission.url|domain }})</small>
+                        </span>
+                        <span class="news-details">
+                            {{ submission.points }} points
+                            by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
+                            | X comments
+                        </span>
+                    </li>
+                {% empty %}
+                    <li>No results found</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+</body>
+</html>
