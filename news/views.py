@@ -72,3 +72,12 @@ def delete_submission(request, submission_id):
     if submission.author == request.user:
         submission.delete()
     return redirect('news:news')
+
+#busqueda
+def search(request):
+    query = request.GET.get('q')
+    if query:
+        results = Submission.objects.filter(title__icontains=query)
+    else:
+        results = Submission.objects.none()
+    return render(request, 'search_results.html', {'results': results})

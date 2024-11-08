@@ -32,10 +32,11 @@
         </ul>
         <!-- Search bar and login section -->
         <div class="nav-right">
-            <form class="search-form">
-                <input type="text" placeholder="Search">
+            <form class =search-form method="GET" action="{% url 'news:search' %}">
+                <input type="text" name="q" placeholder="Search">
                 <button type="submit">Search</button>
             </form>
+        
         
         
         
