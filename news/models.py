@@ -6,10 +6,20 @@ class Submission(models.Model):
     title = models.CharField(max_length=255)
     url = models.URLField(blank=True, null=True)
     text = models.TextField(blank=True, null=True)
+    point = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+    def add_point(self):
+        self.point += 1
+        self.save()
+
+    def subtract_point(self):
+        if self.point > 0:
+            self.point -= 1
+            self.save()
 
 class Submission_URL(Submission):
     pass
@@ -20,3 +30,10 @@ class Submission_ASK(Submission):
 class HiddenSubmission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
+
+class Vote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'submission')

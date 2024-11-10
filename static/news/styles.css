@@ -224,13 +224,17 @@ a.submissions-link:hover {
 
 /* Triángulo pequeño a la izquierda del título */
 .triangle-icon {
+    all: unset;
+    cursor: pointer;
+    display: inline-block;
     width: 0;
     height: 0;
-    border-left: 6px solid transparent; /* Ancho izquierdo del triángulo */
-    border-right: 6px solid transparent; /* Ancho derecho del triángulo */
-    border-bottom: 10px solid #777; /* Color y altura del triángulo */
-    margin-right: 10px; /* Espacio entre el triángulo y el título */
-    align-self: center; /* Centra el triángulo verticalmente en la línea */
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 10px solid #777;
+    margin-right: 10px;
+    margin-bottom: 6px;
+    align-self: center;
 }
 
 .triangle-icon.hidden {

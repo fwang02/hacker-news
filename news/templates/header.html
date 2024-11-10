@@ -9,6 +9,7 @@
     <title>Hacker News</title>
     <link rel="stylesheet" href="{% static 'news/styles.css' %}">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
 </head>
 
 <header>
@@ -24,10 +25,7 @@
             {% if user.is_authenticated %}
                 <li><a href="{% url 'submit' %}">submit</a></li>
             {% else %}
-                <li><a href="#" onclick="function showLoginPrompt() {
-                    alert('Please login to submit a post');
-                }
-                showLoginPrompt()">submit</a></li>
+                <li><a onclick="showLoginPrompt()">submit</a></li>
             {% endif %}
         </ul>
         <!-- Search bar and login section -->
