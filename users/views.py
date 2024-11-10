@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
-from news.models import Submission, HiddenSubmission, Vote  # Assuming you have a Submission model in the news app
+from news.models import Submission, HiddenSubmission, UpvotedSubmission  # Assuming you have a Submission model in the news app
 from .forms import ProfileForm
 from .utils import calculate_account_age
 
@@ -50,7 +50,7 @@ def submissions(request):
     # si es el usuario autenticado, se usa request.user
     voted_submissions = []
     if request.user.is_authenticated:
-        voted_submissions = Vote.objects.filter(user=request.user).values_list('submission_id', flat=True)
+        voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
     return render(request, 'submissions.html', {'submissions': submissions, 'username': user.username, 'voted_submissions': voted_submissions})
 
 
@@ -72,7 +72,7 @@ def upvote(request, submission_id):
     if submission.author == request.user:
         return redirect('news:news')
 
-    Vote.objects.create(user=request.user, submission=submission)
+    UpvotedSubmission.objects.create(user=request.user, submission=submission)
     submission.add_point()
     return redirect('news:news')
 
@@ -81,7 +81,7 @@ def unvote(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id)
     if submission.author == request.user:
         return redirect('news:news')
-    Vote.objects.filter(user=request.user, submission=submission).delete()
+    UpvotedSubmission.objects.filter(user=request.user, submission=submission).delete()
     submission.subtract_point()
 
     next_url = request.GET.get('next')
@@ -89,6 +89,6 @@ def unvote(request, submission_id):
 
 @login_required
 def upvoted_submissions(request):
-    voted_submissions_ids = Vote.objects.filter(user=request.user).values_list('submission_id', flat=True)
+    voted_submissions_ids = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
     submissions = Submission.objects.filter(id__in=voted_submissions_ids)
     return render(request, 'upvoted.html', {'submissions': submissions})

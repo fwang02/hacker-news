@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Submission, HiddenSubmission, Vote
+from .models import Submission, HiddenSubmission, UpvotedSubmission
 from .models import Submission_URL, Submission_ASK
 from .forms import SubmissionForm
 
@@ -9,7 +9,7 @@ def news(request):
     if request.user.is_authenticated:
         hidden_submissions = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
         submissions = Submission.objects.exclude(id__in=hidden_submissions).order_by('title')
-        voted_submissions = Vote.objects.filter(user=request.user).values_list('submission_id', flat=True)
+        voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
         return render(request, 'news.html', {'submissions': submissions, 'voted_submissions': voted_submissions})
     else:
         submissions = Submission.objects.all().order_by('title')
@@ -46,7 +46,7 @@ def newest(request):
     if request.user.is_authenticated:
         hidden_submissions = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
         submissions = Submission.objects.exclude(id__in=hidden_submissions).order_by('-created')
-        voted_submissions = Vote.objects.filter(user=request.user).values_list('submission_id', flat=True)
+        voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
     else:
         submissions = Submission.objects.all().order_by('-created')
     return render(request, 'news.html', {'submissions': submissions, 'voted_submissions': voted_submissions})
