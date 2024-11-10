@@ -6,7 +6,7 @@ class Submission(models.Model):
     title = models.CharField(max_length=255)
     url = models.URLField(blank=True, null=True)
     text = models.TextField(blank=True, null=True)
-    point = models.IntegerField(default=0)
+    point = models.IntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -14,11 +14,13 @@ class Submission(models.Model):
 
     def add_point(self):
         self.point += 1
+        self.author.profile.addKarma(1)
         self.save()
 
     def subtract_point(self):
         if self.point > 0:
             self.point -= 1
+            self.author.profile.reduceKarma(1)
             self.save()
 
 class Submission_URL(Submission):
