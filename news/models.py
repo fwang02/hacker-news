@@ -12,6 +12,11 @@ class Submission(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            self.author.profile.addKarma(1)
+        super().save(*args, **kwargs)
+
     def add_point(self):
         self.point += 1
         self.author.profile.addKarma(1)
