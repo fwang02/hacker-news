@@ -14,8 +14,6 @@
     <!-- Header Section -->
     {% include "header.html" %}
 
-
-
     <!-- Main Content Section -->
     <main>
         <section class="news-list">
@@ -39,7 +37,13 @@
                             X points
                             by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
                             | <a href="{% url 'news:hide_submission' submission.id %}" class="submissions-link">hide</a>
-                            | X comments
+                            |<a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">
+                                {% if submission.comment_count == 1 %}
+                                    1 comment
+                                {% else %}
+                                    {{ submission.comment_count }} comments
+                                {% endif %}
+                            </a>
                             {% if submission.author == request.user %}
                                 | <a href="{% url 'news:delete_submission' submission.id %}" class="submissions-link" onclick="confirmDelete(event)">delete</a>
                             {% endif %}

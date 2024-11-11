@@ -10,7 +10,6 @@ class Submission(models.Model):
 
     def __str__(self):
         return self.title
-
 class Submission_URL(Submission):
     pass
 
@@ -20,3 +19,24 @@ class Submission_ASK(Submission):
 class HiddenSubmission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return f"/news/{self.id}"
+    
+class Comment(models.Model):
+    submission = models.ForeignKey(Submission, related_name='comments', on_delete=models.CASCADE)
+    text = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return "self.text"
+    class Meta:
+        ordering = ['created']
+
+    def save(self, commit=True):
+        comment = super().save(commit=False)
+        comment.author = self.user  # Establecer el autor del comentario
+        if commit:
+            comment.save()
+        return comment
+

@@ -1,0 +1,56 @@
+{% load socialaccount %}
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ submission.title }}</title>
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+</head>
+<header>
+    <nav>
+        <ul class="nav-left">
+            <li><a href="/news" class="logo">Y</a></li>
+            <li><a href="/news" class="head">Confirm</a></li>
+        </ul>
+    </nav>
+</header>
+<body>
+    <div id="comments">
+        <div class="comment" id="comment-{{ comment.id }}">
+            <p class="comment-meta">
+                {% if comment.author == request.user %}
+                        <span class="red-asterisk-comments">*</span>
+                        <span class="triangle-icon hidden "></span>
+                    {% else %}
+                        <span class="triangle-icon"></span>
+                    {% endif %}
+                <strong>{{ comment.author.username }}</strong> 
+                <span class="comment-time">{{ comment.created_at }}</span>
+                
+                {% if comment.author == request.user %}
+                    | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link" onclick="confirmDelete(event)">delete</a>
+                {% endif %}
+                <a href="javascript:void(0);" class="toggle-comment">[-]</a>
+            </p>
+            <div class="comment-content">
+                <p class="comment-text">{{ comment.text }}</p>
+            </div>
+    </div>
+    <div class="confirm-buttons">
+    <form method="POST" action="{% url 'news:delete_comment' comment.id %}">
+        {% csrf_token %}
+        <p style="color: grey;">Do you want this to be deleted?</p>
+        <div class="confirm-buttons">
+            <button type="submit" class="btn btn-yes">Yes</button>
+        </div>
+    </form>
+    
+    <form method="GET" action="{% url 'news:submission_detail' submission.id %}">
+        <div class="confirm-buttons">
+            <button type="submit" class="btn btn-no">No</button>
+        </div>
+    </form>
+</body>

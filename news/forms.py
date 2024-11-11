@@ -1,5 +1,6 @@
 from django import forms
 from .models import Submission
+from .models import Comment
 
 class SubmissionForm(forms.ModelForm):
     class Meta:
@@ -24,3 +25,10 @@ class SubmissionForm(forms.ModelForm):
         if not url and not text:
             raise forms.ValidationError("At least one of URL or text must be provided.")
         return cleaned_data
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']  # Usamos el campo 'text' del modelo
+        widgets = {
+            'text': forms.Textarea(attrs={'placeholder': 'Your Comment'})  # Añades un widget para el campo 'text'
+        }

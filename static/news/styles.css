@@ -149,6 +149,7 @@ main {
 .news-details {
     font-size: 12px;
     color: #888;
+    
 }
 
 form p {
@@ -180,7 +181,6 @@ p {
 .content-wrapper {
     margin: 0 20px; /* Add left and right margin */
 }
-
 
 
 .username-link {
@@ -245,6 +245,126 @@ a.submissions-link:hover {
 }
 */
 
+button[type="submit"] {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 3px;
+    margin: 0; 
+    font-size: 14px;
+    display: inline-block;
+}
+
+/* Contenedor de comentarios */
+#comments {
+    margin-top: 10px;
+}
+
+a.comment-link {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Use the same color as the surrounding text */
+}
+
+/* Estilos para cada comentario */
+.comment {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    margin-left: 20px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Meta información del comentario */
+.comment-meta {
+    font-size: 12px;
+    color: #888;
+    display: flex;
+    align-items: center;
+}
+
+/* Hora del comentario */
+.comment-time {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Link para ocultar comentario */
+.toggle-comment {
+    font-size: 12px;
+    color: #888;
+    text-decoration: none;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+/* Texto del comentario */
+.comment-content {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    line-height: 1.5;
+    color: #333;
+}
+
+/* Botón de reply */
+.reply-link {
+    font-size: 12px;
+    color: #0066c0;
+    text-decoration: none;
+    display: block;
+    margin-top: 2spx;
+}
+
+.reply-link:hover {
+    text-decoration: underline;
+}
+
+
+button[type="submit"]:hover {
+    background-color: #e65c00; /* Color más oscuro al pasar el mouse */
+}
+
+.submission-detail{
+    font-family:Verdana, Geneva, sans-serif; 
+    font-size:10pt; 
+    color:#828282;
+}
+
+.add-comment {
+    display: flex;
+    flex-direction: column; /* Coloca los elementos en una columna */
+    width: 500px; /* Mismo ancho que la caja de texto */
+    margin-left: 20px; /* Espacio izquierdo */
+}
+
+/* Caja de texto */
+.add-comment textarea {
+    width: 100%; /* Asegura que la caja de texto ocupe todo el ancho del contenedor */
+    min-height: 40px; /* Establece una altura mínima */
+    padding: 8px;
+    font-size: 14px;
+    margin-bottom: 10px; /* Espacio entre el textarea y el botón */
+    border-radius: 3px;
+    border: 1px solid #ddd; /* Asegura un borde */
+}
+
+/* Botón */
+.add-comment button {
+    background-color: #f0f0f0; /* Fondo gris */
+    color: #000; /* Letra negra */
+    border: 1px solid #ccc; /* Borde gris */
+    padding: 2px 7px; /* Hacerlo más estrecho */
+    cursor: pointer; /* Cambia el cursor a pointer al pasar sobre el botón */
+    border-radius: 3px; /* Bordes redondeados */
+    margin-top: 10px; /* Espacio superior para separarlo del textarea */
+    font-size: 14px; /* Tamaño de la fuente */
+}
+
+/* Hover para el botón */
+.add-comment button:hover {
+    background-color: #e0e0e0;
+}
 
 
 .icon-container {
@@ -264,6 +384,14 @@ a.submissions-link:hover {
     z-index: 1; /* Ensure the asterisk is on top */
 }
 
+.red-asterisk-comments {
+    color: #ff6600 !important;
+    font-weight: bold;
+    font-size: 14px; /* Ajusta el tamaño según sea necesario */
+    margin-left: 2px; /* Ajusta el espacio entre el texto y el asterisco */
+    display: inline; /* Asegura que esté en línea con el texto */
+}
+
 .news-item {
     display: flex;
     align-items: center;
@@ -274,4 +402,114 @@ a.submissions-link:hover {
 
 .news-title {
     flex-grow: 1; /* Allow the title to take up available space */
+
+/* Submission Details Styles */
+.content-wrapper h1 {
+    font-size: 24px; /* Size for the main submission title */
+    margin-bottom: 10px; /* Space below the title */
+}
+
+.content-wrapper h2 {
+    font-size: 20px; /* Size for the comments section title */
+    margin-top: 20px; /* Space above the comments section */
+}
+
+.content-wrapper h3 {
+    font-size: 18px; /* Size for the add comment section title */
+    margin-top: 20px; /* Space above the add comment section */
+}
+
+/* Contenedor del triángulo y título */
+.icon-container {
+    display: flex;
+    align-items: center; /* Alinea el triángulo y el título verticalmente */
+    margin-right: 10px; /* Espacio entre el triángulo y el título */
+}
+
+/* Estilo del triángulo */
+.triangle-icon {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent; /* Ancho izquierdo del triángulo */
+    border-right: 6px solid transparent; /* Ancho derecho del triángulo */
+    border-bottom: 10px solid #777; /* Color y altura del triángulo */
+    margin-right: 10px; /* Espacio entre el triángulo y el título */
+}
+
+/* Título de la noticia */
+.news-title {
+    display: flex;
+    align-items: center; /* Alinea el triángulo con el título */
+    font-size: 18px;
+}
+
+.news-title a {
+    text-decoration: none; /* Remueve el subrayado del título */
+    color: #000; /* Color negro para el título */
+}
+
+/* Estilo de la URL del título */
+.news-title small {
+    font-size: 12px; /* Tamaño más pequeño para la URL */
+    color: #888; /* Color gris para la URL */
+}
+
+/* Estilo para el meta de la publicación */
+.submission-meta {
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px; /* Espacio entre el título y la meta */
+}
+
+.submission-meta a {
+    color: #0077cc;
+    text-decoration: none;
+}
+
+.submission-meta a:hover {
+    text-decoration: underline;
+}
+
+.confirm-buttons {
+    display: flex;
+    justify-content: flex-start; /* Alinea los botones a la izquierda */
+    gap: 10px; /* Espacio entre los botones */
+    margin-top: 10px; /* Espacio superior */
+    flex-wrap: nowrap; /* No permitir que los botones se envuelvan */
+}
+
+
+/* General button styling */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Styling for the "Yes" button */
+.btn-yes {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+.btn-yes:hover {
+    background-color: #45a049;
+}
+
+/* Styling for the "No" button */
+.btn-no {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+.btn-no:hover {
+    background-color: #e53935;
+}
+
 }
