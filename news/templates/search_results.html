@@ -29,7 +29,7 @@
                         </div>
                         <span class="news-title">
                             <a href="{{ submission.url }}">{{ submission.title }}</a>
-                            <small>({{ submission.url|domain }})</small>
+                            <a href="{% url 'news:submissions_by_domain' %}?domain={{ submission.domain }}" class="domain-link">({{ submission.domain }})</a>
                         </span>
                         <span class="news-details">
                             {{ submission.points }} points
