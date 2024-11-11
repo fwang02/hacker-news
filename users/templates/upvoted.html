@@ -1,0 +1,42 @@
+{% load socialaccount %}
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voted Submissions</title>
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+</head>
+<body>
+    <!-- Header Section -->
+    {% include "header.html" %}
+
+    <!-- Main Content Section -->
+    <main>
+        <div class="submissions-container">
+            <h2>{{ user.username }}'s Voted Submissions</h2>
+
+            <section class="news-list">
+                <ul>
+                    {% for submission in submissions %}
+                        <li class="news-item">
+                            <span class="news-title">
+                                <a href="{{ submission.url }}">{{ submission.title }}</a>
+                                <a href="{% url 'news:submissions_by_domain' %}?domain={{ submission.domain }}" class="domain-link">({{ submission.domain }})</a>
+                            </span>
+                            <span class="news-details">
+                                X points
+                                by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
+                                | <a href="{% url 'users:unvote' submission.id %}?next={{ request.path }}" class="submissions-link">unvote</a>
+                                | X comments
+                            </span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

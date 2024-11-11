@@ -8,3 +8,14 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def addKarma(self, num):
+        self.karma += num
+        self.save()
+
+    def reduceKarma(self, num):
+        if self.karma - num >= 0:
+            self.karma -= num
+        else:
+            self.karma = 0
+        self.save()

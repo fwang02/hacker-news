@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Submission, HiddenSubmission, Comment
+from users.utils import calculate_date
+from .models import Submission, HiddenSubmission, UpvotedSubmission, Comment
 from .models import Submission_URL, Submission_ASK
 from .forms import SubmissionForm, CommentForm
 from django.http import JsonResponse, Http404
@@ -11,8 +12,11 @@ def news(request):
     if request.user.is_authenticated:
         hidden_submissions = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
         submissions = Submission.objects.exclude(id__in=hidden_submissions).order_by('title')
+        voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
+        return render(request, 'news.html', {'submissions': submissions, 'voted_submissions': voted_submissions})
     else:
         submissions = Submission.objects.all().order_by('title')
+        return render(request, 'news.html', {'submissions': submissions})
 
     # Contar los comentarios asociados a cada publicación
     for submission in submissions:
@@ -20,6 +24,7 @@ def news(request):
 
     logged_in_username = request.user.username if request.user.is_authenticated else None
     return render(request, 'news.html', {'submissions': submissions, 'logged_in_username': logged_in_username})
+
 
 @login_required
 def submit(request):
@@ -48,14 +53,16 @@ def submit(request):
 
 def newest(request):
 
+
+
+    voted_submissions = []
     if request.user.is_authenticated:
         hidden_submissions = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
         submissions = Submission.objects.exclude(id__in=hidden_submissions).order_by('-created')
+        voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
     else:
         submissions = Submission.objects.all().order_by('-created')
-
-    logged_in_username = request.user.username if request.user.is_authenticated else None
-    return render(request, 'news.html', {'submissions': submissions, 'logged_in_username': logged_in_username})
+    return render(request, 'news.html', {'submissions': submissions, 'voted_submissions': voted_submissions})
 
 def ask(request):
     submissions = Submission_ASK.objects.all()
@@ -137,3 +144,12 @@ def delete_comment(request, comment_id):
 
     comment.delete()
     return redirect('news:submission_detail', submission_id=comment.submission.id)
+
+def submissions_by_domain(request):
+    domain = request.GET.get('domain')
+    submissions = Submission.objects.filter(domain=domain)
+    voted_submissions = []
+    if request.user.is_authenticated:
+        voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
+    return render(request, 'submissions_by_domain.html', {'submissions': submissions, 'domain': domain, 'voted_submissions': voted_submissions})
+
