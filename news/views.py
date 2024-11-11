@@ -5,6 +5,7 @@ from .models import Submission, HiddenSubmission, UpvotedSubmission, Comment
 from .models import Submission_URL, Submission_ASK
 from .forms import SubmissionForm, CommentForm
 from django.http import JsonResponse, Http404
+from django.contrib import messages
 
 
 
@@ -12,15 +13,21 @@ def news(request):
     if request.user.is_authenticated:
         hidden_submissions = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
         submissions = Submission.objects.exclude(id__in=hidden_submissions).order_by('title')
+
+        for submission in submissions:
+            submission.comment_count = submission.comments.count()
+
         voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
         return render(request, 'news.html', {'submissions': submissions, 'voted_submissions': voted_submissions})
     else:
         submissions = Submission.objects.all().order_by('title')
+
+        for submission in submissions:
+            submission.comment_count = submission.comments.count()
         return render(request, 'news.html', {'submissions': submissions})
 
+    
     # Contar los comentarios asociados a cada publicación
-    for submission in submissions:
-        submission.comment_count = submission.comments.count()
 
     logged_in_username = request.user.username if request.user.is_authenticated else None
     return render(request, 'news.html', {'submissions': submissions, 'logged_in_username': logged_in_username})
@@ -107,6 +114,10 @@ def submission_details(request, submission_id):
 
     # Procesar el formulario de comentarios
     if request.method == 'POST':
+        if not request.user.is_authenticated:  # Verifica si el usuario no está autenticado
+            messages.error(request, "Debes estar logueado para comentar.")  # Mensaje de error
+            return redirect('news:submission_detail', submission_id=submission.id)
+
         form = CommentForm(request.POST)  # Instancia del formulario con los datos POST
         if form.is_valid():  # Verifica que el formulario sea válido
             comment = form.save(commit=False)
@@ -144,6 +155,24 @@ def delete_comment(request, comment_id):
 
     comment.delete()
     return redirect('news:submission_detail', submission_id=comment.submission.id)
+
+def edit_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    # Verificar si el usuario es el autor del comentario
+    if comment.author != request.user:
+        messages.error(request, "You do not have permission to edit this comment.")
+        return redirect('news:submission_detail', submission_id=comment.submission.id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)  # Rellenar el formulario con los datos del comentario
+        if form.is_valid():
+            form.save()  # Guardar el comentario editado
+            return redirect('news:submission_detail', submission_id=comment.submission.id)
+    else:
+        form = CommentForm(instance=comment)  # Si es un GET, mostrar el formulario con los datos del comentario
+
+    return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
 
 def submissions_by_domain(request):
     domain = request.GET.get('domain')

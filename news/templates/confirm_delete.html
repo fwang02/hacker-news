@@ -39,18 +39,15 @@
                 <p class="comment-text">{{ comment.text }}</p>
             </div>
     </div>
-    <div class="confirm-buttons">
-    <form method="POST" action="{% url 'news:delete_comment' comment.id %}">
-        {% csrf_token %}
-        <p style="color: grey;">Do you want this to be deleted?</p>
-        <div class="confirm-buttons">
-            <button type="submit" class="btn btn-yes">Yes</button>
-        </div>
-    </form>
-    
-    <form method="GET" action="{% url 'news:submission_detail' submission.id %}">
-        <div class="confirm-buttons">
-            <button type="submit" class="btn btn-no">No</button>
-        </div>
-    </form>
+    <p style="color: grey;">Do you want this to be deleted?</p>
+    <div class="button-container">
+        <form method="POST" action="{% url 'news:delete_comment' comment.id %}">
+            {% csrf_token %}
+                <button type="submit" class="btn btn-yes">Yes</button>
+        </form>
+        
+        <form method="GET" action="{% url 'news:submission_detail' submission.id %}">
+                <button type="submit" class="btn btn-no">No</button>
+        </form>
+    </div>
 </body>

@@ -14,5 +14,6 @@ urlpatterns = [
     path('<int:submission_id>/', views.submission_details, name='submission_detail'),
     path('confirm-delete/<int:comment_id>/', views.confirm_delete, name='confirm_delete'),
     path('delete-comment/<int:comment_id>/', views.delete_comment, name='delete_comment'),
-    path('from', views.submissions_by_domain, name='submissions_by_domain')
+    path('from', views.submissions_by_domain, name='submissions_by_domain'),
+    path('comment/edit/<int:comment_id>/', views.edit_comment, name='edit_comment'),
 ]

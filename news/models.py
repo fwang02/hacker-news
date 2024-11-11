@@ -58,13 +58,6 @@ class Comment(models.Model):
     class Meta:
         ordering = ['created']
 
-    def save(self, commit=True):
-        comment = super().save(commit=False)
-        comment.author = self.user  # Establecer el autor del comentario
-        if commit:
-            comment.save()
-        return comment
-
 
 class UpvotedSubmission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
