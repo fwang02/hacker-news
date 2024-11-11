@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from news.models import Submission, HiddenSubmission, UpvotedSubmission  # Assuming you have a Submission model in the news app
 from .forms import ProfileForm
-from .utils import calculate_account_age
+from .utils import calculate_date
 
 
 def profile(request):
@@ -15,7 +15,7 @@ def profile(request):
     if user.is_anonymous:
         return redirect('news:news')
     logged_in_user = request.user  # Usuario autenticado, siempre será el mismo
-    account_age = calculate_account_age(user.date_joined)
+    account_age = calculate_date(user.date_joined)
 
     if logged_in_user == user:
         if request.method == 'POST':
@@ -58,7 +58,8 @@ def submissions(request):
 def hidden_submissions(request):
     hidden_submissions_ids = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
     submissions = Submission.objects.filter(id__in=hidden_submissions_ids)
-    return render(request, 'hidden.html', {'submissions': submissions, 'username': request.user.username})
+    voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
+    return render(request, 'hidden.html', {'submissions': submissions, 'voted_submissions' : voted_submissions})
 
 @login_required
 def unhide_submission(request, submission_id):
@@ -74,7 +75,9 @@ def upvote(request, submission_id):
 
     UpvotedSubmission.objects.create(user=request.user, submission=submission)
     submission.add_point()
-    return redirect('news:news')
+
+    next_url = request.GET.get('next')
+    return HttpResponseRedirect(next_url)
 
 @login_required
 def unvote(request, submission_id):

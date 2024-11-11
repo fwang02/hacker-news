@@ -24,12 +24,11 @@
                         <li class="news-item">
                             <span class="news-title">
                                 <a href="{{ submission.url }}">{{ submission.title }}</a>
-                                <small>({{ submission.url|domain }})</small>
+                                <a href="{% url 'news:submissions_by_domain' %}?domain={{ submission.domain }}" class="domain-link">({{ submission.domain }})</a>
                             </span>
                             <span class="news-details">
                                 X points
                                 by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
-                                | <a href="{% url 'users:unhide_submission' submission.id %}" class="submissions-link">unhide</a>
                                 | <a href="{% url 'users:unvote' submission.id %}?next={{ request.path }}" class="submissions-link">unvote</a>
                                 | X comments
                             </span>

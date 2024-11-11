@@ -1,10 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from news.utils import get_domain
+
+
 class Submission(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     url = models.URLField(blank=True, null=True)
+    domain = models.CharField(max_length=255, null=True)
     text = models.TextField(blank=True, null=True)
     point = models.IntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
@@ -13,6 +17,9 @@ class Submission(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
+        if self.url:
+            self.domain = get_domain(self.url)
+
         if self._state.adding:
             self.author.profile.addKarma(1)
         super().save(*args, **kwargs)

@@ -277,5 +277,14 @@ a.submissions-link:hover {
 }
 
 .news-title {
-    flex-grow: 1; /* Allow the title to take up available space */
+    flex-grow: 1;
+}
+
+.news-title .domain-link {
+    font-size: 0.8em;
+    color: gray;
+}
+
+.domain-link:hover {
+    text-decoration: underline;
 }
