@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+
+from users.utils import calculate_date
 from .models import Submission, HiddenSubmission, UpvotedSubmission
 from .models import Submission_URL, Submission_ASK
 from .forms import SubmissionForm
@@ -82,3 +84,11 @@ def search(request):
     else:
         results = Submission.objects.none()
     return render(request, 'search_results.html', {'results': results})
+
+def submissions_by_domain(request):
+    domain = request.GET.get('domain')
+    submissions = Submission.objects.filter(domain=domain)
+    voted_submissions = []
+    if request.user.is_authenticated:
+        voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
+    return render(request, 'submissions_by_domain.html', {'submissions': submissions, 'domain': domain, 'voted_submissions': voted_submissions})

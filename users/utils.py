@@ -1,8 +1,8 @@
 from django.utils.timezone import now
 from datetime import timedelta
 
-def calculate_account_age(date_joined):
-    delta = now() - date_joined
+def calculate_date(date):
+    delta = now() - date
     if delta < timedelta(hours=1):
         return f"{delta.seconds // 60} minutes ago"
     elif delta < timedelta(days=1):
