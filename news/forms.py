@@ -1,4 +1,6 @@
 from django import forms
+from django.core.exceptions import ValidationError
+
 from .models import Submission
 from .models import Comment
 
@@ -16,6 +18,14 @@ class SubmissionForm(forms.ModelForm):
         super(SubmissionForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.label_suffix = ''  # Remove the colon
+
+    def clean_url(self):
+        url = self.cleaned_data.get('url')
+        if url:
+            existing_submission = Submission.objects.filter(url=url).first()
+            if existing_submission:
+                raise ValidationError(f"URL already exists:{existing_submission.id}")
+        return url
 
     def clean(self):
         cleaned_data = super().clean()

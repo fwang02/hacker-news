@@ -54,14 +54,17 @@ def submit(request):
                     author=submission_data.author
                 )
             return redirect('news:news')  # Redirect to the main page
+        else:
+            for error in form.errors.get('url', []):
+                if "URL already exists" in error:
+                    submission_id = error.split(":")[1]
+                    return redirect('news:submission_detail', submission_id=submission_id)
+
     else:
         form = SubmissionForm()
     return render(request, 'submit.html', {'form': form})
 
 def newest(request):
-
-
-
     voted_submissions = []
     if request.user.is_authenticated:
         hidden_submissions = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
@@ -102,9 +105,6 @@ def search(request):
     else:
         results = Submission.objects.none()
     return render(request, 'search_results.html', {'results': results})
-
-    submissions = Submission.objects.all().order_by('-created')
-    return render(request, 'newest.html', {'submissions': submissions})
 
 
 def submission_details(request, submission_id):
