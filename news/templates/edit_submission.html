@@ -49,13 +49,15 @@
         <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
+            <div>
+                <p class="submission-info">URL: <span class="submission-value">{{ submission.url }}</span></p>
+                <p class="submission-info">Text: <span class="submission-value">{{ submission.text }}</span></p>
+            </div>
+            <p class="spacer"></p>
+            <button type="submit">Update</button>
         </form>
-        <div>
-            <p class="submission-info">URL: <span class="submission-value">{{ submission.url }}</span></p>
-            <p class="submission-info">Text: <span class="submission-value">{{ submission.text }}</span></p>
-        </div>
-        <p class="spacer"></p>
-        <button type="submit">Update</button>
+        
+        
     </main>
 </body>
 </html>
