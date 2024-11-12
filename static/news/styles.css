@@ -261,7 +261,7 @@ button[type="submit"] {
     padding: 10px 15px;
     cursor: pointer;
     border-radius: 3px;
-    margin: 0; 
+    margin: 0;
     font-size: 14px;
     display: inline-block;
 }
@@ -338,8 +338,8 @@ button[type="submit"]:hover {
 }
 
 .submission-detail{
-    font-family:Verdana, Geneva, sans-serif; 
-    font-size:10pt; 
+    font-family:Verdana, Geneva, sans-serif;
+    font-size:10pt;
     color:#828282;
 }
 

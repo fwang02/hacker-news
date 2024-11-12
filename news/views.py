@@ -6,32 +6,29 @@ from .models import Submission_URL, Submission_ASK
 from .forms import SubmissionForm, CommentForm
 from django.http import JsonResponse, Http404
 from django.contrib import messages
-
+from .utils import calculate_account_age
+from .utils import calculate_score
 
 
 def news(request):
     if request.user.is_authenticated:
         hidden_submissions = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
-        submissions = Submission.objects.exclude(id__in=hidden_submissions).order_by('title')
-
-        for submission in submissions:
-            submission.comment_count = submission.comments.count()
-
+        submissions = Submission.objects.exclude(id__in=hidden_submissions)
         voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
-        return render(request, 'news.html', {'submissions': submissions, 'voted_submissions': voted_submissions})
     else:
-        submissions = Submission.objects.all().order_by('title')
+        submissions = Submission.objects.all()
+        hidden_submissions = []
+        voted_submissions = []
 
-        for submission in submissions:
-            submission.comment_count = submission.comments.count()
-        return render(request, 'news.html', {'submissions': submissions})
+    for submission in submissions:
+        submission.created_age = calculate_account_age(submission.created)
 
-    
-    # Contar los comentarios asociados a cada publicación
+    submissions = sorted(submissions, key=calculate_score, reverse=True)
 
-    logged_in_username = request.user.username if request.user.is_authenticated else None
-    return render(request, 'news.html', {'submissions': submissions, 'logged_in_username': logged_in_username})
-
+    return render(request, 'news.html', {
+        'submissions': submissions,
+        'voted_submissions': voted_submissions
+    })
 
 @login_required
 def submit(request):
@@ -75,9 +72,17 @@ def newest(request):
     return render(request, 'news.html', {'submissions': submissions, 'voted_submissions': voted_submissions})
 
 def ask(request):
+    voted_submissions = []
     submissions = Submission_ASK.objects.all()
-    logged_in_username = request.user.username if request.user.is_authenticated else None
-    return render(request, 'ask.html', {'submissions': submissions, 'logged_in_username': logged_in_username})
+    if request.user.is_authenticated:
+        voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
+
+    for submission in submissions:
+        submission.created_age = calculate_account_age(submission.created)
+
+    submissions = sorted(submissions, key=calculate_score, reverse=True)
+    return render(request, 'ask.html', {'submissions': submissions, 'voted_submissions': voted_submissions})
+
 
 def detail(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id)
