@@ -27,8 +27,9 @@
                                 <a href="{% url 'news:submissions_by_domain' %}?domain={{ submission.domain }}" class="domain-link">({{ submission.domain }})</a>
                             </span>
                             <span class="news-details">
-                                X points
+                                {{ submission.point }} points
                                 by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
+                                {{ submission.created_age }}
                                 | <a href="{% url 'users:unvote' submission.id %}?next={{ request.path }}" class="submissions-link">unvote</a>
                                 | X comments
                             </span>

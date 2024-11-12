@@ -43,8 +43,9 @@
                             {% endif %}
                         </span>
                         <span class="news-details">
-                            X points
+                            {{ submission.point }} points
                             by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
+                            {{ submission.created_age }} 
                             |
                             <!-- solo se muestra si el usuario autenticado ha votado la submission -->
                             {% if submission.id in voted_submissions %}

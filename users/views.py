@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from news.models import Submission, HiddenSubmission, UpvotedSubmission  # Assuming you have a Submission model in the news app
 from .forms import ProfileForm
 from .utils import calculate_date
+from news.utils import calculate_score
 
 
 def profile(request):
@@ -46,20 +47,31 @@ def profile(request):
 def submissions(request):
     user_id = request.GET.get('id')
     user = get_object_or_404(User, username=user_id)
-    submissions = Submission.objects.filter(author=user)  # Usa el nombre correcto del campo
-    # si es el usuario autenticado, se usa request.user
+    submissions = Submission.objects.filter(author=user)
+
+    # Add created_age to each submission and sort by created_age
+    for submission in submissions:
+        submission.created_age = calculate_date(submission.created)
+    submissions = sorted(submissions, key=lambda x: x.created_age)
+
     voted_submissions = []
     if request.user.is_authenticated:
         voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
-    return render(request, 'submissions.html', {'submissions': submissions, 'username': user.username, 'voted_submissions': voted_submissions})
 
+    return render(request, 'submissions.html', {'submissions': submissions, 'username': user.username, 'voted_submissions': voted_submissions})
 
 @login_required
 def hidden_submissions(request):
     hidden_submissions_ids = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
     submissions = Submission.objects.filter(id__in=hidden_submissions_ids)
+
+    # Add created_age to each submission and sort by created_age
+    for submission in submissions:
+        submission.created_age = calculate_date(submission.created)
+    submissions = sorted(submissions, key=lambda x: x.created_age)
+
     voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
-    return render(request, 'hidden.html', {'submissions': submissions, 'voted_submissions' : voted_submissions})
+    return render(request, 'hidden.html', {'submissions': submissions, 'voted_submissions': voted_submissions})
 
 @login_required
 def unhide_submission(request, submission_id):
@@ -94,4 +106,10 @@ def unvote(request, submission_id):
 def upvoted_submissions(request):
     voted_submissions_ids = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
     submissions = Submission.objects.filter(id__in=voted_submissions_ids)
+
+    # Add created_age to each submission and sort by created_age
+    for submission in submissions:
+        submission.created_age = calculate_date(submission.created)
+    submissions = sorted(submissions, key=lambda x: x.created_age)
+
     return render(request, 'upvoted.html', {'submissions': submissions})
