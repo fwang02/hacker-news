@@ -64,6 +64,7 @@
                             </a>
                             {% if submission.author == request.user %}
                                 | <a href="{% url 'news:delete_submission' submission.id %}" class="submissions-link" onclick="confirmDelete()">delete</a>
+                                | <a href="{% url 'news:delete_submission' submission.id %}" class="submissions-link" onclick="confirmDelete()">delete</a>
                             {% endif %}
                         </span>
                     </li>

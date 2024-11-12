@@ -50,8 +50,8 @@
                                 by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
                                 <!-- solo se muestra si el usuario autenticado ha votado la submission -->
                                 {% if submission.id in voted_submissions %}
-                                    |
-                                    <a href="{% url 'users:unvote' submission.id %}?next={{ request.get_full_path }}" class="submissions-link">unvote</a>
+                                    | <a href="{% url 'news:edit_submission' submission.id %}" class="submissions-link">edit</a>
+                                    | <a href="{% url 'users:unvote' submission.id %}?next={{ request.get_full_path }}" class="submissions-link">unvote</a>
                                 {% endif %}
                             </span>
                         </li>
