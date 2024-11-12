@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="40b7e414-c9ef-4251-a1bc-401d5efe12ff" name="Changes" comment="merge de develop">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/templates/search_results.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/search_results.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/templates/submissions_by_domain.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/submissions_by_domain.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news/templates/submission_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/submission_details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/templates/submissions.html" beforeDir="false" afterPath="$PROJECT_DIR$/users/templates/submissions.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +29,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="develop" />
+        <entry key="$PROJECT_DIR$" value="Feature/#13_Edit_submissions" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -73,7 +73,7 @@
     "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
     "deletionFromPopupRequiresConfirmation": "false",
     "django.template.preview.state": "SHOW_EDITOR",
-    "git-widget-placeholder": "Feature/#13__Edit__submissions",
+    "git-widget-placeholder": "develop",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/dexyt/OneDrive/Desktop/fib/asw/djangos",
     "list.type.of.created.stylesheet": "CSS",
@@ -157,7 +157,7 @@
       <workItem from="1729756872896" duration="5322000" />
       <workItem from="1731018773971" duration="106000" />
       <workItem from="1731018885650" duration="2816000" />
-      <workItem from="1731441070954" duration="10139000" />
+      <workItem from="1731441070954" duration="11672000" />
     </task>
     <task id="LOCAL-00001" summary="Revert &quot;modelos creados&quot;&#10;&#10;This reverts commit e9432f58">
       <option name="closed" value="true" />

@@ -60,7 +60,8 @@
                                 {% endif %}
                                 | X comments
                                 {% if submission.author == request.user %}
-                                    | <a href="{% url 'news:delete_submission' submission.id %}" class="submissions-link" onclick="confirmDelete(event)">delete</a>
+                                    | <a href="{% url 'news:edit_submission' submission.id %}" class="submissions-link">edit</a>
+                                    | <a href="{% url 'news:delete_submission' submission.id %}" class="submissions-link" onclick="confirmDelete()">delete</a>
                                 {% endif %}
                             </span>
                         </li>
