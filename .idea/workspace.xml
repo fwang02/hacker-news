@@ -6,18 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="40b7e414-c9ef-4251-a1bc-401d5efe12ff" name="Changes" comment="merge de develop">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/templates/ask.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/ask.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/templates/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/header.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/templates/news.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/news.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/templates/submission_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/submission_details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news/templates/search_results.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/search_results.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/news/templates/submissions_by_domain.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/submissions_by_domain.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/news/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/news/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/templates/hidden.html" beforeDir="false" afterPath="$PROJECT_DIR$/users/templates/hidden.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/templates/submissions.html" beforeDir="false" afterPath="$PROJECT_DIR$/users/templates/submissions.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/templates/upvoted.html" beforeDir="false" afterPath="$PROJECT_DIR$/users/templates/upvoted.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,12 +41,12 @@
     &quot;assignee&quot;: &quot;angellamaecs&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/hn11c-djangos/hacker-news.git&quot;,
-    &quot;accountId&quot;: &quot;54be99c5-4839-4f9e-8846-254ba6e44f79&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/hn11c-djangos/hacker-news.git",
+    "accountId": "9b92e6f5-ff3c-43a4-91d5-1f834b288588"
   }
-}</component>
+}]]></component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -83,7 +73,7 @@
     "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
     "deletionFromPopupRequiresConfirmation": "false",
     "django.template.preview.state": "SHOW_EDITOR",
-    "git-widget-placeholder": "Feature/#101__View__home__page",
+    "git-widget-placeholder": "Feature/#13__Edit__submissions",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/dexyt/OneDrive/Desktop/fib/asw/djangos",
     "list.type.of.created.stylesheet": "CSS",
@@ -142,8 +132,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.23726.102" />
-        <option value="bundled-python-sdk-5e1850174b45-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.23726.102" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.23339.19" />
+        <option value="bundled-python-sdk-0029f7779945-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.23339.19" />
       </set>
     </attachedChunks>
   </component>
@@ -167,6 +157,7 @@
       <workItem from="1729756872896" duration="5322000" />
       <workItem from="1731018773971" duration="106000" />
       <workItem from="1731018885650" duration="2816000" />
+      <workItem from="1731441070954" duration="10139000" />
     </task>
     <task id="LOCAL-00001" summary="Revert &quot;modelos creados&quot;&#10;&#10;This reverts commit e9432f58">
       <option name="closed" value="true" />

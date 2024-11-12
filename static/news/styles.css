@@ -537,3 +537,26 @@ button[type="submit"]:hover {
 .domain-link:hover {
     text-decoration: underline;
 }
+
+/*-------------------------EDIT SUBMISSION-------------------------------------*/
+.submission-info {
+    display: grid;
+    grid-template-columns: 75px 1fr; /* Ajusta 100px según el ancho necesario para las etiquetas */
+    gap: 2px; /* Espacio entre la etiqueta y el valor */
+    align-items: center;
+    color: #777;
+    margin-bottom: 5px; /* Ajusta según sea necesario */
+}
+
+.label {
+    text-align: right; /* Alinea las etiquetas a la derecha */
+}
+
+.submission-value {
+    text-align: left;
+    color: #777;
+}
+
+.spacer {
+    margin-top: 20px; /* Adjust the space as needed */
+}

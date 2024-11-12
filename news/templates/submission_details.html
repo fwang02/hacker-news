@@ -52,7 +52,7 @@
                             {% endif %}
                         </span>
                         <span class="news-details">
-                            X points
+                            {{ submission.point }} {{ submission.point|pluralize:"point,points" }}
                             by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
                             | <a href="{% url 'news:hide_submission' submission.id %}" class="submissions-link">hide</a>
                             |<a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">
@@ -63,6 +63,7 @@
                                 {% endif %}
                             </a>
                             {% if submission.author == request.user %}
+                                | <a href="{% url 'news:delete_submission' submission.id %}" class="submissions-link" onclick="confirmDelete()">delete</a>
                                 | <a href="{% url 'news:delete_submission' submission.id %}" class="submissions-link" onclick="confirmDelete()">delete</a>
                             {% endif %}
                         </span>
