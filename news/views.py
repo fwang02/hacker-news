@@ -191,11 +191,13 @@ def submissions_by_domain(request):
 @login_required
 def edit_submission(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id, author=request.user)
+    submission.created_age = calculate_account_age(submission.created)
     if request.method == 'POST':
         form = EditSubmissionForm(request.POST, instance=submission)
         if form.is_valid():
             form.save()
-            return redirect('news:submission_detail', submission_id=submission.id)
+            messages.success(request, 'Submission updated successfully.')
+            return redirect('news:edit_submission', submission_id=submission.id)
     else:
         form = EditSubmissionForm(instance=submission)
     return render(request, 'edit_submission.html', {'form': form, 'submission': submission})
