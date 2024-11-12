@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from users.utils import calculate_date
 from .models import Submission, HiddenSubmission, UpvotedSubmission, Comment
 from .models import Submission_URL, Submission_ASK
-from .forms import SubmissionForm, CommentForm
+from .forms import SubmissionForm, CommentForm, EditSubmissionForm
 from django.http import JsonResponse, Http404
 from django.contrib import messages
 from .utils import calculate_account_age
@@ -187,3 +187,15 @@ def submissions_by_domain(request):
         voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
     return render(request, 'submissions_by_domain.html', {'submissions': submissions, 'domain': domain, 'voted_submissions': voted_submissions})
 
+
+@login_required
+def edit_submission(request, submission_id):
+    submission = get_object_or_404(Submission, id=submission_id, author=request.user)
+    if request.method == 'POST':
+        form = EditSubmissionForm(request.POST, instance=submission)
+        if form.is_valid():
+            form.save()
+            return redirect('news:submission_detail', submission_id=submission.id)
+    else:
+        form = EditSubmissionForm(instance=submission)
+    return render(request, 'edit_submission.html', {'form': form, 'submission': submission})
