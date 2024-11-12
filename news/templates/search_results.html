@@ -32,7 +32,7 @@
                             <a href="{% url 'news:submissions_by_domain' %}?domain={{ submission.domain }}" class="domain-link">({{ submission.domain }})</a>
                         </span>
                         <span class="news-details">
-                            {{ submission.points }} points
+                            {{ submission.point }} {{ submission.point|pluralize:"point,points" }}
                             by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
                             | X comments
                         </span>
