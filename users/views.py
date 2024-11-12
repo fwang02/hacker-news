@@ -117,10 +117,16 @@ def upvoted_submissions(request):
 @login_required
 def profile_view(request):
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        form = ProfileForm(request.POST, instance=request.user.profile)
         if form.is_valid():
-            form.save()
+            form.save(commit=False)
+            if 'choose_banner' in request.FILES:
+                profile.banner = request.FILES['choose_banner']
+            if 'choose_avatar' in request.FILES:
+                profile.avatar = request.FILES['choose_avatar']
+            profile.save()
             return redirect('profile')
+
     else:
         form = ProfileForm(instance=request.user.profile)
     return render(request, 'profile.html', {'form': form})

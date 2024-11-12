@@ -36,6 +36,7 @@
 
         <div class="profile-container">
 
+
             <!-- Banner options -->
                 <div class="file-upload-container">
                     <label for="delete-banner">Banner:</label>
@@ -56,7 +57,7 @@
             <p class="profile-info">created: <span class="profile-value">{{ account_age }}</span></p>
             <p class="profile-info">karma: <span class="profile-value">{{ user.profile.karma }}</span></p>
 
-            <form method="post">
+             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
 
