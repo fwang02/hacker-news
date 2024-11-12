@@ -222,6 +222,11 @@ a.submissions-link:hover {
     text-decoration: underline; /* Optional: Add underline on hover */
 }
 
+.submission-number {
+    color: #777;
+    margin-right: 5px;
+}
+
 /* Triángulo pequeño a la izquierda del título */
 .triangle-icon {
     all: unset;

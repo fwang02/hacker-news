@@ -22,6 +22,7 @@
                 <ul>
                     {% for submission in submissions %}
                         <li class="news-item">
+                            <span class="submission-number">{{ forloop.counter }}. </span>
                             <span class="news-title">
                                 <a href="{{ submission.url }}">{{ submission.title }}</a>
                                 <a href="{% url 'news:submissions_by_domain' %}?domain={{ submission.domain }}" class="domain-link">({{ submission.domain }})</a>
