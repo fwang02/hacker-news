@@ -469,22 +469,6 @@ button[type="submit"]:hover {
     margin-top: 20px; /* Space above the add comment section */
 }
 
-/* Contenedor del triángulo y título */
-.icon-container {
-    display: flex;
-    align-items: center; /* Alinea el triángulo y el título verticalmente */
-    margin-right: 10px; /* Espacio entre el triángulo y el título */
-}
-
-/* Estilo del triángulo */
-.triangle-icon {
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent; /* Ancho izquierdo del triángulo */
-    border-right: 6px solid transparent; /* Ancho derecho del triángulo */
-    border-bottom: 10px solid #777; /* Color y altura del triángulo */
-    margin-right: 10px; /* Espacio entre el triángulo y el título */
-}
 
 /* Título de la noticia */
 .news-title {
@@ -580,4 +564,20 @@ button[type="submit"]:hover {
 .domain-link:hover {
     text-decoration: underline;
 
+}
+
+.submissions-comments {
+    display: compact;
+    align-content: start;
+    justify-content: space-between;
+}
+
+.submissions-comments a {
+    text-decoration: none;
+    color: #555555;
+}
+
+.submissions-comments a.selected-link {
+    color: #ff6600;
+    font-weight: bold;
 }

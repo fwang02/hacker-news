@@ -3,8 +3,10 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
-from news.models import Submission, HiddenSubmission, UpvotedSubmission  # Assuming you have a Submission model in the news app
+from news.models import Submission, HiddenSubmission, UpvotedSubmission, \
+    Comment  # Assuming you have a Submission model in the news app
 from .forms import ProfileForm
+from .models import Favorite_submission, Favorite_comment
 from .utils import calculate_date
 
 
@@ -95,3 +97,21 @@ def upvoted_submissions(request):
     voted_submissions_ids = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
     submissions = Submission.objects.filter(id__in=voted_submissions_ids)
     return render(request, 'upvoted.html', {'submissions': submissions})
+
+def favorites(request):
+    user_id = request.GET.get('id')
+    comments = request.GET.get('comments')
+    target_user = get_object_or_404(User, id=user_id)
+    # si es el usuario autenticado, se usa request.user
+    voted_submissions = []
+    if request.user.is_authenticated:
+        voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
+
+    if comments == 'true':
+        users_favorites = Favorite_comment.objects.filter(user=target_user).values_list('comment_id', flat=True)
+        fav_comments = Comment.objects.filter(id__in=users_favorites)
+        return render(request, 'favorite_submissions.html', {'comments': fav_comments, 'target_user' : target_user, 'isComments' : True})
+    else:
+        users_favorites = Favorite_submission.objects.filter(user=target_user).values_list('submission_id', flat=True)
+        fav_submissions = Submission.objects.filter(id__in=users_favorites)
+        return render(request, 'favorite_submissions.html', {'submissions': fav_submissions, 'target_user' : target_user,'voted_submissions' : voted_submissions, 'isComments' : False})
