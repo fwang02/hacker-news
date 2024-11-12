@@ -452,7 +452,6 @@ button[type="submit"]:hover {
     font-size: 24px; /* Size for the main submission title */
     margin-bottom: 10px; /* Space below the title */
 }
-}
 .content-wrapper h2 {
     font-size: 20px; /* Size for the comments section title */
     margin-top: 20px; /* Space above the comments section */

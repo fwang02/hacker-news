@@ -9,6 +9,8 @@
       <change beforePath="$PROJECT_DIR$/news/templates/ask.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/ask.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/news/templates/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/header.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/news/templates/news.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/news.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news/templates/submission_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/submission_details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news/templates/submissions_by_domain.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/submissions_by_domain.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/news/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/news/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/news/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/news/styles.css" afterDir="false" />
