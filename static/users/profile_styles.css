@@ -35,3 +35,94 @@
     font-style: italic; /* Estilo cursiva */
     color: #777; /* Puedes ajustar el color si lo deseas */
 }
+/* Estilos para el banner */
+.banner-container {
+    width: 100%;
+    height: 200px; /* Ajusta la altura según sea necesario */
+    overflow: hidden;
+    position: relative;
+}
+
+.banner-image {
+    width: 100%;
+    height: auto;
+}
+
+/* Estilos para el avatar */
+.avatar-container {
+    position: absolute;
+    top: 150px; /* Ajusta según sea necesario */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px; /* Ajusta el tamaño del avatar según sea necesario */
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid white; /* Añade un borde blanco alrededor del avatar */
+}
+
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Estilos para el contenedor de perfil */
+.profile-container {
+    margin-top: 100px; /* Ajusta según sea necesario para dar espacio al avatar */
+}
+
+.profile-info {
+    display: grid;
+    grid-template-columns: 75px 1fr; /* Ajusta 100px según el ancho necesario para las etiquetas */
+    gap: 10px; /* Espacio entre la etiqueta y el valor */
+    align-items: center;
+    color: #777;
+    margin-bottom: 5px; /* Ajusta según sea necesario */
+}
+
+.label {
+    text-align: right; /* Alinea las etiquetas a la derecha */
+}
+
+.profile-value {
+    text-align: left;
+    color: #000;
+}
+
+/* Contenedor de enlaces (alinear en fila) */
+.links-container {
+    margin-left: 85px; /* Igual a la primera columna de .profile-info para alinear con los valores */
+    margin-top: 10px;
+    display: flex;
+    align-items: center; /* Alinea los enlaces horizontalmente */
+    gap: 5px; /* Espacio entre los enlaces */
+}
+
+/* Estilo para el separador / */
+.links-container .separator {
+    color: #777 !important; /* Color del separador */
+}
+
+/* Estilo para el texto "(publicly visible)" */
+.links-container .publicly-visible {
+    font-style: italic; /* Estilo cursiva */
+    color: #777; /* Puedes ajustar el color si lo deseas */
+}
+
+/* Estilos para el contenedor de carga de archivos */
+.file-upload-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.file-upload-container label {
+    font-weight: bold;
+}
+
+
+.file-upload-container span {
+    color: #777;
+}

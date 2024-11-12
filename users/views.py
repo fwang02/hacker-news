@@ -113,3 +113,14 @@ def upvoted_submissions(request):
     submissions = sorted(submissions, key=lambda x: x.created_age)
 
     return render(request, 'upvoted.html', {'submissions': submissions})
+
+@login_required
+def profile_view(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=request.user.profile)
+    return render(request, 'profile.html', {'form': form})

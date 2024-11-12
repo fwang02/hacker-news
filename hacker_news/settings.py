@@ -266,3 +266,16 @@ WHITENOISE_KEEP_ONLY_HASHED_FILES = True
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+INSTALLED_APPS += ['storages']
+
+AWS_ACCESS_KEY_ID = 'ASIAX45OLCKJRJAOU7PN'
+AWS_SECRET_ACCESS_KEY = '+Z2Xirml5M0QPTMFyOfLR4BEqzORWVoPNz6ExHUk'
+AWS_STORAGE_BUCKET_NAME = 'djangosbucket'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
