@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 
 from news.models import Submission, HiddenSubmission, UpvotedSubmission, \
     Comment  # Assuming you have a Submission model in the news app
@@ -98,20 +99,52 @@ def upvoted_submissions(request):
     submissions = Submission.objects.filter(id__in=voted_submissions_ids)
     return render(request, 'upvoted.html', {'submissions': submissions})
 
+@login_required
+def add_favorite_submission(request, submission_id):
+    submission = get_object_or_404(Submission, id=submission_id)
+    Favorite_submission.objects.create(user=request.user, submission=submission)
+    return redirect(reverse('users:favorites') + '?id=' + str(request.user.id))
+
+@login_required
+def add_favorite_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    Favorite_comment.objects.create(user=request.user, comment=comment)
+    return redirect(reverse('users:favorites') + '?id=' + str(request.user.id) + '?comments=true')
+
+@login_required
+def remove_favorite_submission(request, submission_id):
+    submission = get_object_or_404(Submission, id=submission_id)
+    Favorite_submission.objects.filter(user=request.user, submission=submission).delete()
+    return redirect(reverse('users:favorites') + '?id=' + str(request.user.id))
+
+@login_required
+def remove_favorite_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    Favorite_comment.objects.filter(user=request.user, comment=comment).delete()
+    return redirect(reverse('users:favorites') + '?id=' + str(request.user.id) + '?comments=true')
+
 def favorites(request):
     user_id = request.GET.get('id')
     comments = request.GET.get('comments')
     target_user = get_object_or_404(User, id=user_id)
-    # si es el usuario autenticado, se usa request.user
-    voted_submissions = []
-    if request.user.is_authenticated:
-        voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
+
+    voted = []
+    req_favorites = []
 
     if comments == 'true':
+        if request.user.is_authenticated:
+            # TODO: Falta model de votos en comentarios
+            # voted = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
+            req_favorites = Favorite_comment.objects.filter(user=request.user).values_list('comment_id', flat=True)
+
         users_favorites = Favorite_comment.objects.filter(user=target_user).values_list('comment_id', flat=True)
         fav_comments = Comment.objects.filter(id__in=users_favorites)
-        return render(request, 'favorite_submissions.html', {'comments': fav_comments, 'target_user' : target_user, 'isComments' : True})
+        return render(request, 'favorite_submissions.html', {'comments': fav_comments, 'target_user' : target_user, 'req_favorites' : req_favorites,'isComments' : True})
     else:
+        if request.user.is_authenticated:
+            voted = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
+            req_favorites = Favorite_submission.objects.filter(user=request.user).values_list('submission_id', flat=True)
+
         users_favorites = Favorite_submission.objects.filter(user=target_user).values_list('submission_id', flat=True)
         fav_submissions = Submission.objects.filter(id__in=users_favorites)
-        return render(request, 'favorite_submissions.html', {'submissions': fav_submissions, 'target_user' : target_user,'voted_submissions' : voted_submissions, 'isComments' : False})
+        return render(request, 'favorite_submissions.html', {'submissions': fav_submissions, 'target_user' : target_user, 'req_favorites' : req_favorites,'voted_submissions' : voted, 'isComments' : False})

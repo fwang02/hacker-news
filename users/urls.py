@@ -12,5 +12,10 @@ urlpatterns = [
     path('unvote/<int:submission_id>/', views.unvote, name='unvote'),
     path('upvoted/', views.upvoted_submissions, name='voted_submissions'),
     path('favorites/', views.favorites, name='favorites'),
+    path('favorite/<int:submission_id>', views.add_favorite_submission, name='add_favorite_submission'),
+    path('favorite/<int:comment_id>', views.add_favorite_comment, name='add_favorite_comment'),
+    path('unfavorite/<int:submission_id>', views.remove_favorite_submission, name='remove_favorite_submission'),
+    path('unfavorite/<int:comment_id>', views.remove_favorite_comment, name='remove_favorite_comment'),
+
 
 ]
