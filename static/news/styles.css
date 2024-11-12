@@ -149,7 +149,6 @@ main {
 .news-details {
     font-size: 12px;
     color: #888;
-    
 }
 
 form p {
@@ -175,12 +174,13 @@ form input, form textarea {
 }
 
 p {
-    margin-bottom: 10px; /* Increase the bottom margin to 30px */
+    margin-bottom: 30px; /* Increase the bottom margin to 30px */
 }
 
 .content-wrapper {
     margin: 0 20px; /* Add left and right margin */
 }
+
 
 
 .username-link {
@@ -222,9 +222,12 @@ a.submissions-link:hover {
     text-decoration: underline; /* Optional: Add underline on hover */
 }
 
-.submission-number {
-    color: #777;
-    margin-right: 5px;
+.icon-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-right: 2px;
+    margin-top: -15px; /* Ajusta este valor según sea necesario */
 }
 
 /* Triángulo pequeño a la izquierda del título */
@@ -238,7 +241,6 @@ a.submissions-link:hover {
     border-right: 6px solid transparent;
     border-bottom: 10px solid #777;
     margin-right: 10px;
-    margin-bottom: 6px;
     align-self: center;
 }
 
@@ -246,19 +248,44 @@ a.submissions-link:hover {
     visibility: hidden; /* Mantiene el espacio pero hace invisible el triángulo */
 }
 
-/* Ajustar el contenedor de .news-item para alinear los elementos en fila
+.triangle-icon.unlogged {
+    margin-top: 15px; /* Ajusta este valor según sea necesario */
+}
+
+.red-asterisk {
+    color: #ff6600;
+    font-weight: bold;
+    font-size: 22px; /* Adjust the font size as needed */
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    z-index: 1; /* Ensure the asterisk is on top */
+}
+
 .news-item {
+    display: flex;
+    align-items: center;
     padding: 10px;
     border-bottom: 1px solid #ddd;
-    display: flex;
+    justify-content: space-between; /* Ensure the details are aligned to the right */
 }
-*/
 
+.news-title {
+    flex-grow: 1; /* Allow the title to take up available space */
+}
+
+.submission-number {
+    color: #777;
+    margin-right: 5px;
+}
+
+/*-------------------------COMMENTS-------------------------------------*/
 .button-container {
     display: flex;  /* Usar flexbox para organizar los botones en fila */
     gap: 10px;  /* Espacio entre los botones */
 }
 
+/* PROBLEMAAAAA cambia el triangle-icon
 button[type="submit"] {
     background-color: #ff6600;
     color: white;
@@ -270,6 +297,7 @@ button[type="submit"] {
     font-size: 14px;
     display: inline-block;
 }
+*/
 
 /* Contenedor de comentarios */
 #comments {
@@ -292,7 +320,6 @@ a.comment-link {
     font-size: 14px;
     color: #333;
 }
-
 /* Meta información del comentario */
 .comment-meta {
     font-size: 12px;
@@ -300,13 +327,11 @@ a.comment-link {
     display: flex;
     align-items: center;
 }
-
 /* Hora del comentario */
 .comment-time {
     font-size: 12px;
     color: #888;
 }
-
 /* Link para ocultar comentario */
 .toggle-comment {
     font-size: 12px;
@@ -323,16 +348,14 @@ a.comment-link {
     line-height: 1.5;
     color: #333;
 }
-
 /* Botón de reply */
 .reply-link {
     font-size: 12px;
     color: #0066c0;
     text-decoration: none;
     display: block;
-    margin-top: 2spx;
+    margin-top: 2px;
 }
-
 .reply-link:hover {
     text-decoration: underline;
 }
@@ -341,18 +364,17 @@ a.comment-link {
 button[type="submit"]:hover {
     background-color: #e65c00; /* Color más oscuro al pasar el mouse */
 }
-
 .submission-detail{
     font-family:Verdana, Geneva, sans-serif;
     font-size:10pt;
     color:#828282;
 }
-
 .add-comment {
     display: flex;
     flex-direction: column; /* Coloca los elementos en una columna */
     width: 500px; /* Mismo ancho que la caja de texto */
     margin-left: 100px; /* Espacio izquierdo */
+    margin-top: 15px; /* Ajusta este valor según sea necesario */
 }
 
 /* Caja de texto */
@@ -377,12 +399,10 @@ button[type="submit"]:hover {
     margin-top: 10px; /* Espacio superior para separarlo del textarea */
     font-size: 14px; /* Tamaño de la fuente */
 }
-
 /* Hover para el botón */
 .add-comment button:hover {
     background-color: #e0e0e0;
 }
-
 /*Save Edited Comments*/
 .save-comment {
     display: flex;
@@ -390,7 +410,6 @@ button[type="submit"]:hover {
     width: 500px; /* Mismo ancho que la caja de texto */
     margin-left: 0px; /* Espacio izquierdo */
 }
-
 /* Caja de texto */
 .save-comment textarea {
     width: 200%; /* Asegura que la caja de texto ocupe todo el ancho del contenedor */
@@ -404,7 +423,6 @@ button[type="submit"]:hover {
     border-radius: 3px;
     border: 1px solid #ddd; /* Asegura un borde */
 }
-
 /* Botón */
 .save-comment button {
     background-color: #f0f0f0; /* Fondo gris */
@@ -416,27 +434,9 @@ button[type="submit"]:hover {
     margin-top: 10px; /* Espacio superior para separarlo del textarea */
     font-size: 14px; /* Tamaño de la fuente */
 }
-
 /* Hover para el botón */
 .save-comment button:hover {
     background-color: #e0e0e0;
-}
-
-.icon-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin-right: 3px;
-}
-
-.red-asterisk {
-    color: #ff6600;
-    font-weight: bold;
-    font-size: 22px; /* Adjust the font size as needed */
-    position: absolute;
-    top: -5px;
-    left: 3px;
-    z-index: 1; /* Ensure the asterisk is on top */
 }
 
 .red-asterisk-comments {
@@ -447,84 +447,43 @@ button[type="submit"]:hover {
     display: inline; /* Asegura que esté en línea con el texto */
 }
 
-.news-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    justify-content: space-between; /* Ensure the details are aligned to the right */
-}
-
-.news-title {
-    flex-grow: 1; /* Allow the title to take up available space */
-
 /* Submission Details Styles */
 .content-wrapper h1 {
     font-size: 24px; /* Size for the main submission title */
     margin-bottom: 10px; /* Space below the title */
 }
-
+}
 .content-wrapper h2 {
     font-size: 20px; /* Size for the comments section title */
     margin-top: 20px; /* Space above the comments section */
 }
-
 .content-wrapper h3 {
     font-size: 18px; /* Size for the add comment section title */
     margin-top: 20px; /* Space above the add comment section */
 }
 
-/* Contenedor del triángulo y título */
-.icon-container {
-    display: flex;
-    align-items: center; /* Alinea el triángulo y el título verticalmente */
-    margin-right: 10px; /* Espacio entre el triángulo y el título */
-}
 
-/* Estilo del triángulo */
-.triangle-icon {
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent; /* Ancho izquierdo del triángulo */
-    border-right: 6px solid transparent; /* Ancho derecho del triángulo */
-    border-bottom: 10px solid #777; /* Color y altura del triángulo */
-    margin-right: 10px; /* Espacio entre el triángulo y el título */
-}
-
-/* Título de la noticia */
-.news-title {
-    display: flex;
-    align-items: center; /* Alinea el triángulo con el título */
-    font-size: 18px;
-}
-
-.news-title a {
-    text-decoration: none; /* Remueve el subrayado del título */
-    color: #000; /* Color negro para el título */
-}
-
+/*-------------------------NEWS-------------------------------------*/
 /* Estilo de la URL del título */
 .news-title small {
     font-size: 12px; /* Tamaño más pequeño para la URL */
     color: #888; /* Color gris para la URL */
 }
-
 /* Estilo para el meta de la publicación */
 .submission-meta {
+.submission-number {
     font-size: 14px;
     color: #555;
     margin-top: 10px; /* Espacio entre el título y la meta */
 }
-
 .submission-meta a {
     color: #0077cc;
+    color: #777;
     text-decoration: none;
 }
-
 .submission-meta a:hover {
     text-decoration: underline;
 }
-
 .confirm-buttons button{
     background-color: #f0f0f0; /* Fondo gris */
     color: #000; /* Letra negra */
@@ -535,54 +494,44 @@ button[type="submit"]:hover {
     margin-top: 10px; /* Espacio superior para separarlo del textarea */
     font-size: 14px; /* Tamaño de la fuente */
 }
-
 .confirm-buttons button:hover {
     background-color: #e0e0e0;
 }
-
-
 /* General button styling */
 .btn {
     display: inline-block;
     padding: 10px 20px;
     font-size: 14px;
     font-weight: bold;
+    margin-right: 5px;
     text-align: center;
     cursor: pointer;
     border-radius: 4px;
     border: none;
     transition: background-color 0.3s ease;
 }
-
 /* Styling for the "Yes" button */
 .btn-yes {
     background-color: #4CAF50; /* Green */
     color: white;
 }
-
 .btn-yes:hover {
     background-color: #45a049;
 }
-
 /* Styling for the "No" button */
 .btn-no {
     background-color: #f44336; /* Red */
     color: white;
 }
-
 .btn-no:hover {
     background-color: #e53935;
 }
-
     flex-grow: 1;
 }
-
 .news-title .domain-link {
     font-size: 0.8em;
     color: gray;
 }
-
 .domain-link:hover {
     text-decoration: underline;
-
 }
