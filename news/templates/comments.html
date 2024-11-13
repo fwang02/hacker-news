@@ -31,16 +31,18 @@
                         <span class="comment-time">{{ comment.created_at|timesince }} ago</span>
                         | <a href="{% url 'news:submission_detail' comment.submission.id %}#comment-{{ comment.parent.id }}" class="comment-link"> parent  </a>
                         | <a href="{% url 'news:submission_detail' comment.submission.id %}#comment-{{ comment.id }}" class="comment-link"> context </a>
+                        {% if comment.id in voted_comments %}
+                            | <a href="{% url 'users:unvote_comment' comment.id %}?next={{ request.path }}" class="comment-link">unvote</a>
+                        {% endif %}
+                        {% if comment.author == request.user %}
+                            | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>&nbsp;
+                            | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link">delete</a>
+                        {% endif %}
                         | on:<a href="{% url 'news:submission_detail' comment.submission.id %}" class="comment-link"> {{comment.submission.title}}</a>
                     </span>
-                    {% if comment.id in voted_comments %}
-                        | <a href="{% url 'users:unvote_comment' comment.id %}?next={{ request.path }}" class="comment-link">unvote</a>
-                    {% endif %}
+                    
     
-                    {% if comment.author == request.user %}
-                        | <a href="{% url 'news:edit_comment' comment.id %}" class="edit-link">Edit</a>&nbsp;
-                        | <a href="{% url 'news:confirm_delete' comment.id %}" class="delete-link">Delete</a>
-                    {% endif %}
+                   
 
                 <div class="comment-content">
                     <p class="comment-text">{{ comment.text }}</p>
