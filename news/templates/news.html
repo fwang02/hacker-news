@@ -57,7 +57,7 @@
                             {% endif %}
                             <!-- solo se muestra si el usuario autenticado es el autor de la submission -->
                             {% if user.is_authenticated %}
-                                <a href="{% url 'news:hide_submission' submission.id %}" class="submissions-link">hide</a>
+                                <a href="{% url 'news:hide_submission' submission.id %}?next={{ request.path }}" class="submissions-link">hide</a>
                             {% else %}
                                 <a onclick="showLoginPrompt()" class="submissions-link">hide</a>
                             {% endif %}
