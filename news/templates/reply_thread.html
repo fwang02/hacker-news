@@ -24,8 +24,8 @@
             {% endif %}
             <!-- Botones Editar y Eliminar -->
             {% if reply.author == request.user %}
-                | &nbsp;<a href="{% url 'news:edit_comment' reply.id %}" class="edit-link">Edit</a>&nbsp;
-                | &nbsp;<a href="{% url 'news:confirm_delete' reply.id %}" class="delete-link">Delete</a>
+                | &nbsp;<a href="{% url 'news:edit_comment' reply.id %}" class="comment-link">edit</a>&nbsp;
+                | &nbsp;<a href="{% url 'news:confirm_delete' reply.id %}" class="comment-link">delete</a>
             {% endif %}
         </p>
         

@@ -211,6 +211,10 @@ def comments_view(request):
     comments = Comment.objects.all().order_by('-created_at')  # Ordenar por fecha de creación, de más nuevo a más antiguo
     return render(request, 'comments.html', {'comments': comments})
 
+@login_required
+def threads_view(request):
+    comments = Comment.objects.filter(author=request.user,parent__isnull=True).order_by('-created_at')
+    return render(request, 'threads.html', {'comments': comments})
 
 @login_required
 def edit_submission(request, submission_id):

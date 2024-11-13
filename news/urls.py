@@ -20,6 +20,6 @@ urlpatterns = [
 
 
     path('submission/<int:submission_id>/edit/', views.edit_submission, name='edit_submission'),
-    path('reply/<int:comment_id>/', views.reply_to_comment, name='reply_to_comment')
-
+    path('reply/<int:comment_id>/', views.reply_to_comment, name='reply_to_comment'),
+    path('threads/', views.threads_view, name='threads'),
 ]
