@@ -187,3 +187,6 @@ def submissions_by_domain(request):
         voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
     return render(request, 'submissions_by_domain.html', {'submissions': submissions, 'domain': domain, 'voted_submissions': voted_submissions})
 
+def comments_view(request):
+    comments = Comment.objects.all().order_by('-created')  # Ordenar por fecha de creación, de más nuevo a más antiguo
+    return render(request, 'comments.html', {'comments': comments})
