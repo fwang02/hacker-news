@@ -463,7 +463,6 @@ button[type="submit"]:hover {
     margin-top: 20px; /* Space above the add comment section */
 }
 
-
 /*-------------------------NEWS-------------------------------------*/
 /* Estilo de la URL del título */
 .news-title small {
@@ -536,4 +535,48 @@ button[type="submit"]:hover {
 }
 .domain-link:hover {
     text-decoration: underline;
+}
+
+/*-------------------------EDIT SUBMISSION-------------------------------------*/
+.submission-info {
+    display: grid;
+    grid-template-columns: 75px 1fr; /* Ajusta 100px según el ancho necesario para las etiquetas */
+    gap: 2px; /* Espacio entre la etiqueta y el valor */
+    align-items: center;
+    color: #777;
+    margin-bottom: 5px; /* Ajusta según sea necesario */
+}
+
+.label {
+    text-align: right; /* Alinea las etiquetas a la derecha */
+}
+
+.submission-value {
+    text-align: left;
+    color: #777;
+}
+
+.submissions-comments {
+    display: compact;
+    align-content: start;
+    justify-content: space-between;
+}
+
+.submissions-comments a {
+    text-decoration: none;
+    color: #555555;
+}
+
+.submissions-comments a.selected-link {
+    color: #ff6600;
+    font-weight: bold;
+}
+
+.spacer {
+    margin-top: 20px; /* Adjust the space as needed */
+}
+
+.comment-author {
+    font-size: 12px;
+    color: #888;
 }

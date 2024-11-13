@@ -11,6 +11,7 @@ class Submission(models.Model):
     domain = models.CharField(max_length=255, null=True)
     text = models.TextField(blank=True, null=True)
     point = models.IntegerField(default=1)
+    comment_count = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -50,13 +51,28 @@ class HiddenSubmission(models.Model):
     
 class Comment(models.Model):
     submission = models.ForeignKey(Submission, related_name='comments', on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name="replies")
     text = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    level = models.IntegerField(default=0)
+    
     def __str__(self):
         return "self.text"
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            self.submission.comment_count += 1
+            self.submission.save()
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.submission.comment_count -= 1
+        self.submission.save()
+        super().delete(*args, **kwargs)
+
     class Meta:
-        ordering = ['created']
+        ordering = ['created_at']
 
 
 class UpvotedSubmission(models.Model):
@@ -66,3 +82,9 @@ class UpvotedSubmission(models.Model):
     class Meta:
         unique_together = ('user', 'submission')
 
+class UpvotedComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'comment')

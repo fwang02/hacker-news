@@ -35,6 +35,7 @@ class SubmissionForm(forms.ModelForm):
         if not url and not text:
             raise forms.ValidationError("At least one of URL or text must be provided.")
         return cleaned_data
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
@@ -42,3 +43,8 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'text': forms.Textarea(attrs={'placeholder': 'Your Comment'})  # Añades un widget para el campo 'text'
         }
+
+class EditSubmissionForm(forms.ModelForm):
+    class Meta:
+        model = Submission
+        fields = ['title']

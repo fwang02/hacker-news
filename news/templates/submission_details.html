@@ -30,11 +30,11 @@
                             {% if submission.author == request.user %}
                                 <span class="red-asterisk">*</span>
                                 <span class="triangle-icon hidden"></span> 
-                            {% elif submission.id in voted_submissions %}
+                            {% elif submissionVoted %}
                                 <span class="triangle-icon hidden "></span>
                             {% else %}
                                 {% if user.is_authenticated %}
-                                    <form action="{% url 'users:upvote' submission.id %}?next={{ request.path }}" method="post">
+                                    <form action="{% url 'users:upvote_submission' submission.id %}?next={{ request.path }}" method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="triangle-icon"></button>
                                     </form>
@@ -52,17 +52,30 @@
                             {% endif %}
                         </span>
                         <span class="news-details">
-                            X points
+                            {{ submission.point }} {{ submission.point|pluralize:"point,points" }}
                             by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
-                            | <a href="{% url 'news:hide_submission' submission.id %}" class="submissions-link">hide</a>
-                            |<a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">
-                                {% if submission.comment_count == 1 %}
-                                    1 comment
+                            <a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">{{ submission.created|custom_timesince }} ago</a>
+                            {% if submissionVoted %}
+                                <a href="{% url 'users:unvote_submission' submission.id %}?next={{ request.path }}" class="submissions-link">unvote</a>
+                                |
+                            {% endif %}
+                            <!-- solo se muestra si el usuario autenticado es el autor de la submission -->
+                            {% if user.is_authenticated %}
+                                {% if submission.id in hidden_submissions %}
+                                    | <a href="{% url 'users:unhide_submission' submission.id %}?next={{ request.path }}" class="submissions-link">unhide</a>
                                 {% else %}
-                                    {{ submission.comment_count }} comments
+                                    | <a href="{% url 'news:hide_submission' submission.id %}?next={{ request.path }}" class="submissions-link">hide</a>
                                 {% endif %}
+                            {% else %}
+                                <a onclick="showLoginPrompt()" class="submissions-link">hide</a>
+                            {% endif %}
+                            | <a href="{% url 'users:add_favorite_submission' submission.id %}" class="submissions-link">favorite</a>
+                            |
+                            <a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">
+                                    {{ submission.comment_count }} {{ submission.comment_count|pluralize:"comment,comments" }}
                             </a>
                             {% if submission.author == request.user %}
+                                | <a href="{% url 'news:edit_submission' submission.id %}" class="submissions-link">edit</a>
                                 | <a href="{% url 'news:delete_submission' submission.id %}" class="submissions-link" onclick="confirmDelete()">delete</a>
                             {% endif %}
                         </span>
@@ -76,7 +89,7 @@
         <form method="POST">
             {% csrf_token %}
             {{ form.text }}
-            <button type="submit">add comment</button>
+            <button type="submit">Add comment</button>
         </form>
     </div>
 
@@ -86,81 +99,44 @@
             <div class="comment" id="comment-{{ comment.id }}">
                 <p class="comment-meta">
                     {% if comment.author == request.user %}
-                            <span class="red-asterisk-comments">*</span>
-                            <span class="triangle-icon hidden "></span>
-                        {% else %}
-                            <span class="triangle-icon"></span>
-                        {% endif %}
-                    <strong>{{ comment.author.username }}</strong> 
-                    <span class="comment-time">{{ comment.created_at }}</span>
-
-                    {% if comment.author == request.user %}
-                        | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>
-                        | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link" onclick="confirmDelete(event)">delete</a>
+                        <span class="red-asterisk-comments">*</span>
+                        <span class="triangle-icon hidden "></span>
+                    {% elif comment.id in voted_comments %}
+                        <span class="triangle-icon hidden"></span>
+                    {% else %}
+                        <form action="{% url 'users:upvote_comment' comment.id %}?next={{ request.path }}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="triangle-icon"></button>
+                        </form>
                     {% endif %}
-                    <a href="javascript:void(0);" class="toggle-comment">[-]</a>
+    
+                    <span class="comment-author">
+                        by <strong>{{ comment.author.username }}</strong>
+                        <span class="comment-time">{{ comment.created_at|custom_timesince }} ago</span>&nbsp;
+                    </span>
+                    {% if comment.id in voted_comments %}
+                        | <a href="{% url 'users:unvote_comment' comment.id %}?next={{ request.path }}" class="comment-link">unvote</a>
+                    {% endif %}
+    
+                    {% if comment.author == request.user %}
+                        |&nbsp; <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>&nbsp;
+                        |&nbsp; <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link">delete</a>
+                    {% endif %}
                 </p>
+
                 <div class="comment-content">
                     <p class="comment-text">{{ comment.text }}</p>
-                    <a href="#reply" class="reply-link">reply</a>
+                    <a href="{% url 'news:reply_to_comment' comment.id %}" class="reply-link">reply</a>
+    
+                    <!-- Mostrar respuestas (replies) de forma anidada -->
+                    <div class="replies" style="margin-left: 20px;">
+                        {% include 'reply_thread.html' with replies=comment.replies.all voted_comments=voted_comments%}
+                    </div>
                 </div>
             </div>
         {% empty %}
             <p>No comments yet.</p>
         {% endfor %}
     </div>
-</body>
-</html>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Delete comment functionality
-            const deleteLinks = document.querySelectorAll('.delete-comment');
-
-            deleteLinks.forEach(function(link) {
-                link.addEventListener('click', function(event) {
-                    event.preventDefault();
-
-                    const commentId = this.getAttribute('data-comment-id');
-                    const url = `/delete_comment/${commentId}/`;  // URL para eliminar el comentario
-
-                    fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': document.querySelector('[name="csrfmiddlewaretoken"]').value
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Eliminar el comentario del DOM
-                            const commentDiv = document.getElementById(`comment-${commentId}`);
-                            commentDiv.remove();
-                        } else {
-                            alert('Error al eliminar el comentario.');
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-                });
-            });
-
-            // Toggle comment visibility (expand/collapse)
-            const toggleLinks = document.querySelectorAll('.toggle-comment');
-            toggleLinks.forEach(function(link) {
-                link.addEventListener('click', function(event) {
-                    event.preventDefault();
-
-                    const commentContent = this.closest('.comment').querySelector('.comment-content');
-                    if (commentContent.style.display === "none") {
-                        commentContent.style.display = "block";
-                        this.textContent = "[-]";  // Cambio de texto para indicar que puede ocultarse
-                    } else {
-                        commentContent.style.display = "none";
-                        this.textContent = "[+]";  // Cambio de texto para indicar que puede expandirse
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 </html>

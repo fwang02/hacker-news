@@ -1,9 +1,8 @@
 venv/
+.venv/
 db.sqlite3
 **/__pycache__/
-<<<<<<< HEAD
 .idea/workspace.xml
 .idea/
-=======
 .vscode/
->>>>>>> Feature/#6-Add-comment
+

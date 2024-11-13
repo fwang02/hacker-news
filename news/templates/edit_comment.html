@@ -1,3 +1,4 @@
+{% load custom_filters %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -12,28 +13,31 @@
     <main>
         <p class="comment-meta">
             {% if comment.author == request.user %}
-                    <span class="red-asterisk-comments">*</span>
-                    <span class="triangle-icon hidden "></span>
-                {% else %}
-                    <span class="triangle-icon"></span>
-                {% endif %}
-            <strong>{{ comment.author.username }}</strong> 
-            <span class="comment-time">{{ comment.created_at }}</span>
+                <span class="red-asterisk-comments">*</span>
+                <span class="triangle-icon hidden"></span>
+            {% else %}
+                <span class="triangle-icon"></span>
+            {% endif %}
+            <strong>{{ comment.author.username }}</strong>&nbsp;
+            <span class="comment-time">{{ comment.created_at|custom_timesince }} ago</span>&nbsp;
 
             {% if comment.author == request.user %}
                 | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>
                 | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link" onclick="confirmDelete(event)">delete</a>
             {% endif %}
-            <a href="javascript:void(0);" class="toggle-comment">[-]</a>
         </p>
+
+        <!-- Texto actual del comentario -->
+        <p class="current-comment-text">{{ comment.text }}</p>
+         
         <section>
             <div class="save-comment"> 
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}  <!-- Renderiza el formulario -->
-                <button type="submit">update</button>
-            </form>
-        </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}  
+                    <button type="submit">update</button>
+                </form>
+            </div>
         </section>
     </main>
 </body>
