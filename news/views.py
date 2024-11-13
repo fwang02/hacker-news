@@ -210,6 +210,9 @@ def submissions_by_domain(request):
     for submission in submissions:
         submission.created_age = calculate_account_age(submission.created)
 
+def comments_view(request):
+    comments = Comment.objects.all().order_by('-created')  # Ordenar por fecha de creación, de más nuevo a más antiguo
+    return render(request, 'comments.html', {'comments': comments})
     return render(request, 'submissions_by_domain.html', {
         'submissions': submissions,
         'domain': domain,
