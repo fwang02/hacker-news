@@ -28,7 +28,7 @@
                                     <span class="triangle-icon hidden"></span>
                                 {% else %}
                                     {% if user.is_authenticated %}
-                                        <form action="{% url 'users:upvote' submission.id %}?next={{ request.get_full_path }}" method="post">
+                                        <form action="{% url 'users:upvote_submission' submission.id %}?next={{ request.get_full_path }}" method="post">
                                             {% csrf_token %}
                                             <button type="submit" class="triangle-icon"></button>
                                         </form>
@@ -56,11 +56,7 @@
                                 |
                             {% endif %}
                             <a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">
-                                {% if submission.comment_count == 1 %}
-                                    1 comment
-                                {% else %}
-                                    {{ submission.comment_count }} comments
-                                {% endif %}
+                                    {{ submission.comment_count }} {{ submission.comment_count|pluralize:"comment,comments" }}
                             </a>
                             {% if submission.author == request.user %}
                                 | <a href="{% url 'news:edit_submission' submission.id %}" class="submissions-link">edit</a>

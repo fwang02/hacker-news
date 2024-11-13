@@ -11,6 +11,7 @@ class Submission(models.Model):
     domain = models.CharField(max_length=255, null=True)
     text = models.TextField(blank=True, null=True)
     point = models.IntegerField(default=1)
+    comment_count = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -55,8 +56,21 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     level = models.IntegerField(default=0)
+    
     def __str__(self):
         return "self.text"
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            self.submission.comment_count += 1
+            self.submission.save()
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.submission.comment_count -= 1
+        self.submission.save()
+        super().delete(*args, **kwargs)
+
     class Meta:
         ordering = ['created_at']
 

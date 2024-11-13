@@ -463,7 +463,6 @@ button[type="submit"]:hover {
     margin-top: 20px; /* Space above the add comment section */
 }
 
-
 /*-------------------------NEWS-------------------------------------*/
 /* Estilo de la URL del título */
 .news-title small {
@@ -556,6 +555,21 @@ button[type="submit"]:hover {
     text-align: left;
     color: #777;
 }
+
+.submissions-comments {
+    display: compact;
+    align-content: start;
+    justify-content: space-between;
+}
+
+.submissions-comments a {
+    text-decoration: none;
+    color: #555555;
+}
+
+.submissions-comments a.selected-link {
+    color: #ff6600;
+    font-weight: bold;
 
 .spacer {
     margin-top: 20px; /* Adjust the space as needed */

@@ -35,7 +35,10 @@
                             {{ submission.point }} {{ submission.point|pluralize:"point,points" }}
                             by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
                             <a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">{{ submission.created_age }}</a>
-                            | X comments
+                            |
+                            <a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">
+                                    {{ submission.comment_count }} {{ submission.comment_count|pluralize:"comment,comments" }}
+                            </a>
                         </span>
                     </li>
                 {% empty %}
