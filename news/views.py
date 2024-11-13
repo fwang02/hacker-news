@@ -200,7 +200,7 @@ def submissions_by_domain(request):
     for submission in submissions:
         submission.created_age = calculate_account_age(submission.created)
 
-    return render(request, 'ask.html', {
+    return render(request, 'submissions_by_domain.html', {
         'submissions': submissions,
         'domain': domain,
         'voted_submissions': voted_submissions
