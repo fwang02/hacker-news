@@ -28,7 +28,7 @@
                                     <span class="triangle-icon hidden"></span>
                                 {% else %}
                                     {% if user.is_authenticated %}
-                                        <form action="{% url 'users:upvote' submission.id %}?next={{ request.get_full_path }}" method="post">
+                                        <form action="{% url 'users:upvote_submission' submission.id %}?next={{ request.get_full_path }}" method="post">
                                             {% csrf_token %}
                                             <button type="submit" class="triangle-icon"></button>
                                         </form>
