@@ -51,12 +51,10 @@ class HiddenSubmission(models.Model):
     
 class Comment(models.Model):
     submission = models.ForeignKey(Submission, related_name='comments', on_delete=models.CASCADE)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name="replies")
     text = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    level = models.IntegerField(default=0)
-    
+    created = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return "self.text"
 
@@ -72,7 +70,7 @@ class Comment(models.Model):
         super().delete(*args, **kwargs)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['created']
 
 
 class UpvotedSubmission(models.Model):

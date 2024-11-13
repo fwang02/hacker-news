@@ -22,34 +22,32 @@
         <div class="comment" id="comment-{{ comment.id }}">
             <p class="comment-meta">
                 {% if comment.author == request.user %}
-                    <span class="red-asterisk-comments">*</span>
-                    <span class="triangle-icon hidden"></span>
-                {% else %}
-                    <span class="triangle-icon"></span>
-                {% endif %}
-                <strong>{{ comment.author.username }}</strong>&nbsp;
-                <span class="comment-time">{{ comment.created_at|timesince }} ago</span>&nbsp;
-
+                        <span class="red-asterisk-comments">*</span>
+                        <span class="triangle-icon hidden "></span>
+                    {% else %}
+                        <span class="triangle-icon"></span>
+                    {% endif %}
+                <strong>{{ comment.author.username }}</strong> 
+                <span class="comment-time">{{ comment.created_at }}</span>
+                
                 {% if comment.author == request.user %}
-                    | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>
                     | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link" onclick="confirmDelete(event)">delete</a>
                 {% endif %}
+                <a href="javascript:void(0);" class="toggle-comment">[-]</a>
             </p>
             <div class="comment-content">
                 <p class="comment-text">{{ comment.text }}</p>
             </div>
-        </div>
     </div>
     <p style="color: grey;">Do you want this to be deleted?</p>
     <div class="button-container">
         <form method="POST" action="{% url 'news:delete_comment' comment.id %}">
             {% csrf_token %}
-            <button type="submit" class="btn btn-yes">Yes</button>
+                <button type="submit" class="btn btn-yes">Yes</button>
         </form>
         
         <form method="GET" action="{% url 'news:submission_detail' submission.id %}">
-            <button type="submit" class="btn btn-no">No</button>
+                <button type="submit" class="btn btn-no">No</button>
         </form>
     </div>
 </body>
-</html>

@@ -115,16 +115,29 @@ def search(request):
 
 def submission_details(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id)
-    comments = Comment.objects.filter(submission=submission, parent__isnull=True)  # Solo comentarios principales
+    comments = submission.comments.all()
+    submission.comment_count = submission.comments.count()
+    submission.created_age = calculate_account_age(submission.created)
+
+    if request.user.is_authenticated:
+        hidden_submissions = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
+        voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
+    else:
+        hidden_submissions = []
+        voted_submissions = []
 
     if request.method == 'POST':
+        if not request.user.is_authenticated:
+            messages.error(request, "Debes estar logueado para comentar.")
+            return redirect('news:submission_detail', submission_id=submission.id)
+
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.author = request.user
             comment.submission = submission
+            comment.author = request.user
             comment.save()
-            return redirect('news:submission_details', submission_id=submission.id)
+            return redirect('news:submission_detail', submission_id=submission.id)
     else:
         form = CommentForm()
 
@@ -132,6 +145,8 @@ def submission_details(request, submission_id):
         'submission': submission,
         'comments': comments,
         'form': form,
+        'hidden_submissions': hidden_submissions,
+        'voted_submissions': voted_submissions
     })
 
 
@@ -174,23 +189,6 @@ def edit_comment(request, comment_id):
         form = CommentForm(instance=comment)  # Si es un GET, mostrar el formulario con los datos del comentario
 
     return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
-
-@login_required
-def reply_to_comment(request, comment_id):
-    original_comment = get_object_or_404(Comment, id=comment_id)
-    submission = original_comment.submission
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            reply = form.save(commit=False)
-            reply.author = request.user
-            reply.submission = submission
-            reply.parent = original_comment
-            reply.save()
-            return redirect('news:submission_detail', submission_id=submission.id)
-    else:
-        form = CommentForm()
-    return render(request, 'reply_to_comment.html', {'form': form, 'original_comment': original_comment})
 
 def submissions_by_domain(request):
     domain = request.GET.get('domain')
