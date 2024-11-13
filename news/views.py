@@ -20,9 +20,6 @@ def news(request):
         hidden_submissions = []
         voted_submissions = []
 
-    for submission in submissions:
-        submission.created_age = calculate_account_age(submission.created)
-
     submissions = sorted(submissions, key=calculate_score, reverse=True)
 
     return render(request, 'news.html', {
@@ -76,9 +73,6 @@ def ask(request):
     submissions = Submission_ASK.objects.all()
     if request.user.is_authenticated:
         voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
-
-    for submission in submissions:
-        submission.created_age = calculate_account_age(submission.created)
 
     submissions = sorted(submissions, key=calculate_score, reverse=True)
     return render(request, 'ask.html', {'submissions': submissions, 'voted_submissions': voted_submissions})
@@ -207,8 +201,11 @@ def submissions_by_domain(request):
     if request.user.is_authenticated:
         voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
 
-    for submission in submissions:
-        submission.created_age = calculate_account_age(submission.created)
+    return render(request, 'submissions_by_domain.html', {
+        'submissions': submissions,
+        'domain': domain,
+        'voted_submissions': voted_submissions
+    })
 
 def comments_view(request):
     comments = Comment.objects.all().order_by('-created_at')  # Ordenar por fecha de creación, de más nuevo a más antiguo
@@ -217,13 +214,11 @@ def comments_view(request):
 @login_required
 def threads_view(request):
     comments = Comment.objects.filter(author=request.user,parent__isnull=True).order_by('-created_at')
-
     return render(request, 'threads.html', {'comments': comments})
 
 @login_required
 def edit_submission(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id, author=request.user)
-    submission.created_age = calculate_account_age(submission.created)
     if request.method == 'POST':
         form = EditSubmissionForm(request.POST, instance=submission)
         if form.is_valid():

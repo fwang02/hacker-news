@@ -1,3 +1,4 @@
+{% load custom_filters %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +19,7 @@
                     <span class="triangle-icon"></span>
                 {% endif %}
             <strong>{{ original_comment.author.username }}</strong> 
-            <span class="original-comment-time">{{ original_comment.created_at|timesince }} ago</span>
+            <span class="original-comment-time">{{ original_comment.created_at|custom_timesince }} ago</span>
 
             {% if original_comment.author == request.user %}
                 | <a href="{% url 'news:edit_comment' original_comment.id %}" class="comment-link">edit</a>
