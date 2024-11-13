@@ -119,8 +119,8 @@
                     {% endif %}
     
                     {% if comment.author == request.user %}
-                        |&nbsp; <a href="{% url 'news:edit_comment' comment.id %}" class="edit-link">Edit</a>&nbsp;
-                        |&nbsp; <a href="{% url 'news:confirm_delete' comment.id %}" class="delete-link">Delete</a>
+                        |&nbsp; <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>&nbsp;
+                        |&nbsp; <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link">delete</a>
                     {% endif %}
                 </p>
 

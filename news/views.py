@@ -118,13 +118,17 @@ def submission_details(request, submission_id):
         submissionVoted = UpvotedSubmission.objects.filter(user=request.user, submission=submission).exists()
 
     if request.method == 'POST':
+        if not request.user.is_authenticated:
+            messages.error(request, "You must be logged in to comment.")
+            return redirect('news:submission_detail', submission_id=submission.id)
+
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.author = request.user
             comment.submission = submission
             comment.save()
-            return redirect('news:submission_details', submission_id=submission.id)
+            return redirect('news:submission_detail', submission_id=submission.id)
     else:
         form = CommentForm()
 
@@ -207,14 +211,20 @@ def submissions_by_domain(request):
         'voted_submissions': voted_submissions
     })
 
-def comments_view(request):
+def comments(request):
     comments = Comment.objects.all().order_by('-created_at')  # Ordenar por fecha de creación, de más nuevo a más antiguo
-    return render(request, 'comments.html', {'comments': comments})
+    voted_comments = []
+    if request.user.is_authenticated:
+        voted_comments = UpvotedComment.objects.filter(user=request.user).values_list('comment_id', flat=True)
+    return render(request, 'comments.html', {'comments': comments, 'voted_comments': voted_comments})
 
 @login_required
-def threads_view(request):
+def threads(request):
     comments = Comment.objects.filter(author=request.user,parent__isnull=True).order_by('-created_at')
-    return render(request, 'threads.html', {'comments': comments})
+    voted_comments = []
+    if request.user.is_authenticated:
+        voted_comments = UpvotedComment.objects.filter(user=request.user).values_list('comment_id', flat=True)
+    return render(request, 'threads.html', {'comments': comments, 'voted_comments': voted_comments})
 
 @login_required
 def edit_submission(request, submission_id):

@@ -16,10 +16,10 @@ urlpatterns = [
     path('from', views.submissions_by_domain, name='submissions_by_domain'),
     path('comment/edit/<int:comment_id>/', views.edit_comment, name='edit_comment'),
 
-    path('comments/', views.comments_view, name='comments'),
+    path('comments/', views.comments, name='comments'),
 
 
     path('submission/<int:submission_id>/edit/', views.edit_submission, name='edit_submission'),
     path('reply/<int:comment_id>/', views.reply_to_comment, name='reply_to_comment'),
-    path('threads/', views.threads_view, name='threads'),
+    path('threads/', views.threads, name='threads'),
 ]
