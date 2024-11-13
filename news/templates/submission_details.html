@@ -70,12 +70,9 @@
                                 <a onclick="showLoginPrompt()" class="submissions-link">hide</a>
                             {% endif %}
                             | <a href="{% url 'users:add_favorite_submission' submission.id %}" class="submissions-link">favorite</a>
-                            |<a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">
-                                {% if submission.comment_count == 1 %}
-                                    1 comment
-                                {% else %}
-                                    {{ submission.comment_count }} comments
-                                {% endif %}
+                            |
+                            <a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">
+                                    {{ submission.comment_count }} {{ submission.comment_count|pluralize:"comment,comments" }}
                             </a>
                             {% if submission.author == request.user %}
                                 | <a href="{% url 'news:edit_submission' submission.id %}" class="submissions-link">edit</a>
