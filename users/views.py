@@ -76,7 +76,8 @@ def hidden_submissions(request):
 @login_required
 def unhide_submission(request, submission_id):
     HiddenSubmission.objects.filter(user=request.user, submission_id=submission_id).delete()
-    return redirect('users:hidden_submissions')
+    next_url = request.GET.get('next', request.META.get('HTTP_REFERER', 'news:news'))
+    return HttpResponseRedirect(next_url)
 
 @login_required
 def upvote(request, submission_id):
