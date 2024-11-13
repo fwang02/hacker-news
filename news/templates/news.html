@@ -27,7 +27,7 @@
                                 <span class="triangle-icon hidden "></span>
                             {% else %}
                                 {% if user.is_authenticated %}
-                                    <form action="{% url 'users:upvote' submission.id %}?next={{ request.path }}" method="post">
+                                    <form action="{% url 'users:upvote_submission' submission.id %}?next={{ request.path }}" method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="triangle-icon"></button>
                                     </form>
@@ -43,12 +43,12 @@
                             {% endif %}
                         </span>
                         <span class="news-details">
-                            X points
+                            {{ submission.point }} points
                             by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
                             |
                             <!-- solo se muestra si el usuario autenticado ha votado la submission -->
                             {% if submission.id in voted_submissions %}
-                                <a href="{% url 'users:unvote' submission.id %}?next={{ request.path }}" class="submissions-link">unvote</a>
+                                <a href="{% url 'users:unvote_submission' submission.id %}?next={{ request.path }}" class="submissions-link">unvote</a>
                                 |
                             {% endif %}
                             <!-- solo se muestra si el usuario autenticado es el autor de la submission -->

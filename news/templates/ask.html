@@ -34,9 +34,15 @@
                             <a href="{{ submission.url }}">{{ submission.title }}</a>
                         </span>
                         <span class="news-details">
-                            X points
+                            {{ submission.point }} points
                             by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
-                            | X comments
+                            |<a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">
+                                {% if submission.comment_count == 1 %}
+                                    1 comment
+                                {% else %}
+                                    {{ submission.comment_count }} comments
+                                {% endif %}
+                            </a>
                         </span>
                     </li>
                 {% endfor %}
