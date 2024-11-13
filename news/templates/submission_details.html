@@ -89,7 +89,7 @@
         <form method="POST">
             {% csrf_token %}
             {{ form.text }}
-            <button type="submit">Add comment</button>
+            <button type="submit">add comment</button>
         </form>
     </div>
 
@@ -99,36 +99,81 @@
             <div class="comment" id="comment-{{ comment.id }}">
                 <p class="comment-meta">
                     {% if comment.author == request.user %}
-                        <span class="red-asterisk-comments">*</span>
-                        <span class="triangle-icon hidden "></span>
-                    {% else %}
-                        <span class="triangle-icon"></span>
-                    {% endif %}
-    
-                    <span class="comment-author">
-                        by <strong>{{ comment.author.username }}</strong>
-                        <span class="comment-time">{{ comment.created_at|timesince }} ago</span>&nbsp;
-                    </span>
-    
+                            <span class="red-asterisk-comments">*</span>
+                            <span class="triangle-icon hidden "></span>
+                        {% else %}
+                            <span class="triangle-icon"></span>
+                        {% endif %}
+                    <strong>{{ comment.author.username }}</strong> 
+                    <span class="comment-time">{{ comment.created_at }}</span>
+
                     {% if comment.author == request.user %}
-                        |&nbsp; <a href="{% url 'news:edit_comment' comment.id %}" class="edit-link">Edit</a>&nbsp;
-                        |&nbsp; <a href="{% url 'news:confirm_delete' comment.id %}" class="delete-link">Delete</a>
+                        | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>
+                        | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link" onclick="confirmDelete(event)">delete</a>
                     {% endif %}
+                    <a href="javascript:void(0);" class="toggle-comment">[-]</a>
                 </p>
-    
                 <div class="comment-content">
                     <p class="comment-text">{{ comment.text }}</p>
-                    <a href="{% url 'news:reply_to_comment' comment.id %}" class="reply-link">reply</a>
-    
-                    <!-- Mostrar respuestas (replies) de forma anidada -->
-                    <div class="replies" style="margin-left: 20px;">
-                        {% include 'reply_thread.html' with replies=comment.replies.all %}
-                    </div>
+                    <a href="#reply" class="reply-link">reply</a>
                 </div>
             </div>
         {% empty %}
             <p>No comments yet.</p>
         {% endfor %}
     </div>
+</body>
+</html>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Delete comment functionality
+            const deleteLinks = document.querySelectorAll('.delete-comment');
+
+            deleteLinks.forEach(function(link) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+
+                    const commentId = this.getAttribute('data-comment-id');
+                    const url = `/delete_comment/${commentId}/`;  // URL para eliminar el comentario
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name="csrfmiddlewaretoken"]').value
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Eliminar el comentario del DOM
+                            const commentDiv = document.getElementById(`comment-${commentId}`);
+                            commentDiv.remove();
+                        } else {
+                            alert('Error al eliminar el comentario.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+
+            // Toggle comment visibility (expand/collapse)
+            const toggleLinks = document.querySelectorAll('.toggle-comment');
+            toggleLinks.forEach(function(link) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+
+                    const commentContent = this.closest('.comment').querySelector('.comment-content');
+                    if (commentContent.style.display === "none") {
+                        commentContent.style.display = "block";
+                        this.textContent = "[-]";  // Cambio de texto para indicar que puede ocultarse
+                    } else {
+                        commentContent.style.display = "none";
+                        this.textContent = "[+]";  // Cambio de texto para indicar que puede expandirse
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
