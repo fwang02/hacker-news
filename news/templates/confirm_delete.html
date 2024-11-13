@@ -28,7 +28,7 @@
                     <span class="triangle-icon"></span>
                 {% endif %}
                 <strong>{{ comment.author.username }}</strong>&nbsp;
-                <span class="comment-time">{{ comment.created_at|timesince }} ago</span>&nbsp;
+                <span class="comment-time">{{ comment.created_at|custom_timesince }} ago</span>&nbsp;
 
                 {% if comment.author == request.user %}
                     | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>

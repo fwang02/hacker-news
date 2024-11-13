@@ -50,12 +50,8 @@ def profile(request):
 def submissions(request):
     user_id = request.GET.get('id')
     user = get_object_or_404(User, username=user_id)
-    submissions = Submission.objects.filter(author=user)
-
-    # Add created_age to each submission and sort by created_age
-    for submission in submissions:
-        submission.created_age = calculate_date(submission.created)
-    submissions = sorted(submissions, key=lambda x: x.created_age)
+    #sort de más reciente a más antiguo
+    submissions = Submission.objects.filter(author=user).order_by('-created')
 
     voted_submissions = []
     if request.user.is_authenticated:
@@ -66,12 +62,7 @@ def submissions(request):
 @login_required
 def hidden_submissions(request):
     hidden_submissions_ids = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
-    submissions = Submission.objects.filter(id__in=hidden_submissions_ids)
-
-    # Add created_age to each submission and sort by created_age
-    for submission in submissions:
-        submission.created_age = calculate_date(submission.created)
-    submissions = sorted(submissions, key=lambda x: x.created_age)
+    submissions = Submission.objects.filter(id__in=hidden_submissions_ids).order_by('-created')
 
     voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
     return render(request, 'hidden.html', {'submissions': submissions, 'voted_submissions': voted_submissions})
@@ -125,11 +116,8 @@ def unvote_comment(request, comment_id):
 @login_required
 def upvoted_submissions(request):
     voted_submissions_ids = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
-    submissions = Submission.objects.filter(id__in=voted_submissions_ids)
-    # Add created_age to each submission and sort by created_age
-    for submission in submissions:
-        submission.created_age = calculate_date(submission.created)
-    submissions = sorted(submissions, key=lambda x: x.created_age)
+    submissions = Submission.objects.filter(id__in=voted_submissions_ids).order_by('created')
+
     return render(request, 'upvoted.html', {'submissions': submissions})
 
 @login_required
