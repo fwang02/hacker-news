@@ -104,7 +104,14 @@ def search(request):
         results = Submission.objects.filter(title__icontains=query)
     else:
         results = Submission.objects.none()
-    return render(request, 'search_results.html', {'results': results})
+
+    results = sorted(results, key=calculate_score, reverse=True)
+
+    voted_submissions = []
+    if request.user.is_authenticated:
+        voted_submissions = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
+
+    return render(request, 'search_results.html', {'results': results, 'voted_submissions': voted_submissions})
 
 
 def submission_details(request, submission_id):
