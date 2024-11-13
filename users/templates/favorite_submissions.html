@@ -1,0 +1,118 @@
+{% load socialaccount %}
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voted Submissions</title>
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+</head>
+<body>
+    <!-- Header Section -->
+    {% include "header.html" %}
+
+    <!-- Main Content Section -->
+    <main>
+        <div class="submissions-container">
+            <h2>{{ target_user.username }}'s Favorites</h2>
+            <!-- Cambiar entre submissions y comentarios -->
+            <div class="submissions-comments">
+                {% if not isComments %}
+                    <a href="{% url 'users:favorites' %}?id={{ target_user.id }}" class="selected-link">submissions</a> |
+                    <a href="{% url 'users:favorites' %}?id={{ target_user.id }}&comments=true">comments</a>
+                {% else %}
+                    <a href="{% url 'users:favorites' %}?id={{ target_user.id }}">submissions</a> |
+                    <a href="{% url 'users:favorites' %}?id={{ target_user.id }}&comments=true" class="selected-link">comments</a>
+                {% endif %}
+            </div>
+            {% if not isComments %}
+                <section class="news-list">
+                    <ul>
+                        {% for submission in submissions %}
+                            <li class="news-item">
+                                <div class="icon-container">
+                                    {% if submission.author == request.user %}
+                                        <span class="red-asterisk">*</span>
+                                        <span class="triangle-icon hidden"></span>
+                                    {% elif submission.id in voted_submissions %}
+                                        <span class="triangle-icon hidden "></span>
+                                    {% else %}
+                                        {% if user.is_authenticated %}
+                                            <form action="{% url 'users:upvote_submission' submission.id %}?next={{ request.get_full_path }}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="triangle-icon"></button>
+                                            </form>
+                                        {% else %}
+                                            <button class="triangle-icon" onclick="showLoginPrompt()"></button>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <span class="news-title">
+                                    <a href="{{ submission.url }}">{{ submission.title }}</a>
+                                        {% if submission.domain %}
+                                            <a href="{% url 'news:submissions_by_domain' %}?domain={{ submission.domain }}" class="domain-link">({{ submission.domain }})</a>
+                                        {% endif %}
+                                </span>
+                                <span class="news-details">
+                                    {{ submission.point }} points
+                                    by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
+                                    {% if submission.id in voted_submissions %}
+                                        | <a href="{% url 'users:unvote_submission' submission.id %}?next={{ request.get_full_path }}" class="submissions-link">unvote</a>
+                                    {% endif %}
+                                    |
+                                    {% if submission.id in req_favorites %}
+                                        <a href="{% url 'users:remove_favorite_submission' submission.id %}" class="submissions-link">un-favorite</a>
+                                    {% else %}
+                                        <a href="{% url 'users:add_favorite_submission' submission.id %}" class="submissions-link">favorite</a>
+                                    {% endif %}
+                                    | <a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">
+                                        {% if submission.comment_count == 1 %}
+                                            1 comment
+                                        {% else %}
+                                            {{ submission.comment_count }} comments
+                                        {% endif %}
+                                    </a>
+                                </span>
+                            </li>
+                        {% empty %}
+                            <p>No favorite submissions yet.</p>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% else %}
+                <!-- Comments Section -->
+                <div id="comments">
+                    {% for comment in comments %}
+                        <div class="comment" id="comment-{{ comment.id }}">
+                            <p class="comment-meta">
+                                {% if comment.author == request.user %}
+                                    <span class="red-asterisk-comments">*</span>
+                                    <span class="triangle-icon hidden "></span>
+                                {% else %}
+                                    <span class="triangle-icon"></span>
+                                {% endif %}
+                                <strong>{{ comment.author.username }}</strong>
+                                <span class="comment-time">{{ comment.created_at }}</span>
+
+                                {% if comment.author == request.user %}
+                                    | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>
+                                    | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link" onclick="confirmDelete(event)">delete</a>
+                                {% endif %}
+                                <a href="javascript:void(0);" class="toggle-comment">[-]</a>
+                            </p>
+                            <div class="comment-content">
+                                <p class="comment-text">{{ comment.text }}</p>
+                                <a href="#reply" class="reply-link">reply</a>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p>No favorite comments yet.</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>
