@@ -42,7 +42,9 @@
             <!-- Verificamos si el usuario autenticado está disponible -->
             {% if request.user.is_authenticated %}
                 <div class="user-actions">
-                    <a href="/user/" class="username-link{% if request.path == '/user/' %} active{% endif %}">{{ request.user.username }}</a>
+                    <a href="/user/" class="username-link{% if request.path == '/user/' %} active{% endif %}">
+                        {{ request.user.username }} ({{ request.user.profile.karma }})
+                    </a>                   
                     <span class="separator">|</span>
                     <a href="{% url 'account_logout' %}">logout</a>
                 </div>

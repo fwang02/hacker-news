@@ -18,5 +18,3 @@
 - **Wang, Feiyang** - [fwang02](https://github.com/fwang02)
 ---
 (Fes clic a la icona de Heroku per accedir a la nostra aplicació desplegada)
-
-
