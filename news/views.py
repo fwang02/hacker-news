@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from users.utils import calculate_date
-from .models import Submission, HiddenSubmission, UpvotedSubmission, Comment
+from .models import Submission, HiddenSubmission, UpvotedSubmission, Comment, UpvotedComment
 from .models import Submission_URL, Submission_ASK
 from .forms import SubmissionForm, CommentForm, EditSubmissionForm
 from django.http import JsonResponse, Http404, HttpResponseRedirect
@@ -117,6 +117,12 @@ def submission_details(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id)
     comments = Comment.objects.filter(submission=submission, parent__isnull=True)  # Solo comentarios principales
 
+    voted_comments = []
+    submissionVoted = False
+    if request.user.is_authenticated:
+        voted_comments = UpvotedComment.objects.filter(user=request.user).values_list('comment_id', flat=True)
+        submissionVoted = UpvotedSubmission.objects.filter(user=request.user, submission=submission).exists()
+
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -132,6 +138,8 @@ def submission_details(request, submission_id):
         'submission': submission,
         'comments': comments,
         'form': form,
+        'voted_comments': voted_comments,
+        'submissionVoted': submissionVoted
     })
 
 

@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
 from news.models import Submission, HiddenSubmission, UpvotedSubmission, \
-    Comment  # Assuming you have a Submission model in the news app
+    Comment, UpvotedComment  # Assuming you have a Submission model in the news app
 from .forms import ProfileForm
 from .models import Favorite_submission, Favorite_comment
 from .utils import calculate_date
@@ -83,7 +83,7 @@ def unhide_submission(request, submission_id):
     return HttpResponseRedirect(next_url)
 
 @login_required
-def upvote(request, submission_id):
+def upvote_submission(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id)
 
     if submission.author == request.user:
@@ -96,12 +96,28 @@ def upvote(request, submission_id):
     return HttpResponseRedirect(next_url)
 
 @login_required
-def unvote(request, submission_id):
+def upvote_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    UpvotedComment.objects.create(user=request.user, comment=comment)
+
+    next_url = request.GET.get('next')
+    return HttpResponseRedirect(next_url)
+
+@login_required
+def unvote_submission(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id)
     if submission.author == request.user:
         return redirect('news:news')
     UpvotedSubmission.objects.filter(user=request.user, submission=submission).delete()
     submission.subtract_point()
+
+    next_url = request.GET.get('next')
+    return HttpResponseRedirect(next_url)
+
+@login_required
+def unvote_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    UpvotedComment.objects.filter(user=request.user, comment=comment).delete()
 
     next_url = request.GET.get('next')
     return HttpResponseRedirect(next_url)
@@ -115,6 +131,12 @@ def upvoted_submissions(request):
         submission.created_age = calculate_date(submission.created)
     submissions = sorted(submissions, key=lambda x: x.created_age)
     return render(request, 'upvoted.html', {'submissions': submissions})
+
+@login_required
+def upvoted_comments(request):
+    voted_comments_ids = UpvotedComment.objects.filter(user=request.user).values_list('comment_id', flat=True)
+    comments = Comment.objects.filter(id__in=voted_comments_ids)
+    return render(request, 'upvoted_comments.html', {'comments': comments})
 
 @login_required
 def add_favorite_submission(request, submission_id):
@@ -151,12 +173,12 @@ def favorites(request):
     if comments == 'true':
         if request.user.is_authenticated:
             # TODO: Falta model de votos en comentarios
-            # voted = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
+            voted = UpvotedComment.objects.filter(user=request.user).values_list('comment_id', flat=True)
             req_favorites = Favorite_comment.objects.filter(user=request.user).values_list('comment_id', flat=True)
 
         users_favorites = Favorite_comment.objects.filter(user=target_user).values_list('comment_id', flat=True)
         fav_comments = Comment.objects.filter(id__in=users_favorites)
-        return render(request, 'favorite_submissions.html', {'comments': fav_comments, 'target_user' : target_user, 'req_favorites' : req_favorites,'isComments' : True})
+        return render(request, 'favorite_submissions.html', {'comments': fav_comments, 'target_user' : target_user, 'req_favorites' : req_favorites,'voted_comments' : voted,'isComments' : True})
     else:
         if request.user.is_authenticated:
             voted = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)

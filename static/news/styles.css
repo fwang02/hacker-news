@@ -570,6 +570,7 @@ button[type="submit"]:hover {
 .submissions-comments a.selected-link {
     color: #ff6600;
     font-weight: bold;
+}
 
 .spacer {
     margin-top: 20px; /* Adjust the space as needed */
