@@ -17,4 +17,4 @@
 - **Comino Muriano, David** - [trvdex](https://github.com/trvdex)
 - **Wang, Feiyang** - [fwang02](https://github.com/fwang02)
 ---
-(Fes clic a la icona de Heroku per accedir a la nostra aplicació desplegada)
+(Fes clic a la icona de Heroku o Taiga per accedir a la pàgina web)
