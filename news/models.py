@@ -56,6 +56,7 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     level = models.IntegerField(default=0)
+    point = models.IntegerField(default=1)
     
     def __str__(self):
         return "self.text"
@@ -63,6 +64,7 @@ class Comment(models.Model):
     def save(self, *args, **kwargs):
         if self._state.adding:
             self.submission.comment_count += 1
+            self.author.profile.addKarma(1)
             self.submission.save()
         super().save(*args, **kwargs)
 
@@ -70,6 +72,17 @@ class Comment(models.Model):
         self.submission.comment_count -= 1
         self.submission.save()
         super().delete(*args, **kwargs)
+
+    def add_point(self, point):
+        self.point += point
+        self.author.profile.addKarma(point)
+        self.save()
+
+    def subtract_point(self, point):
+        if self.point > 0:
+            self.point -= point
+            self.author.profile.reduceKarma(point)
+            self.save()
 
     class Meta:
         ordering = ['created_at']

@@ -90,6 +90,7 @@ def upvote_submission(request, submission_id):
 def upvote_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     UpvotedComment.objects.create(user=request.user, comment=comment)
+    comment.add_point(1)
 
     next_url = request.GET.get('next')
     return HttpResponseRedirect(next_url)
@@ -101,7 +102,6 @@ def unvote_submission(request, submission_id):
         return redirect('news:news')
     UpvotedSubmission.objects.filter(user=request.user, submission=submission).delete()
     submission.subtract_point()
-
     next_url = request.GET.get('next')
     return HttpResponseRedirect(next_url)
 
@@ -109,7 +109,7 @@ def unvote_submission(request, submission_id):
 def unvote_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     UpvotedComment.objects.filter(user=request.user, comment=comment).delete()
-
+    comment.subtract_point(1)
     next_url = request.GET.get('next')
     return HttpResponseRedirect(next_url)
 
