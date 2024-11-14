@@ -1,3 +1,5 @@
+{% load custom_filters %}
+{% load socialaccount %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -6,40 +8,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hacker News</title>
     <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+    <script src="{% static 'js/scripts.js' %}"></script>
 </head>
 <body>
     <!-- Header Section -->
-    <header>
-        <nav>
-            <ul class="nav-left">
-                <li><a href="#" class="logo">Y</a></li>
-                <li><a href="#" class="head">Hacker News</a></li>
-                <li><a href="#">new</a></li>
-                <li><a href="#">threads</a></li>
-                <li><a href="#">comments</a></li>
-                <li><a href="#">ask</a></li>
-                <li><a href="/submit">submit</a></li>
-            </ul>
-            <!-- Search bar and login section -->
-            <div class="nav-right">
-                <form class="search-form">
-                    <input type="text" placeholder="Search">
-                    <button type="submit">Search</button>
-                </form>
-                <a href="#" class="login">Login</a>
-            </div>
-        </nav>
-    </header>
+    {% include "header.html" %}
 
     <!-- Main Content Section -->
     <main>
         <section class="news-list">
             <ul>
-                <!-- Each submission should have this structure -->
-                <li class="news-item">
-                    <span class="news-title"><a href="#">Title of the news</a></span>
-                    <span class="news-details">X points by author | X comments</span>
-                </li>
+                {% for submission in submissions %}
+                    <li class="news-item">
+                        <span class="submission-number">{{ forloop.counter }}. </span>
+                        <div class="icon-container">
+                            {% if submission.author == request.user %}
+                                <span class="red-asterisk">*</span>
+                                <span class="triangle-icon hidden"></span> 
+                            {% elif submission.id in voted_submissions %}
+                                <span class="triangle-icon hidden "></span>
+                            {% else %}
+                                {% if user.is_authenticated %}
+                                    <form action="{% url 'users:upvote_submission' submission.id %}?next={{ request.path }}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="triangle-icon"></button>
+                                    </form>
+                                {% else %}
+                                    <button class="triangle-icon unlogged" onclick="showLoginPrompt()"></button>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <span class="news-title">
+                            {% if submission.domain %}
+                                <a href="{{ submission.url }}"> {{ submission.title }}</a>
+                                <a href="{% url 'news:submissions_by_domain' %}?domain={{ submission.domain }}" class="domain-link">({{ submission.domain }})</a>
+                            {% else %}
+                                <a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">{{ submission.title }}</a>
+                            {% endif %}
+                        </span>
+                        <span class="news-details">
+                            {{ submission.point }} {{ submission.point|pluralize:"point,points" }}
+                            by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
+                            <a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">{{ submission.created|custom_timesince }} ago</a>
+                            |
+                            <!-- solo se muestra si el usuario autenticado ha votado la submission -->
+                            {% if submission.id in voted_submissions %}
+                                <a href="{% url 'users:unvote_submission' submission.id %}?next={{ request.path }}" class="submissions-link">unvote</a>
+                                |
+                            {% endif %}
+                            <!-- solo se muestra si el usuario autenticado es el autor de la submission -->
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'news:hide_submission' submission.id %}?next={{ request.path }}" class="submissions-link">hide</a>
+                            {% else %}
+                                <a onclick="showLoginPrompt()" class="submissions-link">hide</a>
+                            {% endif %}
+                            |
+                            <a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">
+                                    {{ submission.comment_count }} {{ submission.comment_count|pluralize:"comment,comments" }}
+                            </a>
+                            {% if submission.author == request.user %}
+                                | <a href="{% url 'news:edit_submission' submission.id %}" class="submissions-link">edit</a>
+                                | <a href="{% url 'news:delete_submission' submission.id %}" class="submissions-link" onclick="confirmDelete()">delete</a>
+                            {% endif %}
+                        </span>
+                    </li>
+                {% endfor %}
             </ul>
         </section>
     </main>

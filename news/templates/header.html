@@ -1,0 +1,81 @@
+{% load socialaccount %}
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker News</title>
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+</head>
+
+<header>
+    <nav>
+        <ul class="nav-left">
+            <li><a href="/news" class="logo">Y</a></li>
+            <li><a href="/news" class="head {% if request.path == '/news/' %}{% endif %}">Hacker News</a></li>
+            <li><a href="/newest" class="{% if request.path == '/newest/' %}active{% endif %}">new</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'news:threads' %}">threads</a></li>
+            {% endif %}
+            <li><a href="{% url 'news:comments' %}" class="{% if request.path == '/comments/' %}active{% endif %}">comments</a></li>
+            <li><a href="/ask" class="{% if request.path == '/ask/' %}active{% endif %}">ask</a></li>
+
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'submit' %}">submit</a></li>
+            {% else %}
+                <li><a onclick="showLoginPrompt()">submit</a></li>
+            {% endif %}
+        </ul>
+        <!-- Search bar and login section -->
+        <div class="nav-right">
+            <form class =search-form method="GET" action="{% url 'news:search' %}">
+                <input type="text" name="q" placeholder="Search">
+                <button type="submit">Search</button>
+            </form>
+        
+        
+        
+        
+        
+            <!-- Verificamos si el usuario autenticado está disponible -->
+            {% if request.user.is_authenticated %}
+                <div class="user-actions">
+                    <a href="/user/" class="username-link{% if request.path == '/user/' %} active{% endif %}">
+                        {{ request.user.username }} ({{ request.user.profile.karma }})
+                    </a>                   
+                    <span class="separator">|</span>
+                    <a href="{% url 'account_logout' %}">logout</a>
+                </div>
+                {% with request.user.socialaccount_set.first as social_account %}
+                    {% if social_account %}
+                        <img src="{{ social_account.extra_data.picture }}" alt="Avatar" class="avatar">
+                    {% endif %}
+                {% endwith %}
+            {% else %}
+                <div id="g_id_onload"
+                     data-client_id="70954103751-9ktlsv9q03hlpm9g49l6776qd9rpfjtg.apps.googleusercontent.com"
+                     data-context="signin"
+                     data-ux_mode="popup"
+                     data-login_uri="{% url 'google_login_by_token' %}"
+                     data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-shape="pill"
+                     data-theme="outline"
+                     data-text="signin_with"
+                     data-size="large"
+                     data-logo_alignment="left">
+                </div>
+            {% endif %}
+        
+        
+        
+        
+        </div>
+    </nav>
+</header>

@@ -6,7 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="40b7e414-c9ef-4251-a1bc-401d5efe12ff" name="Changes" comment="merge de develop">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hacker_news/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/hacker_news/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news/templates/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/header.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news/templates/submission_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/submission_details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news/templates/submissions_by_domain.html" beforeDir="false" afterPath="$PROJECT_DIR$/news/templates/submissions_by_domain.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/news/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/news/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,11 +48,11 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/hn11c-djangos/hacker-news.git&quot;,
-    &quot;accountId&quot;: &quot;9b92e6f5-ff3c-43a4-91d5-1f834b288588&quot;
+    &quot;accountId&quot;: &quot;54be99c5-4839-4f9e-8846-254ba6e44f79&quot;
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -66,20 +70,23 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
+    "Django Server.Unnamed.executor": "Run",
     "Django Server.hacker-news.executor": "Run",
     "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
+    "deletionFromPopupRequiresConfirmation": "false",
     "django.template.preview.state": "SHOW_EDITOR",
-    "git-widget-placeholder": "Feature/#4__Add__new__ask-type__submission",
-    "last_opened_file_path": "C:/Users/angel/PycharmProjects",
+    "git-widget-placeholder": "Feature/#101__View__home__page",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/dexyt/OneDrive/Desktop/fib/asw/djangos",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -89,7 +96,7 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="hacker-news" type="Python.DjangoServer" factoryName="Django server">
+    <configuration name="Unnamed" type="Python.DjangoServer" factoryName="Django server" nameIsGenerated="true">
       <module name="hacker-news" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -104,6 +111,16 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        </ENTRIES>
+      </EXTENSION>
       <option name="launchJavascriptDebuger" value="false" />
       <option name="port" value="8000" />
       <option name="host" value="localhost" />
@@ -119,8 +136,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.23339.19" />
-        <option value="bundled-python-sdk-0029f7779945-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.23339.19" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.23726.102" />
+        <option value="bundled-python-sdk-5e1850174b45-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.23726.102" />
       </set>
     </attachedChunks>
   </component>
@@ -142,6 +159,8 @@
       <workItem from="1729701950406" duration="384000" />
       <workItem from="1729714610816" duration="4392000" />
       <workItem from="1729756872896" duration="5322000" />
+      <workItem from="1731018773971" duration="106000" />
+      <workItem from="1731018885650" duration="2816000" />
     </task>
     <task id="LOCAL-00001" summary="Revert &quot;modelos creados&quot;&#10;&#10;This reverts commit e9432f58">
       <option name="closed" value="true" />
@@ -201,5 +220,15 @@
     <MESSAGE value="desde 0" />
     <MESSAGE value="merge de develop" />
     <option name="LAST_COMMIT_MESSAGE" value="merge de develop" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/news/urls.py</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

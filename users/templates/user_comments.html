@@ -1,0 +1,69 @@
+{% load static %}
+{% load custom_filters %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Comments</title>
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+</head>
+<body>
+    <!-- Header Section -->
+    {% include "header.html" %}
+
+    <!-- Main Content Section -->
+    <main>
+        <div class="comments-container">
+            <h2>{{ usr.username }}'s Comments</h2>
+            <div id="comments">
+                {% for comment in comments %}
+                    <div class="comment" id="comment-{{ comment.id }}">
+                        <p class="comment-meta">
+                            {% if user != usr %}
+                                {% if comment.id in voted_comments %}
+                                    <span class="triangle-icon hidden"></span>
+                                {% else %}
+                                    <form action="{% url 'users:upvote_comment' comment.id %}?next={{ request.path }}" method="post" class="inline-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="triangle-icon comment"></button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
+                            <span class="comment-author">
+                                <strong>
+                                    <a href="{% url 'users:profile' %}?id={{ comment.author.username }}" class="comment-link">{{ comment.author.username }}</a>
+                                </strong>
+                                <span class="comment-time">
+                                    <a href="{% url 'news:reply_to_comment' comment.id %}?reply=false" class="comment-link">
+                                        {{ comment.created_at|custom_timesince }} ago
+                                    </a>
+                                </span>
+                            </span>
+                            {% if usr != user and comment.id in voted_comments %}
+                                |
+                                <a href="{% url 'users:unvote_comment' comment.id %}?next={{ request.path }}" class="comment-link">unvote</a>
+                            {% endif %}
+                            {% if usr == user %}
+                                |
+                                <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>
+                                |
+                                <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link">delete</a>
+                            {% endif %}
+                            |
+                            on: <a href="{% url 'news:submission_detail' comment.submission.id %}" class="comment-link">{{ comment.submission.title }}</a>
+                        </p>
+
+                        <div class="comment-content">
+                            <p class="comment-text">{{ comment.text }}</p>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>No comments yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,93 @@
+{% load socialaccount %}
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'users/profile_styles.css' %}">
+</head>
+<body>
+    {% include "header.html" %}
+    <main>
+
+
+        <!-- Banner -->
+        <div class="banner-container">
+            {% if user.profile.banner %}
+                <img src="{{ user.profile.banner.url }}" alt="Banner" class="banner-image">
+            {% else %}
+                <img src="https://djangosbucket.s3.us-east-1.amazonaws.com/banner.jpg" alt="Banner" class="banner-image">
+            {% endif %}
+        </div>
+
+        <!-- Avatar -->
+        <div class="avatar-container">
+            {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="avatar-image">
+            {% else %}
+                <img src="https://djangosbucket.s3.us-east-1.amazonaws.com/perfil+ender.jpg" alt="Avatar" class="avatar-image">
+            {% endif %}
+        </div>
+
+        <div class="profile-container">
+
+
+            <!-- Banner options -->
+                <div class="file-upload-container">
+                    <label for="delete-banner">Banner:</label>
+                    <input type="checkbox" id="delete-banner" name="delete_banner"> Delete
+                    <span>OR</span>
+                    <input type="file" id="choose-banner" name="choose_banner" onchange="updateFileName(this)">
+                </div>
+
+            <!-- Avatar options -->
+                <div class="file-upload-container">
+                    <label for="delete-avatar">Avatar:</label>
+                    <input type="checkbox" id="delete-avatar" name="delete_avatar"> Delete
+                    <span>OR</span>
+                    <input type="file" id="choose-avatar" name="choose_avatar" onchange="updateFileName(this)">
+                </div>
+
+            <p class="profile-info">username: <span class="profile-value">{{ user.username }}</span></p>
+            <p class="profile-info">created: <span class="profile-value">{{ account_age }}</span></p>
+            <p class="profile-info">karma: <span class="profile-value">{{ user.profile.karma }}</span></p>
+
+             <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <!-- Contenedor para los enlaces -->
+                <div class="links-container">
+                    <a href="{% url 'users:submissions' %}?id={{ user.username }}">submissions</a>
+                </div>
+                <div class="links-container">
+                    <a href="{% url 'users:comments' user.id %}">comments</a>
+                </div>
+                <div class="links-container">
+                    <a href="{% url 'users:hidden_submissions' %}">hidden</a>
+                </div>
+                <div class="links-container">
+                    <a href="{% url 'users:voted_submissions' %}">upvoted submissions</a>
+                    <span class="separator">/</span>
+                    <a href="{% url 'users:voted_comments' %}">comments</a>
+                </div>
+                <div class="links-container">
+                    <a href="{% url 'users:favorites' %}?id={{ user.id }}">favorite submissions</a>
+                    <span class="separator">/</span>
+                    <a href="{% url 'users:favorites' %}?id={{ user.id }}&comments=true">comments</a>
+                    <span class="publicly-visible"><em>(publicly visible)</em></span>
+                </div>
+                <br>
+                <br>
+                <button type="submit" onclick="showUpdateSuccess()">Update</button>
+            </form>
+        </div>
+
+    </main>
+</body>
+</html>

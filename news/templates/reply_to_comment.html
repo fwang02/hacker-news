@@ -1,0 +1,60 @@
+{% load custom_filters %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Comment</title>
+    <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+</head>
+<body>
+    {% include "header.html" %}
+    <main>
+    <div class="comment">
+        <p class="original-comment-meta">
+            {% if original_comment.author == request.user %}
+                <span class="red-asterisk-comments">*</span>
+                <span class="triangle-icon hidden "></span>
+            {% elif is_voted %}
+                <span class="triangle-icon hidden"></span>
+            {% else %}
+                <form action="{% url 'users:upvote_comment' original_comment.id %}?next={{ request.path }}" method="post" class="inline-form">
+                    {% csrf_token %}
+                    <button type="submit" class="triangle-icon comment"></button>
+                </form>
+            {% endif %}
+            <strong>{{ original_comment.author.username }}</strong> 
+            <span class="comment-time">
+                {{ original_comment.created_at|custom_timesince }} ago
+            </span>&nbsp;
+            {% if is_voted %}
+                | <a href="{% url 'users:unvote_comment' original_comment.id %}?next={{ request.path }}" class="comment-link">unvote</a>
+            {% endif %}
+            {% if not is_reply %}
+                {% if is_favorite %}
+                    | <a href="{% url 'users:remove_favorite_comment' original_comment.id %}" class="comment-link">un-favorite</a>
+                {% else %}
+                    | <a href="{% url 'users:add_favorite_comment' original_comment.id %}" class="comment-link">favorite</a>
+                {% endif %}
+            {% endif %}
+            {% if original_comment.author == request.user and not is_reply %}
+                | <a href="{% url 'news:edit_comment' original_comment.id %}" class="comment-link">edit</a>
+                | <a href="{% url 'news:confirm_delete' original_comment.id %}" class="comment-link">delete</a>
+            {% endif %}
+            | on: <a href="{% url 'news:submission_detail' original_comment.submission.id %}" class="comment-link">{{ original_comment.submission.title }}</a>
+            <p>{{ original_comment.text }}</p>
+        </p>
+        <section>
+            <div class="reply-form">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.text }}
+                    <button type="submit">reply</button>
+                </form>
+            </div>
+        </section>
+    </div>
+    </main>
+</body>
+</html>
