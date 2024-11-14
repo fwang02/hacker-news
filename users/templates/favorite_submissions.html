@@ -83,38 +83,44 @@
                 </section>
             {% else %}
                 <!-- Comments Section -->
-                <div id="comments">
+                <p id="comments">
+                    <div class="comment">
                     {% for comment in comments %}
-                        <div class="comment" id="comment-{{ comment.id }}">
-                            <p class="comment-meta">
-                                {% if comment.author == request.user %}
-                                    <span class="red-asterisk-comments">*</span>
-                                    <span class="triangle-icon hidden "></span>
-                                {% elif comment.id in voted_comments %}
-                                    <span class="triangle-icon hidden"></span>
-                                {% else %}
-                                    <form action="{% url 'users:upvote_comment' comment.id %}?next={{ request.get_full_path }}" method="post">
-                                        {% csrf_token %}
-                                        <button type="submit" class="triangle-icon"></button>
-                                    </form>
-                                {% endif %}
 
-                                <strong>{{ comment.author.username }}</strong>
-                                <span class="comment-time">{{ comment.created_at }}</span>
-                                {% if comment.author == request.user %}
-                                    | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>
-                                    | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link" onclick="confirmDelete(event)">delete</a>
-                                {% endif %}
-                                <a href="javascript:void(0);" class="toggle-comment">[-]</a>
-                            </p>
-                            <div class="comment-content">
-                                <p class="comment-text">{{ comment.text }}</p>
-                            </div>
+                        <p class="comment-meta">
+                            {% if comment.author == request.user %}
+                                <span class="red-asterisk-comments">*</span>
+                                <span class="triangle-icon hidden "></span>
+                            {% elif comment.id in voted_comments %}
+                                <span class="triangle-icon hidden"></span>
+                            {% else %}
+                                <form action="{% url 'users:upvote_comment' comment.id %}?next={{ request.get_full_path }}" method="post" class="inline-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="triangle-icon comment"></button>
+                                </form>
+                            {% endif %}
+
+                        <a href="{% url 'users:profile' %}?id={{ comment.author.username }}" class="comment-link">{{ comment.author.username }}</a>
+                        <span class="comment-time">
+                            <a href="{% url 'news:reply_to_comment' comment.id %}?reply=false" class="comment-link">
+                                {{ comment.created_at|custom_timesince }} ago
+                            </a>
+                            {% if comment.id in voted_comments %}
+                                | <a href="{% url 'users:unvote_comment' comment.id %}?next={{ request.get_full_path }}" class="comment-link">unvote</a>
+                            {% endif %}
+                            | <a href="{% url 'users:remove_favorite_comment' comment.id %}" class="comment-link">un-favorite</a>
+                            {% if comment.author == request.user %}
+                                | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>
+                                | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link">delete</a>
+                            {% endif %}
+                        </span>
+                        <div class="comment-content">
+                            <p class="comment-text">{{ comment.text }}</p>
                         </div>
                     {% empty %}
                         <p>No favorite comments yet.</p>
-                    {% endfor %}
-                </div>
+                        {% endfor %}
+                        </div>
             {% endif %}
         </div>
     </main>

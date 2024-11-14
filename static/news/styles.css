@@ -244,6 +244,24 @@ a.submissions-link:hover {
     align-self: center;
 }
 
+.triangle-icon.comment{
+    all: unset;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 10px solid #777;
+    margin-right: 10px;
+    align-self: center;
+}
+
+.inline-form{
+    display: inline;
+}
+
 .triangle-icon.hidden {
     visibility: hidden; /* Mantiene el espacio pero hace invisible el triángulo */
 }
@@ -579,4 +597,15 @@ button[type="submit"]:hover {
 .comment-author {
     font-size: 12px;
     color: #888;
+}
+
+.submission-content {
+    clear: both;
+    display: block;
+    margin-left: 100px;
+    margin-right: 100px;
+    text-align: left;
+    color: gray;
+    border: 1px solid #ccc;
+    padding: 10px;
 }

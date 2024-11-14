@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+
+from users.models import Favorite_comment
 from users.utils import calculate_date
 from .models import Submission, HiddenSubmission, UpvotedSubmission, Comment, UpvotedComment
 from .models import Submission_URL, Submission_ASK
@@ -190,6 +192,8 @@ def edit_comment(request, comment_id):
 
 @login_required
 def reply_to_comment(request, comment_id):
+    reply = request.GET.get('reply')
+    is_reply = True if reply == 'true' else False
     original_comment = get_object_or_404(Comment, id=comment_id)
     submission = original_comment.submission
     if request.method == 'POST':
@@ -203,7 +207,13 @@ def reply_to_comment(request, comment_id):
             return redirect('news:submission_detail', submission_id=submission.id)
     else:
         form = CommentForm()
-    return render(request, 'reply_to_comment.html', {'form': form, 'original_comment': original_comment})
+
+    is_voted = False
+    is_favorite = False
+    if request.user.is_authenticated:
+        is_voted = UpvotedComment.objects.filter(user=request.user, comment=original_comment).exists()
+        is_favorite = Favorite_comment.objects.filter(user=request.user, comment=original_comment).exists()
+    return render(request, 'reply_to_comment.html', {'form': form, 'original_comment': original_comment, 'is_voted': is_voted, 'is_favorite': is_favorite, 'is_reply': is_reply})
 
 def submissions_by_domain(request):
     domain = request.GET.get('domain')

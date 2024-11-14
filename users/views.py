@@ -136,7 +136,7 @@ def add_favorite_submission(request, submission_id):
 def add_favorite_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     Favorite_comment.objects.create(user=request.user, comment=comment)
-    return redirect(reverse('users:favorites') + '?id=' + str(request.user.id) + '?comments=true')
+    return redirect(reverse('users:favorites') + '?id=' + str(request.user.id) + '&comments=true')
 
 @login_required
 def remove_favorite_submission(request, submission_id):
@@ -148,7 +148,7 @@ def remove_favorite_submission(request, submission_id):
 def remove_favorite_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     Favorite_comment.objects.filter(user=request.user, comment=comment).delete()
-    return redirect(reverse('users:favorites') + '?id=' + str(request.user.id) + '?comments=true')
+    return redirect(reverse('users:favorites') + '?id=' + str(request.user.id) + '&comments=true')
 
 def favorites(request):
     user_id = request.GET.get('id')
@@ -193,3 +193,8 @@ def profile_view(request):
     else:
         form = ProfileForm(instance=request.user.profile)
     return render(request, 'profile.html', {'form': form})
+
+def user_comments(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    comments = Comment.objects.filter(author=user).order_by('-created_at')
+    return render(request, 'user_comments.html', {'comments': comments, 'usr' : user})

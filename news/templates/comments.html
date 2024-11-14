@@ -21,9 +21,9 @@
                     {% elif comment.id in voted_comments %}
                         <span class="triangle-icon hidden"></span>
                     {% else %}
-                        <form action="{% url 'users:upvote_comment' comment.id %}?next={{ request.path }}" method="post">
+                        <form action="{% url 'users:upvote_comment' comment.id %}?next={{ request.path }}" method="post" class="inline-form">
                             {% csrf_token %}
-                            <button type="submit" class="triangle-icon"></button>
+                            <button type="submit" class="triangle-icon comment"></button>
                         </form>
                     {% endif %}
                     <span class="comment-author">

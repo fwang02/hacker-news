@@ -83,7 +83,10 @@
             </ul>
         </section>
     </main>
-
+    <!-- Content zone -->
+    <div class="submission-content">
+        <p>{{ submission.text }}</p>
+    </div>
     <!-- Add Comment Form -->
     <div class="add-comment">
         <form method="POST">
@@ -104,15 +107,21 @@
                     {% elif comment.id in voted_comments %}
                         <span class="triangle-icon hidden"></span>
                     {% else %}
-                        <form action="{% url 'users:upvote_comment' comment.id %}?next={{ request.path }}" method="post">
+                        <form action="{% url 'users:upvote_comment' comment.id %}?next={{ request.path }}" method="post" class="inline-form">
                             {% csrf_token %}
-                            <button type="submit" class="triangle-icon"></button>
+                            <button type="submit" class="triangle-icon comment"></button>
                         </form>
                     {% endif %}
     
                     <span class="comment-author">
-                        by <strong>{{ comment.author.username }}</strong>
-                        <span class="comment-time">{{ comment.created_at|custom_timesince }} ago</span>&nbsp;
+                        <strong>
+                            <a href="{% url 'users:profile' %}?id={{ comment.author.username }}" class="comment-link">{{ comment.author.username }} </a>
+                        </strong>
+                        <span class="comment-time">
+                            <a href="{% url 'news:reply_to_comment' comment.id %}?reply=false" class="comment-link">
+                                {{ comment.created_at|custom_timesince }} ago
+                            </a>
+                        </span>&nbsp;
                     </span>
                     {% if comment.id in voted_comments %}
                         | <a href="{% url 'users:unvote_comment' comment.id %}?next={{ request.path }}" class="comment-link">unvote</a>
@@ -126,7 +135,7 @@
 
                 <div class="comment-content">
                     <p class="comment-text">{{ comment.text }}</p>
-                    <a href="{% url 'news:reply_to_comment' comment.id %}" class="reply-link">reply</a>
+                    <a href="{% url 'news:reply_to_comment' comment.id %}?reply=true" class="reply-link">reply</a>
     
                     <!-- Mostrar respuestas (replies) de forma anidada -->
                     <div class="replies" style="margin-left: 20px;">

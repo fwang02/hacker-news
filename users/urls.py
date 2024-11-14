@@ -19,6 +19,6 @@ urlpatterns = [
     path('favorite/comment/<int:comment_id>', views.add_favorite_comment, name='add_favorite_comment'),
     path('unfavorite/submission/<int:submission_id>', views.remove_favorite_submission, name='remove_favorite_submission'),
     path('unfavorite/comment/<int:comment_id>', views.remove_favorite_comment, name='remove_favorite_comment'),
-
+    path('comments/<int:user_id>', views.user_comments, name='comments'),
 
 ]
