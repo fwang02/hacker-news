@@ -26,9 +26,11 @@ def calculate_account_age(date_joined):
         return f"{delta.days // 365} years ago"
 
 
-def calculate_score(submission):
-    # Calcula la edad de la submission en minutos
+def calculate_score(submission, k=1):
+    # Calcular el tiempo transcurrido en minutos
     age_in_minutes = (timezone.now() - submission.created).total_seconds() / 60
-    # Penalización logarítmica del tiempo
-    time_penalty = math.log(1 + age_in_minutes / 60)  # Penaliza suavemente con el tiempo
-    return submission.point - time_penalty
+
+    # Fórmula para ajustar el puntaje: más reciente = más relevante, penaliza suavemente el tiempo
+    adjusted_score = submission.point / (1 + (age_in_minutes / k))
+
+    return adjusted_score

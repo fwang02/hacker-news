@@ -22,7 +22,7 @@ def news(request):
         hidden_submissions = []
         voted_submissions = []
 
-    submissions = sorted(submissions, key=calculate_score, reverse=True)
+    submissions = sorted(submissions, key=lambda x: calculate_score(x), reverse=True)
 
     return render(request, 'news.html', {
         'submissions': submissions,
