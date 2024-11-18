@@ -36,7 +36,7 @@
                                         <button type="submit" class="triangle-icon"></button>
                                     </form>
                                 {% else %}
-                                    <button class="triangle-icon unlogged" onclick="showLoginPrompt()"></button>
+                                    <button class="triangle-icon unlogged"></button>
                                 {% endif %}
                             {% endif %}
                         </div>
@@ -63,7 +63,7 @@
                             </a>
                             {% if submission.author == request.user %}
                                 | <a href="{% url 'news:edit_submission' submission.id %}" class="submissions-link">edit</a>
-                                | <a href="{% url 'news:delete_submission' submission.id %}" class="submissions-link" onclick="confirmDelete()">delete</a>
+                                | <a href="{% url 'news:delete_submission' submission.id %}" class="submissions-link" >delete</a>
                             {% endif %}
                         </span>
                     </li>

@@ -24,11 +24,9 @@
             <li><a href="{% url 'news:comments' %}" class="{% if request.path == '/comments/' %}active{% endif %}">comments</a></li>
             <li><a href="/ask" class="{% if request.path == '/ask/' %}active{% endif %}">ask</a></li>
 
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'submit' %}">submit</a></li>
-            {% else %}
-                <li><a onclick="showLoginPrompt()">submit</a></li>
-            {% endif %}
+            
+            <li><a href="{% url 'submit' %}">submit</a></li>
+            
         </ul>
         <!-- Search bar and login section -->
         <div class="nav-right">
