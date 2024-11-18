@@ -12,7 +12,7 @@
     {% include "header.html" %}
     <main>
     <div class="comment">
-        <p class="original-comment-meta">
+        <p class="comment-meta">
             {% if original_comment.author == request.user %}
                 <span class="red-asterisk-comments">*</span>
                 <span class="triangle-icon hidden "></span>
@@ -24,9 +24,11 @@
                     <button type="submit" class="triangle-icon comment"></button>
                 </form>
             {% endif %}
-            <strong>{{ original_comment.author.username }}</strong> 
+            <strong>{{ original_comment.author.username }}</strong>&nbsp;
             <span class="comment-time">
-                {{ original_comment.created_at|custom_timesince }} ago
+                <a href="{% url 'news:comment_details' original_comment.id %}?reply=false" class="comment-link"> 
+                    {{ original_comment.created_at|custom_timesince }} ago
+                </a>
             </span>&nbsp;
             {% if is_voted %}
                 | <a href="{% url 'users:unvote_comment' original_comment.id %}?next={{ request.path }}" class="comment-link">unvote</a>
