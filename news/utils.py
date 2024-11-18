@@ -2,7 +2,7 @@ from urllib.parse import urlparse
 from django.utils.timezone import now
 from datetime import timedelta, datetime
 from django.utils import timezone
-
+import math
 
 def get_domain(url):
     parsed_url = urlparse(url)
@@ -27,5 +27,8 @@ def calculate_account_age(date_joined):
 
 
 def calculate_score(submission):
+    # Calcula la edad de la submission en minutos
     age_in_minutes = (timezone.now() - submission.created).total_seconds() / 60
-    return submission.point - age_in_minutes
+    # Penalización logarítmica del tiempo
+    time_penalty = math.log(1 + age_in_minutes / 60)  # Penaliza suavemente con el tiempo
+    return submission.point - time_penalty
