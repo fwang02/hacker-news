@@ -255,15 +255,3 @@ def edit_submission(request, submission_id):
     else:
         form = EditSubmissionForm(instance=submission)
     return render(request, 'edit_submission.html', {'form': form, 'submission': submission})
-
-
-def comment_details(request, comment_id):
-    # Recupera el comentario y sus respuestas
-    comment = get_object_or_404(Comment, id=comment_id)
-    replies = comment.replies.all()  # Asumiendo que tienes una relación 'replies' en el modelo Comment
-    
-    # Devuelve el comentario y sus respuestas a la plantilla
-    return render(request, 'comment_details.html', {
-        'comment': comment,
-        'replies': replies
-    })
