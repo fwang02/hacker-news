@@ -20,7 +20,7 @@
                 <a href="{% url 'users:profile' %}?id={{ reply.author.username }}" class="comment-link">{{ reply.author.username }} </a>
             </strong>
             <span class="comment-time">
-                <a href="{% url 'news:comment_details' comment.id %}?reply=false" class="comment-link">
+                <a href="{% url 'news:comment_details' reply.id %}?reply=false" class="comment-link">
                     {{ reply.created_at|custom_timesince }} ago
                 </a>
             </span>&nbsp;

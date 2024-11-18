@@ -18,10 +18,10 @@
             {% else %}
                 <span class="triangle-icon"></span>
             {% endif %}
-            <strong>{{ comment.author.username }}</strong>;
+            <strong>{{ comment.author.username }}</strong>
             <a href="{% url 'news:comment_details' comment.id %}?reply=false" class="comment-link">
                 {{ comment.created_at|custom_timesince }} ago
-            </span>;
+            </span>
 
             {% if comment.author == request.user %}
                 | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>

@@ -1,3 +1,4 @@
+{% load custom_filters %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +15,7 @@
         <div id="comments">
         {% for comment in comments %}
             <div class="comment" id="comment-{{ comment.id }}">
-                <div class="comment-meta">
+                <p class="comment-meta">
                     {% if comment.author == request.user %}
                         <span class="red-asterisk-comments">*</span>
                         <span class="triangle-icon hidden "></span>
@@ -30,7 +31,7 @@
                         by <a href="{% url 'users:profile' %}?id={{ comment.author.username }}" class="comment-link">{{ comment.author.username }}</a>
                         <span class="comment-time">
                             <a href="{% url 'news:comment_details' comment.id %}?reply=false" class="comment-link">
-                                {{ comment.created_at|timesince }} ago
+                                {{ comment.created_at|custom_timesince }} ago
                             </a>
                         </span>
                         | <a href="{% url 'news:submission_detail' comment.submission.id %}#comment-{{ comment.parent.id }}" class="comment-link"> parent  </a>
