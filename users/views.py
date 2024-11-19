@@ -206,4 +206,9 @@ def profile_view(request):
 def user_comments(request, user_id):
     user = get_object_or_404(User, id=user_id)
     comments = Comment.objects.filter(author=user).order_by('-created_at')
-    return render(request, 'user_comments.html', {'comments': comments, 'usr' : user})
+
+    voted_comments = []
+    if request.user.is_authenticated:
+        voted_comments = UpvotedComment.objects.filter(user=request.user).values_list('comment_id', flat=True)
+        
+    return render(request, 'user_comments.html', {'comments': comments, 'usr' : user, 'voted_comments': voted_comments})

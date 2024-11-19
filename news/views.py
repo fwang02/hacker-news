@@ -255,3 +255,20 @@ def edit_submission(request, submission_id):
     else:
         form = EditSubmissionForm(instance=submission)
     return render(request, 'edit_submission.html', {'form': form, 'submission': submission})
+
+
+def comment_details(request, comment_id):
+    # Recupera el comentario y sus respuestas
+    comment = get_object_or_404(Comment, id=comment_id)
+    replies = comment.replies.all()  
+
+    voted_comments = []
+    if request.user.is_authenticated:
+        voted_comments = UpvotedComment.objects.filter(user=request.user).values_list('comment_id', flat=True)
+    
+    # Devuelve el comentario y sus respuestas a la plantilla
+    return render(request, 'comment_details.html', {
+        'comment': comment,
+        'replies': replies,
+        'voted_comments': voted_comments
+    })

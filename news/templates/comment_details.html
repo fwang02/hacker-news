@@ -1,21 +1,24 @@
-{% load custom_filters %}
+{% load socialaccount %}
 {% load static %}
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comments</title>
+    <title>Comment Detail</title>
     <link rel="stylesheet" href="{% static 'news/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'users/profile_styles.css' %}">
 </head>
 <body>
+   
     {% include "header.html" %}
+
     <main>
-        <div id="comments">
-        {% for comment in comments %}
+        
+        <section class="comment-section">
             <div class="comment" id="comment-{{ comment.id }}">
-                <p class="comment-meta">
+                <div class="comment-meta">
                     {% if comment.author == request.user %}
                         <span class="red-asterisk-comments">*</span>
                         <span class="triangle-icon hidden "></span>
@@ -27,36 +30,39 @@
                             <button type="submit" class="triangle-icon comment"></button>
                         </form>
                     {% endif %}
+    
                     <span class="comment-author">
-                        by <a href="{% url 'users:profile' %}?id={{ comment.author.username }}" class="comment-link">{{ comment.author.username }}</a>
+                        <strong>
+                            <a href="{% url 'users:profile' %}?id={{ comment.author.username }}" class="comment-link">{{ comment.author.username }} </a>
+                        </strong>
                         <span class="comment-time">
                             <a href="{% url 'news:comment_details' comment.id %}?reply=false" class="comment-link">
                                 {{ comment.created_at|custom_timesince }} ago
                             </a>
-                        </span>
-                        | <a href="{% url 'news:submission_detail' comment.submission.id %}#comment-{{ comment.parent.id }}" class="comment-link"> parent  </a>
-                        | <a href="{% url 'news:submission_detail' comment.submission.id %}#comment-{{ comment.id }}" class="comment-link"> context </a>
-                        {% if comment.id in voted_comments %}
-                            | <a href="{% url 'users:unvote_comment' comment.id %}?next={{ request.path }}" class="comment-link">unvote</a>
-                        {% endif %}
-                        {% if comment.author == request.user %}
-                            | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>&nbsp;
-                            | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link">delete</a>
-                        {% endif %}
-                        | on:<a href="{% url 'news:submission_detail' comment.submission.id %}" class="comment-link"> {{comment.submission.title}}</a>
+                        </span>&nbsp;
                     </span>
-                    
+                    {% if comment.id in voted_comments %}
+                        | <a href="{% url 'users:unvote_comment' comment.id %}?next={{ request.path }}" class="comment-link">unvote</a>
+                    {% endif %}
     
-                   
+                    {% if comment.author == request.user %}
+                        |&nbsp; <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>&nbsp;
+                        |&nbsp; <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link">delete</a>
+                    {% endif %}
+                </div>
 
                 <div class="comment-content">
                     <p class="comment-text">{{ comment.text }}</p>
+                    <a href="{% url 'news:reply_to_comment' comment.id %}?reply=true" class="reply-link">reply</a>
+    
+                    <!-- Mostrar respuestas (replies) de forma anidada -->
+                    <div class="replies" style="margin-left: 20px;">
+                        {% include 'reply_thread.html' with replies=comment.replies.all voted_comments=voted_comments%}
+                    </div>
                 </div>
             </div>
-        {% empty %}
-            <p>No comments yet.</p>
-        {% endfor %}
-    </div>
+        </section>
     </main>
+
 </body>
 </html>
