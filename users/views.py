@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
@@ -23,10 +24,18 @@ def profile(request):
 
     if logged_in_user == user:
         if request.method == 'POST':
-            form = ProfileForm(request.POST, instance=user.profile)
+            form = ProfileForm(request.POST, request.FILES,instance=user.profile)
             if form.is_valid():
-                form.save()
-                return redirect('users:profile')
+                profile = form.save(commit=False)
+                if 'choose_banner' in request.FILES:
+                    profile.banner = request.FILES['choose_banner']
+                if 'choose_avatar' in request.FILES:
+                    profile.avatar = request.FILES['choose_avatar']
+                profile.save()
+                messages.success(request, 'Profile updated successfully!')
+            else:
+                messages.error(request, 'Failed to update profile. Please try again.')
+            return redirect('users:profile')
         else:
             form = ProfileForm(instance=user.profile)
 
