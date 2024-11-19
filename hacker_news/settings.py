@@ -42,6 +42,13 @@ load_dotenv()
 GOOGLE_OAUTH_CLIENT_ID = os.environ.get('GOOGLE_OAUTH_CLIENT_ID')
 GOOGLE_OAUTH_CLIENT_SECRET = os.environ.get('GOOGLE_OAUTH_CLIENT_SECRET')
 
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_SESSION_TOKEN = os.environ.get('AWS_SESSION_TOKEN')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_REGION_NAME = os.environ.get('AWS_REGION_NAME')
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
 SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
 
@@ -257,6 +264,19 @@ STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
+    # Store uploaded media files in Amazon S3 instead of on the local filesystem:
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "access_key": AWS_ACCESS_KEY_ID,
+            "secret_key": AWS_SECRET_ACCESS_KEY,
+            "region_name": AWS_REGION_NAME,
+            "bucket_name": AWS_STORAGE_BUCKET_NAME,
+            "custom_domain": AWS_S3_CUSTOM_DOMAIN,
+        },
+        "LOCATION": "media",
+        "DEFAULT_ACL": "public-read",
+    },
 }
 
 # Don't store the original (un-hashed filename) version of static files, to reduce slug size:
@@ -270,13 +290,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 INSTALLED_APPS += ['storages']
-
-AWS_ACCESS_KEY_ID = 'ASIAX45OLCKJRJAOU7PN'
-AWS_SECRET_ACCESS_KEY = '+Z2Xirml5M0QPTMFyOfLR4BEqzORWVoPNz6ExHUk'
-AWS_STORAGE_BUCKET_NAME = 'djangosbucket'
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
 
+
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+MEDIA_ROOT = 'media/'
