@@ -51,7 +51,7 @@
 /* Estilos para el avatar */
 .avatar-container {
     position: absolute;
-    top: 150px; /* Ajusta según sea necesario */
+    top: 200px; /* Ajusta según sea necesario */
     left: 50%;
     transform: translateX(-50%);
     width: 150px; /* Ajusta el tamaño del avatar según sea necesario */
