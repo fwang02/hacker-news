@@ -70,7 +70,7 @@ else:
 if IS_HEROKU_APP:
     ALLOWED_HOSTS = ["projecte-asw-cdd22f32d84c.herokuapp.com"]
 else:
-    ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "0.0.0.0",  ".ngrok-free.app"]
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]", "0.0.0.0",  ".ngrok-free.app"]
 
 # Application definition
 
