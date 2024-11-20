@@ -28,8 +28,14 @@
                     <span class="triangle-icon"></span>
                 {% endif %}
                 <strong>{{ comment.author.username }}</strong>&nbsp;
-                <span class="comment-time">{{ comment.created_at|custom_timesince }} ago</span>&nbsp;
-
+                <a href="{% url 'news:comment_details' comment.id %}?reply=false" class="comment-link">
+                    {{ comment.created_at|custom_timesince }} ago
+                </a>
+                {% if is_favorite %}
+                    | <a href="{% url 'users:remove_favorite_comment' comment.id %}" class="comment-link">un-favorite</a>
+                {% else %}
+                    | <a href="{% url 'users:add_favorite_comment' comment.id %}" class="comment-link">favorite</a>
+                {% endif %} 
                 {% if comment.author == request.user %}
                     | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>
                     | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link">delete</a>
