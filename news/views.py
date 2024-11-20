@@ -122,11 +122,9 @@ def submission_details(request, submission_id):
 
     voted_comments = []
     submissionVoted = False
-    is_favorite = []
     if request.user.is_authenticated:
         voted_comments = UpvotedComment.objects.filter(user=request.user).values_list('comment_id', flat=True)
         submissionVoted = UpvotedSubmission.objects.filter(user=request.user, submission=submission).exists()
-        is_favorite = Favorite_comment.objects.filter(user=request.user).values_list('comment_id', flat=True)
         
     if request.method == 'POST':
         if not request.user.is_authenticated:
@@ -150,7 +148,6 @@ def submission_details(request, submission_id):
         'form': form,
         'voted_comments': voted_comments,
         'submissionVoted': submissionVoted,
-        'is_favorite': is_favorite
     })
 
 
@@ -165,10 +162,7 @@ def confirm_delete(request, comment_id):
         comment.delete()
         return redirect('news:submission_detail', submission_id=comment.submission.id)
 
-    is_favorite = False
-    if request.user.is_authenticated:
-        is_favorite = Favorite_comment.objects.filter(user=request.user, comment=comment).exists()
-    return render(request, 'confirm_delete.html', {'comment': comment, 'submission': submission, 'is_favorite': is_favorite})
+    return render(request, 'confirm_delete.html', {'comment': comment, 'submission': submission})
 
 def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
@@ -195,10 +189,7 @@ def edit_comment(request, comment_id):
     else:
         form = CommentForm(instance=comment)  # Si es un GET, mostrar el formulario con los datos del comentario
 
-    is_favorite = False
-    if request.user.is_authenticated:
-        is_favorite = Favorite_comment.objects.filter(user=request.user, comment=comment).exists()
-    return render(request, 'edit_comment.html', {'form': form, 'comment': comment, 'is_favorite': is_favorite})
+    return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
 
 @login_required
 def reply_to_comment(request, comment_id):
@@ -241,23 +232,19 @@ def submissions_by_domain(request):
 def comments(request):
     comments = Comment.objects.all().order_by('-created_at')  # Ordenar por fecha de creación, de más nuevo a más antiguo
     voted_comments = []
-    is_favorite = []
     if request.user.is_authenticated:
         voted_comments = UpvotedComment.objects.filter(user=request.user).values_list('comment_id', flat=True)
-        is_favorite = Favorite_comment.objects.filter(user=request.user).values_list('comment_id', flat=True)
 
     
-    return render(request, 'comments.html', {'comments': comments, 'voted_comments': voted_comments, 'is_favorite': is_favorite})
+    return render(request, 'comments.html', {'comments': comments, 'voted_comments': voted_comments})
 
 @login_required
 def threads(request):
     comments = Comment.objects.filter(author=request.user,parent__isnull=True).order_by('-created_at')
     voted_comments = []
-    is_favorite = []
     if request.user.is_authenticated:
         voted_comments = UpvotedComment.objects.filter(user=request.user).values_list('comment_id', flat=True)
-        is_favorite = Favorite_comment.objects.filter(user=request.user).values_list('comment_id', flat=True)
-    return render(request, 'threads.html', {'comments': comments, 'voted_comments': voted_comments, 'is_favorite': is_favorite})
+    return render(request, 'threads.html', {'comments': comments, 'voted_comments': voted_comments})
 
 @login_required
 def edit_submission(request, submission_id):
@@ -281,26 +268,21 @@ def get_all_reply_ids(comment):
     return reply_ids
 
 def comment_details(request, comment_id):
+    # Recupera el comentario y sus respuestas
     comment = get_object_or_404(Comment, id=comment_id)
-
-    all_reply_ids = get_all_reply_ids(comment)
+    replies = comment.replies.all()  
 
     voted_comments = []
-    is_favorite = [] 
-
+    is_favorite = False
     if request.user.is_authenticated:
         voted_comments = UpvotedComment.objects.filter(user=request.user).values_list('comment_id', flat=True)
-
-        favorite_comments = Favorite_comment.objects.filter(
-            user=request.user, comment_id__in=[comment.id] + all_reply_ids
-        ).values_list('comment_id', flat=True)
-
-        is_favorite = list(favorite_comments)
-
+        is_favorite = Favorite_comment.objects.filter(user=request.user, comment=comment).exists()
+    
+    # Devuelve el comentario y sus respuestas a la plantilla
     return render(request, 'comment_details.html', {
         'comment': comment,
-        'replies': comment.replies.all(),
+        'replies': replies,
         'voted_comments': voted_comments,
-        'is_favorite': is_favorite, 
+        'is_favorite': is_favorite
     })
 

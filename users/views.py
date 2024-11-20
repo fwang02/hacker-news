@@ -208,8 +208,6 @@ def user_comments(request, user_id):
     comments = Comment.objects.filter(author=user).order_by('-created_at')
 
     voted_comments = []
-    is_favorite = []
     if request.user.is_authenticated:
         voted_comments = UpvotedComment.objects.filter(user=request.user).values_list('comment_id', flat=True)
-        is_favorite = Favorite_comment.objects.filter(user=request.user).values_list('comment_id', flat=True)
-    return render(request, 'user_comments.html', {'comments': comments, 'usr' : user, 'voted_comments': voted_comments, 'is_favorite': is_favorite})
+    return render(request, 'user_comments.html', {'comments': comments, 'usr' : user, 'voted_comments': voted_comments})
