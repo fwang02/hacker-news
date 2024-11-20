@@ -44,6 +44,7 @@
                             | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link">delete</a>
                         {% endif %}
                         | on:<a href="{% url 'news:submission_detail' comment.submission.id %}" class="comment-link"> {{comment.submission.title}}</a>
+                        | {{ comment.point }} {{ comment.point|pluralize:"point,points" }}
                     </span>
                     
     

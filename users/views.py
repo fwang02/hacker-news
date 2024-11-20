@@ -175,7 +175,7 @@ def favorites(request):
 
         users_favorites = Favorite_comment.objects.filter(user=target_user).values_list('comment_id', flat=True)
         fav_comments = Comment.objects.filter(id__in=users_favorites)
-        return render(request, 'favorite_submissions.html', {'comments': fav_comments, 'target_user' : target_user, 'req_favorites' : req_favorites,'voted_comments' : voted,'isComments' : True})
+        return render(request, 'favorites.html', {'comments': fav_comments, 'target_user' : target_user, 'req_favorites' : req_favorites, 'voted_comments' : voted, 'isComments' : True})
     else:
         if request.user.is_authenticated:
             voted = UpvotedSubmission.objects.filter(user=request.user).values_list('submission_id', flat=True)
@@ -183,7 +183,7 @@ def favorites(request):
 
         users_favorites = Favorite_submission.objects.filter(user=target_user).values_list('submission_id', flat=True)
         fav_submissions = Submission.objects.filter(id__in=users_favorites)
-        return render(request, 'favorite_submissions.html', {'submissions': fav_submissions, 'target_user' : target_user, 'req_favorites' : req_favorites,'voted_submissions' : voted, 'isComments' : False})
+        return render(request, 'favorites.html', {'submissions': fav_submissions, 'target_user' : target_user, 'req_favorites' : req_favorites, 'voted_submissions' : voted, 'isComments' : False})
 
 
 @login_required

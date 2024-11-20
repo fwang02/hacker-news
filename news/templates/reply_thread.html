@@ -33,6 +33,7 @@
             | <a href="{% url 'news:edit_comment' reply.id %}" class="comment-link">edit</a>
             | <a href="{% url 'news:confirm_delete' reply.id %}" class="comment-link">delete</a>
         {% endif %}
+        | {{ reply.point }} {{ reply.point|pluralize:"point,points" }}
     </div>
         
         <div class="comment-content">

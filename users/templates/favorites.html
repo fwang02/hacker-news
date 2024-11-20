@@ -110,6 +110,8 @@
                                 | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>
                                 | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link">delete</a>
                             {% endif %}
+                            |
+                            {{ comment.point }} {{ comment.point|pluralize:"point,points" }}
                         </span>
                         <div class="comment-content">
                             <p class="comment-text">{{ comment.text }}</p>

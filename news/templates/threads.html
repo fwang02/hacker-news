@@ -50,7 +50,8 @@
                     |
                 {% endif %}
                 on: <a href="{% url 'news:submission_detail' comment.submission.id %}" class="comment-link">{{ comment.submission.title|truncatechars:30 }}</a>
-                </p>
+                |
+                {{ comment.point }} {{ comment.point|pluralize:"point,points" }}
             </span>
                 <div class="comment-content">
                     <p class="comment-text">{{ comment.text }}</p>

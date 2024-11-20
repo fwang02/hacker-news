@@ -35,6 +35,8 @@
                             <a href="{% url 'users:unvote_comment' comment.id %}?next={{ request.path }}" class="comment-link">unvote</a>
                             |
                             on: <a href="{% url 'news:submission_detail' comment.submission.id %}" class="comment-link">{{ comment.submission.title }}</a>
+                            |
+                            {{ comment.point }} {{ comment.point|pluralize:"point,points" }}
                         </p>
 
                         <div class="comment-content">
