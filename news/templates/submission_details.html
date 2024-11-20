@@ -43,16 +43,19 @@
                             by <a href="{% url 'users:profile' %}?id={{ submission.author }}" class="submissions-link">{{ submission.author }}</a>
                             <a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">{{ submission.created|custom_timesince }} ago</a>
                             {% if submissionVoted %}
-                                <a href="{% url 'users:unvote_submission' submission.id %}?next={{ request.path }}" class="submissions-link">unvote</a>
-                                |
+                                | <a href="{% url 'users:unvote_submission' submission.id %}?next={{ request.path }}" class="submissions-link">unvote</a>
+                                
                             {% endif %}
                             <!-- solo se muestra si el usuario autenticado es el autor de la submission -->
-                            {% if submission.id in hidden_submissions %}
-                                | <a href="{% url 'users:unhide_submission' submission.id %}?next={{ request.path }}" class="submissions-link">unhide</a>
+                            {% if user.is_authenticated %}
+                                {% if submission.id in hidden_submissions %}
+                                    | <a href="{% url 'users:unhide_submission' submission.id %}?next={{ request.path }}" class="submissions-link">unhide</a>
+                                {% else %}
+                                    | <a href="{% url 'news:hide_submission' submission.id %}?next={{ request.path }}" class="submissions-link">hide</a>
+                                {% endif %}
                             {% else %}
-                                | <a href="{% url 'news:hide_submission' submission.id %}?next={{ request.path }}" class="submissions-link">hide</a>
+                                <a onclick="showLoginPrompt()" class="submissions-link">hide</a>
                             {% endif %}
-                            
                             | <a href="{% url 'users:add_favorite_submission' submission.id %}" class="submissions-link">favorite</a>
                             |
                             <a href="{% url 'news:submission_detail' submission.id %}" class="submissions-link">
@@ -105,15 +108,15 @@
                             <a href="{% url 'news:comment_details' comment.id %}?reply=false" class="comment-link">
                                 {{ comment.created_at|custom_timesince }} ago
                             </a>
-                        </span>&nbsp;
+                        </span>
                     </span>
                     {% if comment.id in voted_comments %}
                         | <a href="{% url 'users:unvote_comment' comment.id %}?next={{ request.path }}" class="comment-link">unvote</a>
                     {% endif %}
-    
+                    | <a href="{% url 'users:add_favorite_comment' comment.id %}" class="comment-link">favorite</a> 
                     {% if comment.author == request.user %}
-                        |&nbsp; <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>&nbsp;
-                        |&nbsp; <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link">delete</a>
+                        | <a href="{% url 'news:edit_comment' comment.id %}" class="comment-link">edit</a>
+                        | <a href="{% url 'news:confirm_delete' comment.id %}" class="comment-link">delete</a>
                     {% endif %}
                 </div>
 
