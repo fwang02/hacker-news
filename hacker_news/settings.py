@@ -94,6 +94,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'django.contrib.humanize',
     'rest_framework',
+    'rest_framework.authtoken',
     'news',
     'users',
     'apis',
