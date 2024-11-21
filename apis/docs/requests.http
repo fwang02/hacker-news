@@ -1,0 +1,9 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=PyCharm
+
+### GET all submissions
+GET http://localhost:8000/api/submissions
+
+### GET all comments
+GET http://localhost:8000/api/comments

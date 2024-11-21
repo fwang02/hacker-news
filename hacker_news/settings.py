@@ -92,9 +92,11 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'django.contrib.humanize',
+    'rest_framework',
     'news',
     'users',
-    'django.contrib.humanize',
+    'apis',
 ]
 
 SITE_ID = 3 #1
