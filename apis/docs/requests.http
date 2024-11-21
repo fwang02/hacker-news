@@ -7,3 +7,6 @@ GET http://localhost:8000/api/submissions
 
 ### GET all comments
 GET http://localhost:8000/api/comments
+
+### GET newest submissions
+GET http://localhost:8000/api/submissions?sort=newest
