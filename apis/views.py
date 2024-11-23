@@ -1,7 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from django.shortcuts import get_object_or_404
 from news.models import Submission, Comment
 from news.utils import calculate_score
 from .serializers import SubmissionSerializer, CommentSerializer
@@ -27,4 +27,8 @@ class Comment_APIView(APIView):
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 
-
+class SubmissionDetailView(APIView):
+    def get(self, request, id):
+        submission = get_object_or_404(Submission, id=id)
+        serializer = SubmissionSerializer(submission)
+        return Response(serializer.data)
