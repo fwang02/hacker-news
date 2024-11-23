@@ -13,3 +13,14 @@ GET http://localhost:8000/api/submissions?sort=newest
 
 ### GET submission details by ID
 GET http://localhost:8000/api/submissions/4
+
+### Crear una nueva submission
+POST http://localhost:8000/api/submissions
+Authorization: ApiKey a9aa8ca1bad68bd682684730496829d9f115fa8a
+Content-Type: application/json
+
+{
+  "title": "Nuevo Título de Submission",
+  "url": "http://www.example.com",
+  "text": "Aquí va la descripción de la submission."
+}
