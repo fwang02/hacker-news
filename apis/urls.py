@@ -16,10 +16,12 @@ Including another URLconf
 """
 from django.urls import path
 from apis import views
-from apis.views import Submission_APIView, Comment_APIView
+from apis.views import Submission_APIView, Comment_APIView, SubmissionDetailView
 from news.models import Comment
 
 urlpatterns = [
     path('submissions', Submission_APIView.as_view()),
     path('comments', Comment_APIView.as_view()),
+    path('submissions/<int:id>', SubmissionDetailView.as_view(), name='submission_detail'),
+    path('submissions', Submission_APIView.as_view(), name='submit_submission'),
 ]
