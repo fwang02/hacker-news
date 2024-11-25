@@ -26,3 +26,8 @@ class SubmissionSerializer(serializers.ModelSerializer):
         # Serializamos solo los comentarios raíz (sin padre)
         root_comments = obj.comments.filter(parent__isnull=True)
         return CommentSerializer(root_comments, many=True).data
+
+class SubmissionCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Submission
+        fields = ['title', 'url', 'text']
