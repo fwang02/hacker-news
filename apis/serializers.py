@@ -1,3 +1,5 @@
+from operator import is_not
+
 from rest_framework import serializers
 from news.models import Submission, Comment
 
@@ -14,6 +16,11 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ['id', 'text', 'created_at', 'level', 'point', 'submission', 'parent', 'author', 'replies']
 
+class ThreadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
 
 class SubmissionSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
@@ -26,6 +33,13 @@ class SubmissionSerializer(serializers.ModelSerializer):
         # Serializamos solo los comentarios raíz (sin padre)
         root_comments = obj.comments.filter(parent__isnull=True)
         return CommentSerializer(root_comments, many=True).data
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if not instance.url:
+            representation.pop('url')
+            representation.pop('domain')
+        return representation
 
 class SubmissionCreateSerializer(serializers.ModelSerializer):
     class Meta:
