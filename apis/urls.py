@@ -24,4 +24,6 @@ urlpatterns = [
     path('comments', Comment_APIView.as_view()),
     path('submissions/<int:id>', SubmissionDetailView.as_view(), name='submission_detail'),
     path('submissions', Submission_APIView.as_view(), name='submit_submission'),
+    path('submissions/<int:id>/update', Submission_APIView.as_view(), name='update_submission_title'),
+
 ]

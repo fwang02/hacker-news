@@ -49,3 +49,14 @@ class SubmissionCreateSerializer(serializers.ModelSerializer):
         if Submission.objects.filter(title=value).exists():
             raise serializers.ValidationError("A submission with this title already exists.")
         return value
+
+
+class SubmissionUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Submission
+        fields = ['title']
+
+    def validate_title(self, value):
+        if Submission.objects.filter(title=value).exclude(id=self.instance.id).exists():
+            raise serializers.ValidationError("A submission with this title already exists.")
+        return value

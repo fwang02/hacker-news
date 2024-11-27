@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from news.models import Submission, Comment
 from news.utils import calculate_score
-from .serializers import SubmissionSerializer, CommentSerializer, SubmissionCreateSerializer
+from .serializers import SubmissionSerializer, CommentSerializer, SubmissionCreateSerializer, SubmissionUpdateSerializer
 from rest_framework.permissions import IsAuthenticated
 from .utils import get_user_from_api_key
 
@@ -32,6 +32,20 @@ class Submission_APIView(APIView):
         if serializer.is_valid():
             serializer.save(author=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, id):
+        self.check_permissions(request)
+
+        submission = get_object_or_404(Submission, id=id)
+        # Check if the request user is the author of the submission
+        if submission.author != request.user:
+            return Response({'error': 'You do not have permission to edit this submission.'},
+                            status=status.HTTP_403_FORBIDDEN)
+        serializer = SubmissionUpdateSerializer(submission, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def check_permissions(self, request):
