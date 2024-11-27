@@ -28,8 +28,8 @@ Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
 ### Update the title of an existing submission
 PUT http://localhost:8000/api/submissions/12/update
 Content-Type: application/json
-Authorization: Token 4b5acbd77a85ff8c08268b2e7006b9200ddc2041
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
 
 {
-  "title": "Updated Submission Title"
+  "title": "Updated Submission Title 5"
 }
