@@ -1,3 +1,4 @@
+import re
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status
@@ -5,9 +6,9 @@ from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-from news.models import Submission, Comment
+from news.models import Submission, Comment, Submission_ASK
 from news.utils import calculate_score
-from .serializers import SubmissionSerializer, CommentSerializer, SubmissionCreateSerializer
+from .serializers import SubmissionSerializer, CommentSerializer, SubmissionCreateSerializer, ThreadSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .utils import get_user_from_api_key
 
@@ -22,7 +23,18 @@ class Submission_APIView(APIView):
     )
     def get(self, request):
         sort = request.query_params.get('sort', 'point')
+        from_domain = request.query_params.get('from', None)
         submissions = Submission.objects.all()
+
+        if from_domain:
+            domain_regex = re.compile(
+                r'^(?:[a-zA-Z0-9]'  # First character of the domain
+                r'(?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)'  # Sub domain + hostname
+                r'+[a-zA-Z]{2,6}\.?$'  # First level TLD
+            )
+            if not domain_regex.match(from_domain):
+                return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Invalid domain parameter'})
+            submissions = submissions.filter(domain=from_domain)
 
         if sort == 'point':
             submissions = sorted(submissions, key=lambda x: calculate_score(x), reverse=True)
@@ -41,9 +53,6 @@ class Submission_APIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def check_permissions(self, request):
-        if request.method in ['POST', 'PUT', 'DELETE']:
-            super().check_permissions(request)
 
 class Comment_APIView(APIView):
     def get(self, request):
@@ -51,9 +60,6 @@ class Comment_APIView(APIView):
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 
-    def check_permissions(self, request):
-        if request.method in ['POST', 'PUT', 'DELETE']:
-            super().check_permissions(request)
 
 class SubmissionDetailView(APIView):
     def get(self, request, id):
@@ -61,7 +67,17 @@ class SubmissionDetailView(APIView):
         serializer = SubmissionSerializer(submission)
         return Response(serializer.data)
 
-    def check_permissions(self, request):
-        if request.method in ['POST', 'PUT', 'DELETE']:
-            super().check_permissions(request)
 
+class ThreadView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        comments = Comment.objects.filter(author=request.user,parent__isnull=True).order_by('-created_at')
+        serializer = ThreadSerializer(comments, many=True)
+        return Response(serializer.data)
+
+class AskView(APIView):
+    def get(self, request):
+        asks = Submission_ASK.objects.all()
+        serializer = SubmissionSerializer(asks, many=True)
+        return Response(serializer.data)
