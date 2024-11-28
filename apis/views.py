@@ -35,6 +35,7 @@ class Submission_APIView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        self.check_permissions(request)
         serializer = SubmissionCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(author=request.user)
