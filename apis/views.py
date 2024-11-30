@@ -119,6 +119,9 @@ class Submission_VoteAPIView(APIView):
             submission = get_object_or_404(Submission, id=id)
         except Http404:
             return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        if UpvotedSubmission.objects.filter(user=request.user, submission=submission).exists():
+            return Response({'message': 'You have already voted for this submission.'},
+                            status=status.HTTP_400_BAD_REQUEST)
         if submission.author == request.user:
             return Response({'message': 'You cannot vote for your own submission.'}, status=status.HTTP_403_FORBIDDEN)
         UpvotedSubmission.objects.create(user=request.user, submission=submission)
@@ -132,6 +135,10 @@ class Submission_VoteAPIView(APIView):
             submission = get_object_or_404(Submission, id=id)
         except Http404:
             return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        upvoted_submission = UpvotedSubmission.objects.filter(user=request.user, submission=submission).first()
+        if not upvoted_submission:
+            return Response({'message': 'You have not voted for this submission yet.'},
+                            status=status.HTTP_400_BAD_REQUEST)
         if submission.author == request.user:
             return Response({'message': 'You cannot unvote your own submission.'}, status=status.HTTP_403_FORBIDDEN)
         upvoted_submission = get_object_or_404(UpvotedSubmission, user=request.user, submission=submission)
@@ -153,6 +160,9 @@ class Submission_FavoriteAPIView(APIView):
             submission = get_object_or_404(Submission, id=id)
         except Http404:
             return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        if Favorite_submission.objects.filter(user=request.user, submission=submission).exists():
+            return Response({'message': 'You have already favorited this submission.'},
+                            status=status.HTTP_400_BAD_REQUEST)
         Favorite_submission.objects.create(user=request.user, submission=submission)
         return Response({'message': 'Submission favorited successfully.'}, status=status.HTTP_200_OK)
 
@@ -163,7 +173,13 @@ class Submission_FavoriteAPIView(APIView):
             submission = get_object_or_404(Submission, id=id)
         except Http404:
             return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
-        Favorite_submission.objects.filter(user=request.user, submission=submission).delete()
+        favorite_submission = Favorite_submission.objects.filter(user=request.user, submission=submission).first()
+        if not favorite_submission:
+            return Response({'message': 'You have not favorited this submission yet.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Remove the submission from the user's favorites
+        favorite_submission.delete()
         return Response({'message': 'Submission unfavorited successfully.'}, status=status.HTTP_200_OK)
 
     def check_permissions(self, request):
