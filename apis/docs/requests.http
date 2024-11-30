@@ -12,7 +12,7 @@ GET http://localhost:8000/api/comments
 GET http://localhost:8000/api/submissions?sort=newest
 
 ### GET submission details by ID
-GET http://localhost:8000/api/submissions/40
+GET http://localhost:8000/api/submissions/4
 
 ### Crear una nueva submission
 POST http://localhost:8000/api/submissions
@@ -20,7 +20,7 @@ Content-Type: application/json
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
 
 {
-    "title": "New submission",
+    "title": "New submission to unvote3",
     "url": "https://www.example.com",
     "text": "This is a new submission"
 }
@@ -37,3 +37,11 @@ Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c0
 ### Delete an existing submission
 DELETE http://localhost:8000/api/submissions/15/delete
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
+
+### Vote a submission
+POST http://localhost:8000/api/submissions/28/vote
+Authorization: Token 4b5acbd77a85ff8c08268b2e7006b9200ddc2041 #a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### Unvote a submission
+DELETE http://localhost:8000/api/submissions/28/unvote
+Authorization: Token 4b5acbd77a85ff8c08268b2e7006b9200ddc2041 #a9aa8ca1bad68bd682684730496829d9f115fa8a
