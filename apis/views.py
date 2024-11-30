@@ -5,9 +5,10 @@ from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-from news.models import Submission, Comment, UpvotedSubmission
+from news.models import *
+from users.models import *
 from news.utils import calculate_score
-from .serializers import SubmissionSerializer, CommentSerializer, SubmissionCreateSerializer, SubmissionUpdateSerializer
+from .serializers import *
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.http import Http404
 
@@ -142,3 +143,29 @@ class Submission_VoteAPIView(APIView):
         if request.method in ['POST', 'PUT', 'DELETE']:
             super().check_permissions(request)
 
+
+class Submission_FavoriteAPIView(APIView):
+    #permission_classes = [IsAuthenticated]
+    # Favorite a submission
+    def post(self, request, id):
+        self.check_permissions(request)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        Favorite_submission.objects.create(user=request.user, submission=submission)
+        return Response({'message': 'Submission favorited successfully.'}, status=status.HTTP_200_OK)
+
+    # Unfavorite a submission
+    def delete(self, request, id):
+        self.check_permissions(request)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        Favorite_submission.objects.filter(user=request.user, submission=submission).delete()
+        return Response({'message': 'Submission unfavorited successfully.'}, status=status.HTTP_200_OK)
+
+    def check_permissions(self, request):
+        if request.method in ['POST', 'DELETE']:
+            super().check_permissions(request)

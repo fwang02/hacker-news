@@ -20,13 +20,13 @@ Content-Type: application/json
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
 
 {
-    "title": "New submission to unvote3",
+    "title": "New submission to unvote4",
     "url": "https://www.example.com",
     "text": "This is a new submission"
 }
 
 ### Update the title of an existing submission
-PUT http://localhost:8000/api/submissions/12/update
+PUT http://localhost:8000/api/submissions/27/update
 Content-Type: application/json
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
 
@@ -45,3 +45,11 @@ Authorization: Token 4b5acbd77a85ff8c08268b2e7006b9200ddc2041 #a9aa8ca1bad68bd68
 ### Unvote a submission
 DELETE http://localhost:8000/api/submissions/28/unvote
 Authorization: Token 4b5acbd77a85ff8c08268b2e7006b9200ddc2041 #a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### Favorite a submission
+POST http://localhost:8000/api/submissions/28/favorite
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### Unfavorite a submission
+DELETE http://localhost:8000/api/submissions/28/unfavorite
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
