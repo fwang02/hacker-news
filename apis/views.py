@@ -61,6 +61,16 @@ class Submission_APIView(APIView):
             return Response(response_serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, id):
+        self.check_permissions(request)
+        submission = get_object_or_404(Submission, id=id)
+        # Check if the request user is the author of the submission
+        if submission.author != request.user:
+            return Response({'message': 'You do not have permission to delete this submission.'},
+                            status=status.HTTP_403_FORBIDDEN)
+        submission.delete()
+        return Response({'message': 'Submission deleted successfully.'}, status=status.HTTP_200_OK)
+
     def check_permissions(self, request):
         if request.method in ['POST', 'PUT', 'DELETE']:
             super().check_permissions(request)
