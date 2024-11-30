@@ -9,7 +9,6 @@ from news.models import Submission, Comment
 from news.utils import calculate_score
 from .serializers import SubmissionSerializer, CommentSerializer, SubmissionCreateSerializer, SubmissionUpdateSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .utils import get_user_from_api_key
 
 class Submission_APIView(APIView):
 
