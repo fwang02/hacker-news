@@ -38,8 +38,11 @@ class Submission_APIView(APIView):
         self.check_permissions(request)
         serializer = SubmissionCreateSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(author=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            #serializer.save(author=request.user)
+            #return Response(serializer.data, status=status.HTTP_201_CREATED)
+            submission = serializer.save(author=request.user)
+            response_serializer = SubmissionSerializer(submission)
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, id):
@@ -52,8 +55,11 @@ class Submission_APIView(APIView):
                             status=status.HTTP_403_FORBIDDEN)
         serializer = SubmissionUpdateSerializer(submission, data=request.data, partial=True)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+            #serializer.save()
+            #return Response(serializer.data)
+            submission = serializer.save()
+            response_serializer = SubmissionSerializer(submission)
+            return Response(response_serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def check_permissions(self, request):

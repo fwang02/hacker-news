@@ -2,7 +2,7 @@
 from rest_framework.permissions import BasePermission
 from rest_framework.exceptions import AuthenticationFailed
 
-class HasAuthToken(BasePermission):
+class HasAutToken(BasePermission):
     def has_permission(self, request, view):
         auth_token = request.headers.get('Authorization')
         if not auth_token:
