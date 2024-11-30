@@ -53,3 +53,11 @@ Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
 ### Unfavorite a submission
 DELETE http://localhost:8000/api/submissions/28/unfavorite
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### Hide a submission
+POST http://localhost:8000/api/submissions/28/hide
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### Unhide a submission
+DELETE http://localhost:8000/api/submissions/28/unhide
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a

@@ -152,7 +152,6 @@ class Submission_VoteAPIView(APIView):
 
 
 class Submission_FavoriteAPIView(APIView):
-    #permission_classes = [IsAuthenticated]
     # Favorite a submission
     def post(self, request, id):
         self.check_permissions(request)
@@ -177,10 +176,42 @@ class Submission_FavoriteAPIView(APIView):
         if not favorite_submission:
             return Response({'message': 'You have not favorited this submission yet.'},
                             status=status.HTTP_400_BAD_REQUEST)
-
         # Remove the submission from the user's favorites
         favorite_submission.delete()
         return Response({'message': 'Submission unfavorited successfully.'}, status=status.HTTP_200_OK)
+
+    def check_permissions(self, request):
+        if request.method in ['POST', 'DELETE']:
+            super().check_permissions(request)
+
+class Submission_HideAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # Hide a submission
+    def post(self, request, id):
+        self.check_permissions(request)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        if HiddenSubmission.objects.filter(user=request.user, submission=submission).exists():
+            return Response({'message': 'You have already hidden this submission.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        HiddenSubmission.objects.create(user=request.user, submission=submission)
+        return Response({'message': 'Submission hidden successfully.'}, status=status.HTTP_200_OK)
+
+    # Unhide a submission
+    def delete(self, request, id):
+        self.check_permissions(request)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        hidden_submission = HiddenSubmission.objects.filter(user=request.user, submission=submission).first()
+        if not hidden_submission:
+            return Response({'message': 'This submission is not hidden.'}, status=status.HTTP_400_BAD_REQUEST)
+        hidden_submission.delete()
+        return Response({'message': 'Submission unhidden successfully.'}, status=status.HTTP_200_OK)
 
     def check_permissions(self, request):
         if request.method in ['POST', 'DELETE']:
