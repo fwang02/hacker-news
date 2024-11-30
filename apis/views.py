@@ -9,6 +9,7 @@ from news.models import Submission, Comment
 from news.utils import calculate_score
 from .serializers import SubmissionSerializer, CommentSerializer, SubmissionCreateSerializer, SubmissionUpdateSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from django.http import Http404
 
 class Submission_APIView(APIView):
 
@@ -46,8 +47,10 @@ class Submission_APIView(APIView):
 
     def put(self, request, id):
         self.check_permissions(request)
-
-        submission = get_object_or_404(Submission, id=id)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
         # Check if the request user is the author of the submission
         if submission.author != request.user:
             return Response({'error': 'You do not have permission to edit this submission.'},
@@ -63,7 +66,10 @@ class Submission_APIView(APIView):
 
     def delete(self, request, id):
         self.check_permissions(request)
-        submission = get_object_or_404(Submission, id=id)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
         # Check if the request user is the author of the submission
         if submission.author != request.user:
             return Response({'message': 'You do not have permission to delete this submission.'},
@@ -87,7 +93,10 @@ class Comment_APIView(APIView):
 
 class SubmissionDetailView(APIView):
     def get(self, request, id):
-        submission = get_object_or_404(Submission, id=id)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
         serializer = SubmissionSerializer(submission)
         return Response(serializer.data)
 

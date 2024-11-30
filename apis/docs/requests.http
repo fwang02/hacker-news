@@ -12,7 +12,7 @@ GET http://localhost:8000/api/comments
 GET http://localhost:8000/api/submissions?sort=newest
 
 ### GET submission details by ID
-GET http://localhost:8000/api/submissions/4
+GET http://localhost:8000/api/submissions/40
 
 ### Crear una nueva submission
 POST http://localhost:8000/api/submissions
