@@ -9,7 +9,7 @@ from news.models import Submission, Comment
 from news.utils import calculate_score
 from .serializers import SubmissionSerializer, CommentSerializer, SubmissionCreateSerializer, SubmissionUpdateSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .utils import get_user_from_api_key
+from django.http import Http404
 
 class Submission_APIView(APIView):
 
@@ -38,23 +38,44 @@ class Submission_APIView(APIView):
         self.check_permissions(request)
         serializer = SubmissionCreateSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(author=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            #serializer.save(author=request.user)
+            #return Response(serializer.data, status=status.HTTP_201_CREATED)
+            submission = serializer.save(author=request.user)
+            response_serializer = SubmissionSerializer(submission)
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, id):
         self.check_permissions(request)
-
-        submission = get_object_or_404(Submission, id=id)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
         # Check if the request user is the author of the submission
         if submission.author != request.user:
             return Response({'error': 'You do not have permission to edit this submission.'},
                             status=status.HTTP_403_FORBIDDEN)
         serializer = SubmissionUpdateSerializer(submission, data=request.data, partial=True)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+            #serializer.save()
+            #return Response(serializer.data)
+            submission = serializer.save()
+            response_serializer = SubmissionSerializer(submission)
+            return Response(response_serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id):
+        self.check_permissions(request)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        # Check if the request user is the author of the submission
+        if submission.author != request.user:
+            return Response({'message': 'You do not have permission to delete this submission.'},
+                            status=status.HTTP_403_FORBIDDEN)
+        submission.delete()
+        return Response({'message': 'Submission deleted successfully.'}, status=status.HTTP_200_OK)
 
     def check_permissions(self, request):
         if request.method in ['POST', 'PUT', 'DELETE']:
@@ -72,7 +93,10 @@ class Comment_APIView(APIView):
 
 class SubmissionDetailView(APIView):
     def get(self, request, id):
-        submission = get_object_or_404(Submission, id=id)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
         serializer = SubmissionSerializer(submission)
         return Response(serializer.data)
 
