@@ -1,9 +1,8 @@
 from operator import is_not
 
 from rest_framework import serializers
-from news.models import Submission, Comment
 from users.models import Profile
-
+from news.models import Submission, Comment, Submission_ASK, Submission_URL
 
 class ReplySerializer(serializers.ModelSerializer):
     class Meta:
@@ -47,6 +46,35 @@ class SubmissionCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission
         fields = ['title', 'url', 'text']
+        
+    def create(self, validated_data):
+        if 'url' in validated_data and validated_data['url']:
+            submission = Submission_URL.objects.create(**validated_data)
+        else:
+            submission = Submission_ASK.objects.create(**validated_data)
+        return submission
+
+    def validate(self, data):
+        if not data.get('url') and not data.get('text'):
+            raise serializers.ValidationError("Either 'url' or 'text' must be provided.")
+        return data
+
+    def validate_title(self, value):
+        #Ensure the title is unique.
+        if Submission.objects.filter(title=value).exists():
+            raise serializers.ValidationError("A submission with this title already exists.")
+        return value
+
+
+class SubmissionUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Submission
+        fields = ['title']
+
+    def validate_title(self, value):
+        if Submission.objects.filter(title=value).exclude(id=self.instance.id).exists():
+            raise serializers.ValidationError("A submission with this title already exists.")
+        return value
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:

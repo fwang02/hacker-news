@@ -8,13 +8,13 @@ from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-from news.models import Submission, Comment, Submission_ASK, HiddenSubmission, UpvotedSubmission, UpvotedComment
+from .utils import get_user_from_api_key
+from news.models import *
+from users.models import *
 from news.utils import calculate_score
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .utils import get_user_from_api_key
-from users.models import Favorite_submission, Favorite_comment
-
+from django.http import Http404
 
 class Submission_APIView(APIView):
 
@@ -25,6 +25,7 @@ class Submission_APIView(APIView):
                    400: "Invalid sort parameter"},
         manual_parameters=[openapi.Parameter('sort', openapi.IN_QUERY, description="Sort submissions by point or newest", type=openapi.TYPE_STRING)]
     )
+    #get all submissions in page hackernews
     def get(self, request):
         sort = request.query_params.get('sort', 'point')
         from_domain = request.query_params.get('from', None)
@@ -50,14 +51,57 @@ class Submission_APIView(APIView):
         serializer = SubmissionSerializer(submissions, many=True)
         return Response(serializer.data)
 
+    #create a new submission
     def post(self, request):
+
         self.authentication_classes = [TokenAuthentication]
         serializer = SubmissionCreateSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(author=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            #serializer.save(author=request.user)
+            #return Response(serializer.data, status=status.HTTP_201_CREATED)
+            submission = serializer.save(author=request.user)
+            response_serializer = SubmissionSerializer(submission)
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    #update a submission
+    def put(self, request, id):
+        self.check_permissions(request)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        # Check if the request user is the author of the submission
+        if submission.author != request.user:
+            return Response({'error': 'You do not have permission to edit this submission.'},
+                            status=status.HTTP_403_FORBIDDEN)
+        serializer = SubmissionUpdateSerializer(submission, data=request.data, partial=True)
+        if serializer.is_valid():
+            #serializer.save()
+            #return Response(serializer.data)
+            submission = serializer.save()
+            response_serializer = SubmissionSerializer(submission)
+            return Response(response_serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    #delete a submission
+    def delete(self, request, id):
+        self.check_permissions(request)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        # Check if the request user is the author of the submission
+        if submission.author != request.user:
+            return Response({'message': 'You do not have permission to delete this submission.'},
+                            status=status.HTTP_403_FORBIDDEN)
+        submission.delete()
+        return Response({'message': 'Submission deleted successfully.'}, status=status.HTTP_200_OK)
+
+
+    def check_permissions(self, request):
+        if request.method in ['POST', 'PUT', 'DELETE']:
+            super().check_permissions(request)
 
 class Comment_APIView(APIView):
     def get(self, request):
@@ -67,8 +111,12 @@ class Comment_APIView(APIView):
 
 
 class SubmissionDetailView(APIView):
+    #get submission with the given id
     def get(self, request, id):
-        submission = get_object_or_404(Submission, id=id)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
         serializer = SubmissionSerializer(submission)
         return Response(serializer.data)
 
@@ -204,3 +252,109 @@ class UserUpvotedComments(APIView):
         comments = Comment.objects.filter(id__in=upvoted_comments_ids).order_by('-created_at')
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)         
+
+class Submission_VoteAPIView(APIView):
+    #Vote a submission
+    def post(self, request, id):
+        self.check_permissions(request)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        if UpvotedSubmission.objects.filter(user=request.user, submission=submission).exists():
+            return Response({'message': 'You have already voted for this submission.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        if submission.author == request.user:
+            return Response({'message': 'You cannot vote for your own submission.'}, status=status.HTTP_403_FORBIDDEN)
+        UpvotedSubmission.objects.create(user=request.user, submission=submission)
+        submission.add_point()
+        return Response({'message': 'Submission voted successfully.'}, status=status.HTTP_200_OK)
+
+    # Unvote a submission
+    def delete(self, request, id):
+        self.check_permissions(request)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        upvoted_submission = UpvotedSubmission.objects.filter(user=request.user, submission=submission).first()
+        if not upvoted_submission:
+            return Response({'message': 'You have not voted for this submission yet.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        if submission.author == request.user:
+            return Response({'message': 'You cannot unvote your own submission.'}, status=status.HTTP_403_FORBIDDEN)
+        upvoted_submission = get_object_or_404(UpvotedSubmission, user=request.user, submission=submission)
+        upvoted_submission.delete()
+        submission.subtract_point()
+        return Response({'message': 'Submission unvoted successfully.'}, status=status.HTTP_200_OK)
+
+    def check_permissions(self, request):
+        if request.method in ['POST', 'PUT', 'DELETE']:
+            super().check_permissions(request)
+
+
+class Submission_FavoriteAPIView(APIView):
+    # Favorite a submission
+    def post(self, request, id):
+        self.check_permissions(request)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        if Favorite_submission.objects.filter(user=request.user, submission=submission).exists():
+            return Response({'message': 'You have already favorited this submission.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        Favorite_submission.objects.create(user=request.user, submission=submission)
+        return Response({'message': 'Submission favorited successfully.'}, status=status.HTTP_200_OK)
+
+    # Unfavorite a submission
+    def delete(self, request, id):
+        self.check_permissions(request)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        favorite_submission = Favorite_submission.objects.filter(user=request.user, submission=submission).first()
+        if not favorite_submission:
+            return Response({'message': 'You have not favorited this submission yet.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        # Remove the submission from the user's favorites
+        favorite_submission.delete()
+        return Response({'message': 'Submission unfavorited successfully.'}, status=status.HTTP_200_OK)
+
+    def check_permissions(self, request):
+        if request.method in ['POST', 'DELETE']:
+            super().check_permissions(request)
+
+class Submission_HideAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # Hide a submission
+    def post(self, request, id):
+        self.check_permissions(request)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        if HiddenSubmission.objects.filter(user=request.user, submission=submission).exists():
+            return Response({'message': 'You have already hidden this submission.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        HiddenSubmission.objects.create(user=request.user, submission=submission)
+        return Response({'message': 'Submission hidden successfully.'}, status=status.HTTP_200_OK)
+
+    # Unhide a submission
+    def delete(self, request, id):
+        self.check_permissions(request)
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        hidden_submission = HiddenSubmission.objects.filter(user=request.user, submission=submission).first()
+        if not hidden_submission:
+            return Response({'message': 'This submission is not hidden.'}, status=status.HTTP_400_BAD_REQUEST)
+        hidden_submission.delete()
+        return Response({'message': 'Submission unhidden successfully.'}, status=status.HTTP_200_OK)
+
+    def check_permissions(self, request):
+        if request.method in ['POST', 'DELETE']:
+            super().check_permissions(request)
