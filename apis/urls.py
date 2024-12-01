@@ -32,4 +32,6 @@ urlpatterns = [
     path('users/<int:user_id>/hidden', UserHiddenSubmissions.as_view(), name='user_hidden_submissions'),
     path('users/<int:user_id>/fav_submissions', UserFavoriteSubmissions.as_view(), name='user-favorite-submissions'),
     path('users/<int:user_id>/fav_comments', UserFavoriteComments.as_view(), name='user-favorite-comments'),
+    path('users/<int:user_id>/up_submissions', UserUpvotedSubmissions.as_view(), name='user-upvoted-submissions'),
+    path('users/<int:user_id>/up_comments', UserUpvotedComments.as_view(), name='user-upvoted-comments'),
 ]

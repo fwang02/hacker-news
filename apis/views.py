@@ -8,7 +8,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-from news.models import Submission, Comment, Submission_ASK, HiddenSubmission
+from news.models import Submission, Comment, Submission_ASK, HiddenSubmission, UpvotedSubmission, UpvotedComment
 from news.utils import calculate_score
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -152,5 +152,55 @@ class UserFavoriteComments(APIView):
         user = get_object_or_404(User, id=user_id)
         favorite_comments_ids = Favorite_comment.objects.filter(user=user).values_list('comment', flat=True)
         comments = Comment.objects.filter(id__in=favorite_comments_ids).order_by('-created_at')
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+class UserUpvotedSubmissions(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    
+    @swagger_auto_schema(
+        tags=['User'],
+        operation_description="Get user's upvoted submissions",
+        responses={
+            200: SubmissionSerializer(many=True),
+            403: "Forbidden - Can only view your own upvoted submissions",
+            404: "User not found"
+        }
+    )
+    def get(self, request, user_id):
+        if request.user.id != user_id:
+            return Response(
+                {"error": "You can only view your own upvoted submissions"}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+            
+        upvoted_submissions_ids = UpvotedSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
+        submissions = Submission.objects.filter(id__in=upvoted_submissions_ids).order_by('-created')
+        serializer = SubmissionSerializer(submissions, many=True)
+        return Response(serializer.data)
+
+class UserUpvotedComments(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    
+    @swagger_auto_schema(
+        tags=['User'],
+        operation_description="Get user's upvoted comments",
+        responses={
+            200: CommentSerializer(many=True),
+            403: "Forbidden - Can only view your own upvoted comments",
+            404: "User not found"
+        }
+    )
+    def get(self, request, user_id):
+        if request.user.id != user_id:
+            return Response(
+                {"error": "You can only view your own upvoted comments"}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+            
+        upvoted_comments_ids = UpvotedComment.objects.filter(user=request.user).values_list('comment', flat=True)
+        comments = Comment.objects.filter(id__in=upvoted_comments_ids).order_by('-created_at')
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)         

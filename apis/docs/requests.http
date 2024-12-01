@@ -48,3 +48,11 @@ GET http://localhost:8000/api/users/4/fav_submissions
 
 ### Get user's favorite comments
 GET http://localhost:8000/api/users/3/fav_comments
+
+### Get user's upvoted submissions
+GET http://localhost:8000/api/users/1/up_submissions
+Authorization: Token 0d9f80ab61c69ce2f160bde2e3f81bb8b43d74ab
+
+### Get user's upvoted comments
+GET http://localhost:8000/api/users/1/up_comments
+Authorization: Token 0d9f80ab61c69ce2f160bde2e3f81bb8b43d74ab
