@@ -21,8 +21,11 @@ from news.models import Comment
 
 urlpatterns = [
     path('comments', Comment_APIView.as_view()),
-    path('submissions/<int:id>', SubmissionDetailView.as_view(), name='submission_detail'),
+    path('threads', ThreadView.as_view(), name='threads'),
+    path('asks', AskView.as_view(), name='asks'),
+  
     path('submissions', Submission_APIView.as_view(), name='submit_submission'),
+    path('submissions/<int:id>', SubmissionDetailView.as_view(), name='submission_detail'),
     path('submissions/<int:id>/update', Submission_APIView.as_view(), name='update_submission_title'),
     path('submissions/<int:id>/delete', Submission_APIView.as_view(), name='delete_submission'),
     path('submissions/<int:id>/vote', Submission_VoteAPIView.as_view(), name='vote_submission'),
@@ -32,4 +35,12 @@ urlpatterns = [
     path('submissions/<int:id>/hide', Submission_HideAPIView.as_view(), name='hide_submission'),
     path('submissions/<int:id>/unhide', Submission_HideAPIView.as_view(), name='unhide_submission'),
 
+    path('users/<int:id>/profile', ProfileView.as_view(), name='profile'),
+    path('users/<int:user_id>/submissions', UserSubmissions.as_view(), name='user_submissions'),
+    path('users/<int:user_id>/comments', UserCommentsAPIView.as_view(), name='user_comments'),
+    path('users/<int:user_id>/hidden', UserHiddenSubmissions.as_view(), name='user_hidden_submissions'),
+    path('users/<int:user_id>/fav_submissions', UserFavoriteSubmissions.as_view(), name='user-favorite-submissions'),
+    path('users/<int:user_id>/fav_comments', UserFavoriteComments.as_view(), name='user-favorite-comments'),
+    path('users/<int:user_id>/up_submissions', UserUpvotedSubmissions.as_view(), name='user-upvoted-submissions'),
+    path('users/<int:user_id>/up_comments', UserUpvotedComments.as_view(), name='user-upvoted-comments'),
 ]
