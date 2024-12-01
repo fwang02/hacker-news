@@ -8,11 +8,12 @@ from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-from news.models import Submission, Comment, Submission_ASK
+from news.models import Submission, Comment, Submission_ASK, HiddenSubmission
 from news.utils import calculate_score
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .utils import get_user_from_api_key
+
 
 class Submission_APIView(APIView):
 
@@ -104,3 +105,19 @@ class UserCommentsAPIView(APIView):
         comments = Comment.objects.filter(author_id=user_id)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
+
+class UserHiddenSubmissions(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    
+    def get(self, request, user_id):
+        if request.user.id != user_id:
+            return Response(
+                {"error": "You do not have permission to view other users' hidden submissions."}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+            
+        hidden_submissions_ids = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
+        submissions = Submission.objects.filter(id__in=hidden_submissions_ids).order_by('-created')
+        serializer = SubmissionSerializer(submissions, many=True)
+        return Response(serializer.data)         

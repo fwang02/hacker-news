@@ -29,5 +29,5 @@ urlpatterns = [
     path('users/<int:id>/profile', ProfileView.as_view(), name='profile'),
     path('users/<int:user_id>/submissions', UserSubmissions.as_view(), name='user_submissions'),
     path('users/<int:user_id>/comments', UserCommentsAPIView.as_view(), name='user_comments'),
-
+    path('users/<int:user_id>/hidden', UserHiddenSubmissions.as_view(), name='user_hidden_submissions'),
 ]
