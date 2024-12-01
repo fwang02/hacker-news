@@ -42,3 +42,9 @@ GET http://localhost:8000/api/users/2/comments
 ### Get user's hidden submissions
 GET http://localhost:8000/api/users/1/hidden
 Authorization: Token 0d9f80ab61c69ce2f160bde2e3f81bb8b43d74ab
+
+### Get user's favorite submissions
+GET http://localhost:8000/api/users/4/fav_submissions
+
+### Get user's favorite comments
+GET http://localhost:8000/api/users/3/fav_comments

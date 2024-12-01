@@ -13,6 +13,7 @@ from news.utils import calculate_score
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .utils import get_user_from_api_key
+from users.models import Favorite_submission, Favorite_comment
 
 
 class Submission_APIView(APIView):
@@ -120,4 +121,36 @@ class UserHiddenSubmissions(APIView):
         hidden_submissions_ids = HiddenSubmission.objects.filter(user=request.user).values_list('submission', flat=True)
         submissions = Submission.objects.filter(id__in=hidden_submissions_ids).order_by('-created')
         serializer = SubmissionSerializer(submissions, many=True)
+        return Response(serializer.data)
+
+class UserFavoriteSubmissions(APIView):
+    @swagger_auto_schema(
+        tags=['User'],
+        operation_description="Get user's favorite submissions",
+        responses={
+            200: SubmissionSerializer(many=True),
+            404: "User not found"
+        }
+    )
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        favorite_submissions_ids = Favorite_submission.objects.filter(user=user).values_list('submission', flat=True)
+        submissions = Submission.objects.filter(id__in=favorite_submissions_ids).order_by('-created')
+        serializer = SubmissionSerializer(submissions, many=True)
+        return Response(serializer.data)
+
+class UserFavoriteComments(APIView):
+    @swagger_auto_schema(
+        tags=['User'],
+        operation_description="Get user's favorite comments",
+        responses={
+            200: CommentSerializer(many=True),
+            404: "User not found"
+        }
+    )
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        favorite_comments_ids = Favorite_comment.objects.filter(user=user).values_list('comment', flat=True)
+        comments = Comment.objects.filter(id__in=favorite_comments_ids).order_by('-created_at')
+        serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)         
