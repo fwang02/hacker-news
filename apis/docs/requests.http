@@ -34,4 +34,7 @@ GET http://localhost:8000/api/submissions?from=example.com
 GET http://localhost:8000/api/users/3/profile
 
 ### Get user's submissions
-GET http://localhost:8000/api/users/4/submissions
+GET http://localhost:8000/api/users/1/submissions
+
+### Get user's comments
+GET http://localhost:8000/api/users/2/comments

@@ -97,3 +97,10 @@ class UserSubmissions(APIView):
         submissions = Submission.objects.filter(author=user)
         serializer = SubmissionSerializer(submissions, many=True)
         return Response(serializer.data)
+
+class UserCommentsAPIView(APIView):
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        comments = Comment.objects.filter(author_id=user_id)
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
