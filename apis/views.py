@@ -56,7 +56,20 @@ class Submission_APIView(APIView):
     @swagger_auto_schema(
         tags=['Submission'],
         operation_description="Create a submission",
-        request_body=SubmissionCreateSerializer,
+        #request_body=SubmissionCreateSerializer,
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'title': openapi.Schema(type=openapi.TYPE_STRING, description='Title of the submission'),
+                'url': openapi.Schema(type=openapi.TYPE_STRING, description='URL of the submission'),
+                'text': openapi.Schema(type=openapi.TYPE_STRING, description='Text of the submission')
+            },
+            example={
+                "title": "titulo ejemplo",
+                "url": "https://www.youtube.com/",
+                "text": "texto ejemplo"
+            }
+        ),
         responses={
             201: SubmissionSerializer,
             400: openapi.Response(
@@ -94,7 +107,16 @@ class Submission_APIView(APIView):
     @swagger_auto_schema(
         tags=['Submission'],
         operation_description="Update a submission",
-        request_body=SubmissionUpdateSerializer,
+        #request_body=SubmissionUpdateSerializer,
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'title': openapi.Schema(type=openapi.TYPE_STRING, description='Title of the submission')
+            },
+            example={
+                "title": "Title Updated"
+            }
+        ),
         responses={
             200: SubmissionSerializer,
             400: openapi.Response(
