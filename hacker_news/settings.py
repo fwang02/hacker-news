@@ -106,7 +106,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'hacker_news.permissions.TokenRequiredForUnsafeMethods',
+        'rest_framework.permissions.IsAuthenticated',
     ],
 }
 

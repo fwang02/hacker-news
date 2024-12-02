@@ -4,11 +4,10 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import permission_classes
+from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-from .utils import get_user_from_api_key
 from news.models import *
 from users.models import *
 from news.utils import calculate_score
@@ -17,6 +16,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.http import Http404
 
 class Submission_APIView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     @swagger_auto_schema(
         tags=['Submission'],
@@ -97,7 +98,6 @@ class Submission_APIView(APIView):
                             status=status.HTTP_403_FORBIDDEN)
         submission.delete()
         return Response({'message': 'Submission deleted successfully.'}, status=status.HTTP_200_OK)
-
 
     def check_permissions(self, request):
         if request.method in ['POST', 'PUT', 'DELETE']:
@@ -212,7 +212,7 @@ class UserUpvotedSubmissions(APIView):
         operation_description="Get user's upvoted submissions",
         responses={
             200: SubmissionSerializer(many=True),
-            403: "Forbidden - Can only view your own upvoted submissions",
+            403: "You can only view your own upvoted submissions",
             404: "User not found"
         }
     )
@@ -254,6 +254,9 @@ class UserUpvotedComments(APIView):
         return Response(serializer.data)         
 
 class Submission_VoteAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
     #Vote a submission
     def post(self, request, id):
         self.check_permissions(request)
@@ -294,6 +297,9 @@ class Submission_VoteAPIView(APIView):
 
 
 class Submission_FavoriteAPIView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     # Favorite a submission
     def post(self, request, id):
         self.check_permissions(request)
@@ -328,6 +334,7 @@ class Submission_FavoriteAPIView(APIView):
 
 class Submission_HideAPIView(APIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     # Hide a submission
     def post(self, request, id):
