@@ -1,19 +1,21 @@
 import re
-from django.contrib.auth.models import User
+
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import permission_classes, authentication_classes
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.shortcuts import get_object_or_404
+
 from news.models import *
-from users.models import *
 from news.utils import calculate_score
+from users.models import *
 from .serializers import *
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from django.http import Http404
+
 
 class Submission_APIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -269,10 +271,33 @@ class AskView(APIView):
         return Response(serializer.data)
 
 class ProfileView(APIView):
+    authentication_classes = [TokenAuthentication]
+
+    @swagger_auto_schema(
+        tags=['User'],
+        operation_description="Get user profile",
+        responses={
+            200: openapi.Response(
+                description="Profile retrieved successfully",
+                schema=ProfileSerializer
+            ),
+            404: openapi.Response(
+                description="Profile not found",
+                examples={
+                    "application/json": { "detail": "No Profile matches the given query."}
+                }
+            ),
+            500: openapi.Response(description="Internal Server Error")
+        }
+    )
     def get(self, request,id):
         profile = get_object_or_404(Profile, user_id=id)
         serializer = ProfileSerializer(profile)
-        return Response(serializer.data)
+        response_data = serializer.data
+        if request.user.id == id:
+            token = Token.objects.filter(user_id=id).values_list('key', flat=True).first()
+            response_data = { **serializer.data, 'token': token }
+        return Response(response_data)
 
 class UserSubmissions(APIView):
     def get(self, request, user_id):

@@ -11,7 +11,6 @@ from news.models import Submission, HiddenSubmission, UpvotedSubmission, \
 from .forms import ProfileForm
 from .models import Favorite_submission, Favorite_comment
 from .utils import calculate_date
-from news.utils import calculate_score
 
 
 def profile(request):

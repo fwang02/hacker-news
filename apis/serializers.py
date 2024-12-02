@@ -77,6 +77,8 @@ class SubmissionUpdateSerializer(serializers.ModelSerializer):
         return value
 
 class ProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+
     class Meta:
         model = Profile
-        fields = '__all__'
+        fields = ['user_id', 'username', 'karma', 'about', 'banner', 'avatar']
