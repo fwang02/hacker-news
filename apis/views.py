@@ -103,6 +103,38 @@ class Submission_APIView(APIView):
             return Response(response_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def check_permissions(self, request):
+        if request.method in ['POST', 'PUT', 'DELETE']:
+            super().check_permissions(request)
+
+class Comment_APIView(APIView):
+    def get(self, request):
+        comments = Comment.objects.all()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+
+class SubmissionDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    #get submission with the given id
+    @swagger_auto_schema(
+        tags=['Submission'],
+        operation_description="Get a submission",
+        responses={
+            200: SubmissionSerializer,
+            404: "No submission with such an ID."
+        }
+    )
+    def get(self, request, id):
+        try:
+            submission = get_object_or_404(Submission, id=id)
+        except Http404:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = SubmissionSerializer(submission)
+        return Response(serializer.data)
+
     #update a submission
     @swagger_auto_schema(
         tags=['Submission'],
@@ -221,32 +253,6 @@ class Submission_APIView(APIView):
     def check_permissions(self, request):
         if request.method in ['POST', 'PUT', 'DELETE']:
             super().check_permissions(request)
-
-class Comment_APIView(APIView):
-    def get(self, request):
-        comments = Comment.objects.all()
-        serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data)
-
-
-class SubmissionDetailView(APIView):
-    #get submission with the given id
-    @swagger_auto_schema(
-        tags=['Submission'],
-        operation_description="Get a submission",
-        responses={
-            200: SubmissionSerializer,
-            404: "No submission with such an ID."
-        }
-    )
-    def get(self, request, id):
-        try:
-            submission = get_object_or_404(Submission, id=id)
-        except Http404:
-            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = SubmissionSerializer(submission)
-        return Response(serializer.data)
-
 
 class ThreadView(APIView):
     permission_classes = [IsAuthenticated]

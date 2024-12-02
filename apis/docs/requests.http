@@ -60,12 +60,12 @@ Content-Type: application/json
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
 
 {
-    "title": "API test",
+    "title": "API test 2",
     "url": "http://localhost:8000/swagger/"
 }
 
 ### Update the title of an existing submission
-PUT http://localhost:8000/api/submissions/27/update
+PUT http://localhost:8000/api/submissions/29/update
 Content-Type: application/json
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
 
@@ -74,7 +74,7 @@ Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c0
 }
 
 ### Delete an existing submission
-DELETE http://localhost:8000/api/submissions/27/delete
+DELETE http://localhost:8000/api/submissions/27
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
 
 ### Vote a submission
@@ -82,7 +82,7 @@ POST http://localhost:8000/api/submissions/28/vote
 Authorization: Token 4b5acbd77a85ff8c08268b2e7006b9200ddc2041 #a9aa8ca1bad68bd682684730496829d9f115fa8a
 
 ### Unvote a submission
-DELETE http://localhost:8000/api/submissions/28/unvote
+DELETE http://localhost:8000/api/submissions/28/vote
 Authorization: Token 4b5acbd77a85ff8c08268b2e7006b9200ddc2041 #a9aa8ca1bad68bd682684730496829d9f115fa8a
 
 ### Favorite a submission
@@ -90,7 +90,7 @@ POST http://localhost:8000/api/submissions/28/favorite
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
 
 ### Unfavorite a submission
-DELETE http://localhost:8000/api/submissions/28/unfavorite
+DELETE http://localhost:8000/api/submissions/28/favorite
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
 
 ### Hide a submission
@@ -98,5 +98,5 @@ POST http://localhost:8000/api/submissions/28/hide
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
 
 ### Unhide a submission
-DELETE http://localhost:8000/api/submissions/28/unhide
+DELETE http://localhost:8000/api/submissions/28/hide
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
