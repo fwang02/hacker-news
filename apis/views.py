@@ -19,6 +19,7 @@ class Submission_APIView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
+    # get all submissions in page hackernews
     @swagger_auto_schema(
         tags=['Submission'],
         operation_description="Get all submissions",
@@ -26,7 +27,6 @@ class Submission_APIView(APIView):
                    400: "Invalid sort parameter"},
         manual_parameters=[openapi.Parameter('sort', openapi.IN_QUERY, description="Sort submissions by point or newest", type=openapi.TYPE_STRING)]
     )
-    #get all submissions in page hackernews
     def get(self, request):
         sort = request.query_params.get('sort', 'point')
         from_domain = request.query_params.get('from', None)
@@ -53,8 +53,33 @@ class Submission_APIView(APIView):
         return Response(serializer.data)
 
     #create a new submission
+    @swagger_auto_schema(
+        tags=['Submission'],
+        operation_description="Create a submission",
+        request_body=SubmissionCreateSerializer,
+        responses={
+            201: SubmissionSerializer,
+            400: openapi.Response(
+                description="Validation errors",
+                examples={
+                    "application/json": {
+                        "non_field_errors": ["Either 'url' or 'text' must be provided."],
+                        "title": ["A submission with this title already exists."]
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"message": "Invalid token."},
+                        {"message": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            )
+        }
+    )
     def post(self, request):
-
         self.authentication_classes = [TokenAuthentication]
         serializer = SubmissionCreateSerializer(data=request.data)
         if serializer.is_valid():
@@ -66,6 +91,39 @@ class Submission_APIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     #update a submission
+    @swagger_auto_schema(
+        tags=['Submission'],
+        operation_description="Update a submission",
+        request_body=SubmissionUpdateSerializer,
+        responses={
+            200: SubmissionSerializer,
+            400: openapi.Response(
+                description="Validation errors",
+                examples={
+                    "application/json": {
+                        "title": ["A submission with this title already exists."]
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"detail": "Invalid token."},
+                        {"detail": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found",
+                examples={
+                    "application/json": {
+                        "message": "No submission with such an ID."
+                    }
+                }
+            )
+        }
+    )
     def put(self, request, id):
         self.check_permissions(request)
         try:
@@ -86,6 +144,45 @@ class Submission_APIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     #delete a submission
+    @swagger_auto_schema(
+        tags=['Submission'],
+        operation_description="Delete a submission",
+        responses={
+            200: openapi.Response(
+                description="Submission deleted successfully",
+                examples={
+                    "application/json": {
+                        "message": "Submission deleted successfully."
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Bad Request",
+                examples={
+                    "application/json": {
+                        "error": "Invalid request."
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"detail": "Invalid token."},
+                        {"detail": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found",
+                examples={
+                    "application/json": {
+                        "message": "No submission with such an ID."
+                    }
+                }
+            )
+        }
+    )
     def delete(self, request, id):
         self.check_permissions(request)
         try:
@@ -112,6 +209,14 @@ class Comment_APIView(APIView):
 
 class SubmissionDetailView(APIView):
     #get submission with the given id
+    @swagger_auto_schema(
+        tags=['Submission'],
+        operation_description="Get a submission",
+        responses={
+            200: SubmissionSerializer,
+            404: "No submission with such an ID."
+        }
+    )
     def get(self, request, id):
         try:
             submission = get_object_or_404(Submission, id=id)
@@ -258,6 +363,53 @@ class Submission_VoteAPIView(APIView):
     authentication_classes = [TokenAuthentication]
 
     #Vote a submission
+    @swagger_auto_schema(
+        tags=['Submission'],
+        operation_description="Vote a submission",
+        responses={
+            200: openapi.Response(
+                description="Submission voted successfully",
+                examples={
+                    "application/json": {
+                        "message": "Submission voted successfully."
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Bad Request",
+                examples={
+                    "application/json": {
+                        "message": "You have already voted for this submission."
+                    }
+                }
+            ),
+            403: openapi.Response(
+                description="Forbidden",
+                examples={
+                    "application/json": {
+                        "message": "You cannot vote for your own submission."
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"message": "Invalid token."},
+                        {"message": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found",
+                examples={
+                    "application/json": {
+                        "message": "No submission with such an ID."
+                    }
+                }
+            )
+        }
+    )
     def post(self, request, id):
         self.check_permissions(request)
         try:
@@ -274,6 +426,53 @@ class Submission_VoteAPIView(APIView):
         return Response({'message': 'Submission voted successfully.'}, status=status.HTTP_200_OK)
 
     # Unvote a submission
+    @swagger_auto_schema(
+        tags=['Submission'],
+        operation_description="Delete a vote from a submission",
+        responses={
+            200: openapi.Response(
+                description="Vote removed successfully",
+                examples={
+                    "application/json": {
+                        "message": "Submission unvoted successfully."
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Bad Request",
+                examples={
+                    "application/json": {
+                        "message": "You have not voted for this submission yet."
+                    }
+                }
+            ),
+            403: openapi.Response(
+                description="Forbidden",
+                examples={
+                    "application/json": {
+                        "message": "You cannot unvote your own submission."
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"message": "Invalid token."},
+                        {"message": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found",
+                examples={
+                    "application/json": {
+                        "message": "No submission with such an ID."
+                    }
+                }
+            )
+        }
+    )
     def delete(self, request, id):
         self.check_permissions(request)
         try:
@@ -301,6 +500,45 @@ class Submission_FavoriteAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     # Favorite a submission
+    @swagger_auto_schema(
+        tags=['Submission'],
+        operation_description="Favorite a submission",
+        responses={
+            200: openapi.Response(
+                description="Submission favorited successfully",
+                examples={
+                    "application/json": {
+                        "message": "Submission favorited successfully."
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Bad Request",
+                examples={
+                    "application/json": {
+                        "message": "You have already favorited this submission."
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"message": "Invalid token."},
+                        {"message": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found",
+                examples={
+                    "application/json": {
+                        "message": "No submission with such an ID."
+                    }
+                }
+            )
+        }
+    )
     def post(self, request, id):
         self.check_permissions(request)
         try:
@@ -314,6 +552,45 @@ class Submission_FavoriteAPIView(APIView):
         return Response({'message': 'Submission favorited successfully.'}, status=status.HTTP_200_OK)
 
     # Unfavorite a submission
+    @swagger_auto_schema(
+        tags=['Submission'],
+        operation_description="Unfavorite a submission",
+        responses={
+            200: openapi.Response(
+                description="Submission unfavorited successfully",
+                examples={
+                    "application/json": {
+                        "message": "Submission unfavorited successfully."
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Bad Request",
+                examples={
+                    "application/json": {
+                        "message": "You have not favorited this submission yet."
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"message": "Invalid token."},
+                        {"message": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found",
+                examples={
+                    "application/json": {
+                        "message": "No submission with such an ID."
+                    }
+                }
+            )
+        }
+    )
     def delete(self, request, id):
         self.check_permissions(request)
         try:
@@ -337,6 +614,45 @@ class Submission_HideAPIView(APIView):
     authentication_classes = [TokenAuthentication]
 
     # Hide a submission
+    @swagger_auto_schema(
+        tags=['Submission'],
+        operation_description="Hide a submission",
+        responses={
+            200: openapi.Response(
+                description="Submission hidden successfully",
+                examples={
+                    "application/json": {
+                        "message": "Submission hidden successfully."
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Bad Request",
+                examples={
+                    "application/json": {
+                        "message": "You have already hidden this submission."
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"message": "Invalid token."},
+                        {"message": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found",
+                examples={
+                    "application/json": {
+                        "message": "No submission with such an ID."
+                    }
+                }
+            )
+        }
+    )
     def post(self, request, id):
         self.check_permissions(request)
         try:
@@ -350,6 +666,45 @@ class Submission_HideAPIView(APIView):
         return Response({'message': 'Submission hidden successfully.'}, status=status.HTTP_200_OK)
 
     # Unhide a submission
+    @swagger_auto_schema(
+        tags=['Submission'],
+        operation_description="Unhide a submission",
+        responses={
+            200: openapi.Response(
+                description="Submission unhidden successfully",
+                examples={
+                    "application/json": {
+                        "message": "Submission unhidden successfully."
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Bad Request",
+                examples={
+                    "application/json": {
+                        "message": "This submission is not hidden."
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"message": "Invalid token."},
+                        {"message": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found",
+                examples={
+                    "application/json": {
+                        "message": "No submission with such an ID."
+                    }
+                }
+            )
+        }
+    )
     def delete(self, request, id):
         self.check_permissions(request)
         try:

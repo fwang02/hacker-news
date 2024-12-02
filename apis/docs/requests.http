@@ -7,22 +7,9 @@ GET http://localhost:8000/api/comments
 ### GET newest submissions
 GET http://localhost:8000/api/submissions?sort=newest
 
-### GET submission details by ID
-GET http://localhost:8000/api/submissions/2
-
-### Crear una nueva submission
-POST http://localhost:8000/api/submissions
-Content-Type: application/json
-Authorization: Token 17e56252c5a6a3c2b5c58d398b69c9360bef4122
-
-{
-    "title": "API test",
-    "url": "http://localhost:8000/swagger/"
-}
-
 ### Get threads
 GET http://localhost:8000/api/threads
-Authorization: Token 17e56252c5a6a3c2b5c58d398b69c9360bef4122
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
 
 ### Get asks
 GET http://localhost:8000/api/asks
@@ -34,14 +21,14 @@ GET http://localhost:8000/api/submissions?from=example.com
 GET http://localhost:8000/api/users/3/profile
 
 ### Get user's submissions
-GET http://localhost:8000/api/users/1/submissions
+GET http://localhost:8000/api/users/6/submissions
 
 ### Get user's comments
-GET http://localhost:8000/api/users/2/comments
+GET http://localhost:8000/api/users/6/comments
 
 ### Get user's hidden submissions
 GET http://localhost:8000/api/users/1/hidden
-Authorization: Token 0d9f80ab61c69ce2f160bde2e3f81bb8b43d74ab
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
 
 ### Get user's favorite submissions
 GET http://localhost:8000/api/users/4/fav_submissions
@@ -63,17 +50,31 @@ Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c0
     "text": "This is a new submission"
 }
 
+
+### GET submission details by ID
+GET http://localhost:8000/api/submissions/2
+
+### Crear una nueva submission
+POST http://localhost:8000/api/submissions
+Content-Type: application/json
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+{
+    "title": "API test",
+    "url": "http://localhost:8000/swagger/"
+}
+
 ### Update the title of an existing submission
 PUT http://localhost:8000/api/submissions/27/update
 Content-Type: application/json
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
 
 {
-  "title": "Updated Submission Title"
+  "title": "Updated Submission Title2"
 }
 
 ### Delete an existing submission
-DELETE http://localhost:8000/api/submissions/15/delete
+DELETE http://localhost:8000/api/submissions/27/delete
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
 
 ### Vote a submission
