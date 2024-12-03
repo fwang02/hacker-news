@@ -275,6 +275,35 @@ class CommentDetailView(APIView):
 
         comment.delete()
         return Response({'message': 'Comment deleted successfully.'}, status=status.HTTP_200_OK)
+    
+    # Obtener un comentario y sus replies
+    @swagger_auto_schema(
+        tags=['Comment'],
+        operation_description="Get a comment with all its replies",
+        responses={
+            200: CommentSerializer,
+            404: openapi.Response(description="Not Found")
+        }
+    )
+    
+    def get(self, request, submission_id, comment_id):
+        # Buscar la Submission y el Comment por sus ID
+        try:
+            submission = Submission.objects.get(id=submission_id)
+            comment = Comment.objects.get(id=comment_id, submission=submission)
+        except Submission.DoesNotExist:
+            return Response({"message": "Submission not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Comment.DoesNotExist:
+            return Response({"message": "No comment with such an ID."}, status=status.HTTP_404_NOT_FOUND)
+
+        replies = comment.replies.all()  
+
+        comment_data = CommentSerializer(comment).data
+        replies_data = CommentSerializer(replies, many=True).data
+
+        comment_data['replies'] = replies_data
+
+        return Response(comment_data, status=status.HTTP_200_OK)
 
     def check_permissions(self, request):
         if request.method in ['POST', 'PUT', 'DELETE']:

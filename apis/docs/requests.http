@@ -78,8 +78,11 @@ Content-Type: application/json
   "text": "Final API comment"
 }
 
+### GET comment with their comments by ID
+GET http://localhost:8000/api/submissions/1/comments/3
+
 ### Edit a comment
-PUT http://localhost:8000/api/submissions/1/comments/7
+PUT http://localhost:8000/api/submissions/1/comments/13
 Content-Type: application/json
 Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
 
