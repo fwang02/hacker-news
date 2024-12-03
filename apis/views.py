@@ -111,11 +111,57 @@ class Submission_APIView(APIView):
             super().check_permissions(request)
 
 class Comment_APIView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    # Get all comments
     def get(self, request):
         comments = Comment.objects.all()
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 
+    # Agregar un comentario
+    @swagger_auto_schema(
+        tags=['Comment'],
+        operation_description="Add a comment",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'text': openapi.Schema(type=openapi.TYPE_STRING, description="Text of the comment"),
+            },
+            required=['text'],
+            example={
+                'text': "Este es un comentario de prueba."
+            }
+        ),
+        responses={
+            201: openapi.Response(description="Comment created successfully", schema=CommentSerializer),
+            400: openapi.Response(description="Validation error"),
+            401: openapi.Response(description="Unauthorized"),
+        }
+    )
+    def post(self, request, id):
+        self.authentication_classes = [TokenAuthentication]
+        
+        # Obtener la Submission correspondiente al ID proporcionado en la URL
+        try:
+            submission = Submission.objects.get(id=id)
+        except Submission.DoesNotExist:
+            return Response({"detail": "Submission not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Crear el comentario usando el serializer, pasando la submission al contexto
+        serializer = CommentCreateSerializer(data=request.data, context={'submission': submission})
+
+        if serializer.is_valid():
+            comment = serializer.save(author=request.user)
+            response_serializer = CommentSerializer(comment)  # Serializar para la respuesta
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def check_permissions(self, request):
+        if request.method in ['POST', 'PUT', 'DELETE']:
+            super().check_permissions(request)
 
 class SubmissionDetailView(APIView):
     permission_classes = [IsAuthenticated]
