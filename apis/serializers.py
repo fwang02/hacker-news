@@ -93,3 +93,41 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['about']
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['text', 'parent']  # El serializer ya no incluye 'submission', lo pasamos en la vista
+
+    def create(self, validated_data):
+        # Obtener el ID de la Submission desde el contexto
+        submission = self.context.get('submission')  # El 'submission' se pasa desde la vista
+
+        # Asignar la 'submission' al comentario
+        validated_data['submission'] = submission
+        
+        # Si el comentario tiene un 'parent', ajustamos su nivel
+        parent = validated_data.get('parent')
+        if parent:
+            validated_data['level'] = parent.level + 1
+
+        return super().create(validated_data)
+
+    def validate(self, data):
+        # Validar que el campo 'text' esté presente
+        if not data.get('text'):
+            raise serializers.ValidationError("The 'text' field is required.")
+        return data
+
+
+class CommentUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['text']  
+
+    def validate_text(self, value):
+        # Validar que el texto no esté vacío
+        if not value.strip(): 
+            raise serializers.ValidationError("The 'text' field cannot be empty.")
+        
+        return value
