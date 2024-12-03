@@ -25,7 +25,6 @@ urlpatterns = [
   
     path('submissions', Submission_APIView.as_view(), name='submit_submission'),
     path('submissions/<int:id>', SubmissionDetailView.as_view(), name='submission_detail'),
-    path('submissions/<int:id>/update', SubmissionDetailView.as_view(), name='update_submission_title'),
     path('submissions/<int:id>', SubmissionDetailView.as_view(), name='delete_submission'),
     path('submissions/<int:id>/vote', Submission_VoteAPIView.as_view(), name='vote_submission'),
     path('submissions/<int:id>/favorite', Submission_FavoriteAPIView.as_view(), name='favorite_submission'),
@@ -34,8 +33,8 @@ urlpatterns = [
     path('users/<int:user_id>/submissions', UserSubmissions.as_view(), name='user_submissions'),
     path('users/<int:user_id>/comments', UserCommentsAPIView.as_view(), name='user_comments'),
     path('users/<int:user_id>/hidden', UserHiddenSubmissions.as_view(), name='user_hidden_submissions'),
-    path('users/<int:user_id>/fav_submissions', UserFavoriteSubmissions.as_view(), name='user-favorite-submissions'),
-    path('users/<int:user_id>/fav_comments', UserFavoriteComments.as_view(), name='user-favorite-comments'),
-    path('users/<int:user_id>/up_submissions', UserUpvotedSubmissions.as_view(), name='user-upvoted-submissions'),
-    path('users/<int:user_id>/up_comments', UserUpvotedComments.as_view(), name='user-upvoted-comments'),
+    path('users/<int:user_id>/submissions/favorites', UserFavoriteSubmissions.as_view(), name='user-favorite-submissions'),
+    path('users/<int:user_id>/comments/favorites', UserFavoriteComments.as_view(), name='user-favorite-comments'),
+    path('users/<int:user_id>/submissions/upvoted', UserUpvotedSubmissions.as_view(), name='user-upvoted-submissions'),
+    path('users/<int:user_id>/comments/upvoted', UserUpvotedComments.as_view(), name='user-upvoted-comments'),
 ]

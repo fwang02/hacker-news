@@ -344,5 +344,6 @@ SWAGGER_SETTINGS = {
             'in': 'header'
         }
     },
+    'DEFAULT_MODEL_RENDERING': 'example',
 }
 

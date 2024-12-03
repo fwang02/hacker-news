@@ -4,18 +4,24 @@ from rest_framework import serializers
 from users.models import Profile
 from news.models import Submission, Comment, Submission_ASK, Submission_URL
 
-class ReplySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = ['id', 'text', 'created_at', 'level', 'point', 'submission', 'parent', 'author']
-
 
 class CommentSerializer(serializers.ModelSerializer):
-    replies = ReplySerializer(many=True, read_only=True)
+    replies = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
         fields = ['id', 'text', 'created_at', 'level', 'point', 'submission', 'parent', 'author', 'replies']
+
+    def get_replies(self, obj):
+        replies = obj.replies.all()
+        return CommentSerializer(replies, many=True).data
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if instance.parent is None:
+            representation.pop('parent')
+        return representation
+
 
 class ThreadSerializer(serializers.ModelSerializer):
     class Meta:
@@ -82,3 +88,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['user_id', 'username', 'karma', 'about', 'banner', 'avatar']
+
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['about']

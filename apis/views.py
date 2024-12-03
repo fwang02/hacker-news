@@ -24,6 +24,7 @@ class Submission_APIView(APIView):
     # get all submissions in page hackernews
     @swagger_auto_schema(
         tags=['Submission'],
+        security=[],
         operation_description="Get all submissions",
         responses={200: SubmissionSerializer(many=True),
                    400: "Invalid sort parameter"},
@@ -298,6 +299,55 @@ class ProfileView(APIView):
             token = Token.objects.filter(user_id=id).values_list('key', flat=True).first()
             response_data = { **serializer.data, 'token': token }
         return Response(response_data)
+
+    @swagger_auto_schema(
+        tags=['User'],
+        operation_description="Update user profile",
+        request_body=ProfileUpdateSerializer,
+        responses={
+            200: openapi.Response(
+                description="Profile updated successfully",
+                schema=ProfileUpdateSerializer
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"detail": "Invalid token."},
+                        {"detail": "Authentication credentials were not provided."}
+                    ]
+                }
+            ),
+            403: openapi.Response(
+                description="Forbidden",
+                examples={
+                    "application/json": {"message": "You do not have permission to edit this profile."}
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found",
+                examples={
+                    "application/json": { "message": "No profile with such ID." }
+                }
+            )
+        }
+    )
+    def put(self, request, id):
+        self.permission_classes = [IsAuthenticated]
+        self.check_permissions(request)
+        try:
+            profile = get_object_or_404(Profile, user_id=id)
+        except Http404:
+            return Response({'message': 'No profile with such ID.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if request.user.id != id:
+            return Response({'message': 'You do not have permission to edit this profile.'}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = ProfileUpdateSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserSubmissions(APIView):
     def get(self, request, user_id):

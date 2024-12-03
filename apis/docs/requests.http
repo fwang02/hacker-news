@@ -17,40 +17,6 @@ GET http://localhost:8000/api/asks
 ### Get submissions by domain
 GET http://localhost:8000/api/submissions?from=example.com
 
-### Get user's profile
-GET http://localhost:8000/api/users/3/profile
-
-### Get user's submissions
-GET http://localhost:8000/api/users/6/submissions
-
-### Get user's comments
-GET http://localhost:8000/api/users/6/comments
-
-### Get user's hidden submissions
-GET http://localhost:8000/api/users/1/hidden
-Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
-
-### Get user's favorite submissions
-GET http://localhost:8000/api/users/4/fav_submissions
-
-### Get user's favorite comments
-GET http://localhost:8000/api/users/3/fav_comments
-
-### Get user's upvoted submissions
-GET http://localhost:8000/api/users/1/up_submissions
-Authorization: Token 0d9f80ab61c69ce2f160bde2e3f81bb8b43d74ab
-
-### Get user's upvoted comments
-GET http://localhost:8000/api/users/1/up_comments
-Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
-
-{
-    "title": "New submission to unvote4",
-    "url": "https://www.example.com",
-    "text": "This is a new submission"
-}
-
-
 ### GET submission details by ID
 GET http://localhost:8000/api/submissions/2
 
@@ -65,12 +31,12 @@ Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
 }
 
 ### Update the title of an existing submission
-PUT http://localhost:8000/api/submissions/29/update
+PUT http://localhost:8000/api/submissions/10
 Content-Type: application/json
-Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
+Authorization: Token 14744982b8c13b25923fa52ccaea639dbef3286b
 
 {
-  "title": "Updated Submission Title2"
+  "title": "Updated Submission Title"
 }
 
 ### Delete an existing submission
@@ -100,3 +66,42 @@ Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
 ### Unhide a submission
 DELETE http://localhost:8000/api/submissions/28/hide
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### USERS
+
+### Get user's profile
+GET http://localhost:8000/api/users/9/profile
+Authorization: Token 2765422b9cdf4f1ba8b296122b58a1bb68c54bd1
+
+### Get user's submissions
+GET http://localhost:8000/api/users/6/submissions
+
+### Get user's comments
+GET http://localhost:8000/api/users/6/comments
+
+### Get user's hidden submissions
+GET http://localhost:8000/api/users/1/hidden
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### Get user's favorite submissions
+GET http://localhost:8000/api/users/4/submissions/favorites
+
+### Get user's favorite comments
+GET http://localhost:8000/api/users/3/comments/favorites
+
+### Get user's upvoted submissions
+GET http://localhost:8000/api/users/1/submissions/upvoted
+Authorization: Token 0d9f80ab61c69ce2f160bde2e3f81bb8b43d74ab
+
+### Get user's upvoted comments
+GET http://localhost:8000/api/users/1/comments/upvoted
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
+
+### Update about
+PUT http://localhost:8000/api/users/2/profile
+Authorization: Token f21efac3fd089c420fe7fc79df54e9c0b2b5a3e5
+Content-Type: application/json
+
+{
+    "about": "I'm a new user"
+}
