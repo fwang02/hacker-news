@@ -79,13 +79,17 @@ Content-Type: application/json
 }
 
 ### Edit a comment
-PUT http://localhost:8000/api/submissions/1/comments/9
+PUT http://localhost:8000/api/submissions/1/comments/7
 Content-Type: application/json
 Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
 
 {
   "text": "Edit API comment"
 }
+
+### Delete an existing comment
+DELETE http://localhost:8000/api/submissions/1/comments/3
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
 
 ### USERS
 

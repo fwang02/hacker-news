@@ -167,7 +167,7 @@ class CommentDetailView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    # Edita a comentario
+    # Edit a comment
     @swagger_auto_schema(
         tags=['Comment'],
         operation_description="Edit a comment",
@@ -191,8 +191,13 @@ class CommentDetailView(APIView):
     )
     def put(self, request, submission_id, comment_id):
         self.check_permissions(request)
-        submission = get_object_or_404(Submission, id=submission_id)
-        comment = get_object_or_404(Comment, id=comment_id, submission=submission)
+        try:
+            submission = Submission.objects.get(id=submission_id)
+            comment = Comment.objects.get(id=comment_id, submission=submission)
+        except Submission.DoesNotExist:
+            return Response({"message": "Submission not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Comment.DoesNotExist:
+            return Response({"message": "No comment with such an ID."}, status=status.HTTP_404_NOT_FOUND)
 
         if comment.author != request.user:
             return Response({"message": "You do not have permission to edit this comment."},
@@ -205,6 +210,71 @@ class CommentDetailView(APIView):
             return Response(response_serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Delete a comment
+    @swagger_auto_schema(
+        tags=['Comment'],
+        operation_description="Delete a comment",
+        responses={
+            200: openapi.Response(
+                description="Comment deleted successfully",
+                examples={
+                    "application/json": {
+                        "message": "Comment deleted successfully."
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Bad Request",
+                examples={
+                    "application/json": {
+                        "error": "Invalid request."
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"detail": "Invalid token."},
+                        {"detail": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            ),
+            403: openapi.Response(
+                description="Forbidden",
+                examples={
+                    "application/json": {
+                        "message": "You do not have permission to delete this comment."
+                    }
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found",
+                examples={
+                    "application/json": {
+                        "message": "No comment with such an ID."
+                    }
+                }
+            )
+        }
+    )
+    def delete(self, request, submission_id, comment_id):
+        self.check_permissions(request)
+        try:
+            submission = Submission.objects.get(id=submission_id)
+            comment = Comment.objects.get(id=comment_id, submission=submission)
+        except Submission.DoesNotExist:
+            return Response({"message": "Submission not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Comment.DoesNotExist:
+            return Response({"message": "No comment with such an ID."}, status=status.HTTP_404_NOT_FOUND)
+        
+        if comment.author != request.user:
+            return Response({"message": "You do not have permission to delete this comment."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        comment.delete()
+        return Response({'message': 'Comment deleted successfully.'}, status=status.HTTP_200_OK)
 
     def check_permissions(self, request):
         if request.method in ['POST', 'PUT', 'DELETE']:
