@@ -78,6 +78,15 @@ Content-Type: application/json
   "text": "Final API comment"
 }
 
+### Edit a comment
+PUT http://localhost:8000/api/submissions/1/comments/9
+Content-Type: application/json
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+
+{
+  "text": "Edit API comment"
+}
+
 ### USERS
 
 ### Get user's profile

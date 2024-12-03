@@ -118,3 +118,16 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         if not data.get('text'):
             raise serializers.ValidationError("The 'text' field is required.")
         return data
+
+
+class CommentUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['text']  
+
+    def validate_text(self, value):
+        # Validar que el texto no esté vacío
+        if not value.strip(): 
+            raise serializers.ValidationError("The 'text' field cannot be empty.")
+        
+        return value

@@ -163,6 +163,54 @@ class Comment_APIView(APIView):
         if request.method in ['POST', 'PUT', 'DELETE']:
             super().check_permissions(request)
 
+class CommentDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    # Edita a comentario
+    @swagger_auto_schema(
+        tags=['Comment'],
+        operation_description="Edit a comment",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'text': openapi.Schema(type=openapi.TYPE_STRING, description="Text of the comment"),
+            },
+            required=['text'],
+            example={
+                'text': "Comentario editado."
+            }
+        ),
+        responses={
+            200: CommentSerializer,
+            400: openapi.Response(description="Validation error"),
+            401: openapi.Response(description="Unauthorized"),
+            403: openapi.Response(description="Forbidden: You don't have permission to edit this comment."),
+            404: openapi.Response(description="Not Found")
+        }
+    )
+    def put(self, request, submission_id, comment_id):
+        self.check_permissions(request)
+        submission = get_object_or_404(Submission, id=submission_id)
+        comment = get_object_or_404(Comment, id=comment_id, submission=submission)
+
+        if comment.author != request.user:
+            return Response({"message": "You do not have permission to edit this comment."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        serializer = CommentUpdateSerializer(comment, data=request.data, partial=True)
+        if serializer.is_valid():
+            updated_comment = serializer.save()
+            response_serializer = CommentSerializer(updated_comment)
+            return Response(response_serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def check_permissions(self, request):
+        if request.method in ['POST', 'PUT', 'DELETE']:
+            super().check_permissions(request)
+
+
 class SubmissionDetailView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
