@@ -69,10 +69,17 @@ class Comment(models.Model):
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        self.submission.comment_count -= 1
+        total_replies = self.count_replies()
+        self.submission.comment_count -= (1 + total_replies)
         self.submission.save()
         super().delete(*args, **kwargs)
 
+    def count_replies(self):
+        total_replies = 0
+        for reply in self.replies.all():
+            total_replies += 1 + reply.count_replies()
+        return total_replies
+    
     def add_point(self, point):
         self.point += point
         self.author.profile.addKarma(point)
