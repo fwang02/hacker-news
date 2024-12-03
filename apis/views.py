@@ -249,8 +249,16 @@ class CommentDetailView(APIView):
                     }
                 }
             ),
+             404: openapi.Response(
+                description="Not Found (Submission)",
+                examples={
+                    "application/json": {
+                        "message": "Submission not found"
+                    }
+                }
+            ),
             404: openapi.Response(
-                description="Not Found",
+                description="Not Found (Comment)",
                 examples={
                     "application/json": {
                         "message": "No comment with such an ID."
@@ -696,8 +704,16 @@ class Comment_VoteAPIView(APIView):
                     ]
                 }
             ),
+             404: openapi.Response(
+                description="Not Found (Submission)",
+                examples={
+                    "application/json": {
+                        "message": "Submission not found"
+                    }
+                }
+            ),
             404: openapi.Response(
-                description="Not Found",
+                description="Not Found (Comment)",
                 examples={
                     "application/json": {
                         "message": "No comment with such an ID."
@@ -708,21 +724,19 @@ class Comment_VoteAPIView(APIView):
     )
     def post(self, request, submission_id, comment_id):
         self.check_permissions(request)
-        
-        try:
-            submission = get_object_or_404(Submission, id=submission_id)
-            comment = get_object_or_404(Comment, id=comment_id, submission=submission)
-        except Submission.DoesNotExist:
-            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
-        except Comment.DoesNotExist:
-            return Response({'message': 'No comment with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
 
-        # Verificar si el usuario ya ha votado por este comentario
+        try:
+            submission = Submission.objects.get(id=submission_id)
+            comment = Comment.objects.get(id=comment_id, submission=submission)
+        except Submission.DoesNotExist:
+            return Response({"message": "Submission not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Comment.DoesNotExist:
+            return Response({"message": "No comment with such an ID."}, status=status.HTTP_404_NOT_FOUND)
+
         if UpvotedComment.objects.filter(user=request.user, comment=comment).exists():
             return Response({'message': 'You have already voted for this comment.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        # Verificar que el usuario no esté votando su propio comentario
         if comment.author == request.user:
             return Response({'message': 'You cannot vote for your own comment.'}, status=status.HTTP_403_FORBIDDEN)
 
@@ -769,8 +783,16 @@ class Comment_VoteAPIView(APIView):
                     ]
                 }
             ),
+             404: openapi.Response(
+                description="Not Found (Submission)",
+                examples={
+                    "application/json": {
+                        "message": "Submission not found"
+                    }
+                }
+            ),
             404: openapi.Response(
-                description="Not Found",
+                description="Not Found (Comment)",
                 examples={
                     "application/json": {
                         "message": "No comment with such an ID."
@@ -784,20 +806,17 @@ class Comment_VoteAPIView(APIView):
         self.check_permissions(request)
 
         try:
-            submission = get_object_or_404(Submission, id=submission_id)
-            comment = get_object_or_404(Comment, id=comment_id, submission=submission)
+            submission = Submission.objects.get(id=submission_id)
+            comment = Comment.objects.get(id=comment_id, submission=submission)
         except Submission.DoesNotExist:
-            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "Submission not found"}, status=status.HTTP_404_NOT_FOUND)
         except Comment.DoesNotExist:
-            return Response({'message': 'No comment with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "No comment with such an ID."}, status=status.HTTP_404_NOT_FOUND)
 
-        # Verificar si el usuario ha votado por este comentario
         upvoted_comment = UpvotedComment.objects.filter(user=request.user, comment=comment).first()
         if not upvoted_comment:
             return Response({'message': 'You have not voted for this comment yet.'},
                             status=status.HTTP_400_BAD_REQUEST)
-
-        # Verificar que el usuario no está intentando desvotar su propio comentario
         if comment.author == request.user:
             return Response({'message': 'You cannot unvote your own comment.'}, status=status.HTTP_403_FORBIDDEN)
 
@@ -1057,6 +1076,147 @@ class Submission_FavoriteAPIView(APIView):
         favorite_submission.delete()
         return Response({'message': 'Submission unfavorited successfully.'}, status=status.HTTP_200_OK)
 
+    def check_permissions(self, request):
+        if request.method in ['POST', 'DELETE']:
+            super().check_permissions(request)
+
+class Comment_FavoriteAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    # Favorite a comment
+    @swagger_auto_schema(
+        tags=['Comment'],
+        operation_description="Favorite a comment",
+        responses={
+            200: openapi.Response(
+                description="Comment favorited successfully",
+                examples={
+                    "application/json": {
+                        "message": "Comment favorited successfully."
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Bad Request",
+                examples={
+                    "application/json": {
+                        "message": "You have already favorited this comment."
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"message": "Invalid token."},
+                        {"message": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            ),
+             404: openapi.Response(
+                description="Not Found (Submission)",
+                examples={
+                    "application/json": {
+                        "message": "Submission not found"
+                    }
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found (Comment)",
+                examples={
+                    "application/json": {
+                        "message": "No comment with such an ID."
+                    }
+                }
+            )
+        }
+    )
+    def post(self, request, submission_id, comment_id):
+        self.check_permissions(request)
+        
+        try:
+            submission = Submission.objects.get(id=submission_id)
+            comment = Comment.objects.get(id=comment_id, submission=submission)
+        except Submission.DoesNotExist:
+            return Response({"message": "Submission not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Comment.DoesNotExist:
+            return Response({"message": "No comment with such an ID."}, status=status.HTTP_404_NOT_FOUND)
+
+        if Favorite_comment.objects.filter(user=request.user, comment=comment).exists():
+            return Response({'message': 'You have already favorited this comment.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        Favorite_comment.objects.create(user=request.user, comment=comment)
+        return Response({'message': 'Comment favorited successfully.'}, status=status.HTTP_200_OK)
+    
+    # Unfavorite a comment
+    @swagger_auto_schema(
+        tags=['Comment'],
+        operation_description="Unfavorite a comment",
+        responses={
+            200: openapi.Response(
+                description="Comment unfavorited successfully",
+                examples={
+                    "application/json": {
+                        "message": "Comment unfavorited successfully."
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Bad Request",
+                examples={
+                    "application/json": {
+                        "message": "You have not favorited this comment yet."
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"message": "Invalid token."},
+                        {"message": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            ),
+             404: openapi.Response(
+                description="Not Found (Submission)",
+                examples={
+                    "application/json": {
+                        "message": "Submission not found"
+                    }
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found (Comment)",
+                examples={
+                    "application/json": {
+                        "message": "No comment with such an ID."
+                    }
+                }
+            )
+        }
+    )
+    def delete(self, request, submission_id, comment_id):
+        self.check_permissions(request)
+
+        try:
+            submission = Submission.objects.get(id=submission_id)
+            comment = Comment.objects.get(id=comment_id, submission=submission)
+        except Submission.DoesNotExist:
+            return Response({"message": "Submission not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Comment.DoesNotExist:
+            return Response({"message": "No comment with such an ID."}, status=status.HTTP_404_NOT_FOUND)
+
+        favorite_comment = Favorite_comment.objects.filter(user=request.user, comment=comment).first()
+        if not favorite_comment:
+            return Response({'message': 'You have not favorited this comment yet.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        favorite_comment.delete()
+        return Response({'message': 'Comment unfavorited successfully.'}, status=status.HTTP_200_OK)
+    
     def check_permissions(self, request):
         if request.method in ['POST', 'DELETE']:
             super().check_permissions(request)

@@ -34,6 +34,7 @@ urlpatterns = [
     path('submissions/<int:submission_id>/comments/<int:comment_id>', CommentDetailView.as_view(), name='delete_comment'),
     path('submissions/<int:submission_id>/comments/<int:comment_id>', CommentDetailView.as_view(), name='view_comment'),
     path('submissions/<int:submission_id>/comments/<int:comment_id>/vote', Comment_VoteAPIView.as_view(), name='vote_comment'),
+    path('submissions/<int:submission_id>/comments/<int:comment_id>/favorite', Comment_FavoriteAPIView.as_view(), name='favorite_comment'),
     path('users/<int:id>/profile', ProfileView.as_view(), name='profile'),
     path('users/<int:user_id>/submissions', UserSubmissions.as_view(), name='user_submissions'),
     path('users/<int:user_id>/comments', UserCommentsAPIView.as_view(), name='user_comments'),
