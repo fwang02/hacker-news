@@ -10,7 +10,6 @@
 </div>
 
 ## Membres de l'equip
-*** 
 (Cognoms, Nom - Usuari GitHub)
 - **Santiago Clerigo, Angella Mae** - [angellamaecs](https://github.com/angellamaecs)
 - **González Ortega, David** - [davigo2411](https://github.com/davigo2411)
