@@ -75,11 +75,20 @@ Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
 Content-Type: application/json
 
 {
-  "text": "Final API comment"
+  "text": "API comment"
+}
+
+### Reply comment
+POST http://localhost:8000/api/submissions/2/comments/35/reply
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+Content-Type: application/json
+
+{
+  "text": "Replying a comment API last"
 }
 
 ### GET comment with their comments by ID
-GET http://localhost:8000/api/submissions/1/comments/3
+GET http://localhost:8000/api/submissions/2/comments/33
 
 ### Edit a comment
 PUT http://localhost:8000/api/submissions/1/comments/13
@@ -95,15 +104,15 @@ DELETE http://localhost:8000/api/submissions/1/comments/3
 Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
 
 ### Vote a comment
-POST http://localhost:8000/api/submissions/1/comments/3/vote
+POST http://localhost:8000/api/submissions/2/comments/35/vote
 Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
 
 ### Unvote a comment
-DELETE http://localhost:8000/api/submissions/1/comments/3/vote
+DELETE http://localhost:8000/api/submissions/2/comments/35/vote
 Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
 
 ### Favorite a comment
-POST http://localhost:8000/api/submissions/1/comments/3/favorite
+POST http://localhost:8000/api/submissions/1/comments/32/favorite
 Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
 
 ### Unfavorite a comment

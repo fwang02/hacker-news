@@ -30,6 +30,7 @@ urlpatterns = [
     path('submissions/<int:id>/favorite', Submission_FavoriteAPIView.as_view(), name='favorite_submission'),
     path('submissions/<int:id>/hide', Submission_HideAPIView.as_view(), name='hide_submission'),
     path('submissions/<int:id>/comments', Comment_APIView.as_view(), name='add_comment'),
+    path('submissions/<int:submission_id>/comments/<int:comment_id>/reply', Comment_ReplyAPIView.as_view(), name='reply_comment'),
     path('submissions/<int:submission_id>/comments/<int:comment_id>', CommentDetailView.as_view(), name='edit_comment'),
     path('submissions/<int:submission_id>/comments/<int:comment_id>', CommentDetailView.as_view(), name='delete_comment'),
     path('submissions/<int:submission_id>/comments/<int:comment_id>', CommentDetailView.as_view(), name='view_comment'),

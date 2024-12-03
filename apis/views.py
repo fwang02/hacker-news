@@ -163,6 +163,62 @@ class Comment_APIView(APIView):
         if request.method in ['POST', 'PUT', 'DELETE']:
             super().check_permissions(request)
 
+class Comment_ReplyAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    #Reply comment
+    @swagger_auto_schema(
+        tags=['Comment'],
+        operation_description="Reply to a comment",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'text': openapi.Schema(type=openapi.TYPE_STRING, description="Text of the comment"),
+            },
+            required=['text'],
+            example={
+                'text': "This is a reply to the comment."
+            }
+        ),
+        responses={
+            201: openapi.Response(description="Reply created successfully", schema=CommentSerializer),
+            400: openapi.Response(description="Validation error"),
+            401: openapi.Response(description="Unauthorized"),
+            404: openapi.Response(
+                description="Not Found",
+                examples={
+                    "application/json": {
+                        "message": "Submission not found or Parent comment not found."
+                    }
+                }
+            ),
+        }
+    )
+    def post(self, request, submission_id, comment_id):
+        try:
+            submission = Submission.objects.get(id=submission_id)
+            parent_comment = Comment.objects.get(id=comment_id, submission=submission)
+        except Submission.DoesNotExist:
+            return Response({"message": "Submission not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Comment.DoesNotExist:
+            return Response({"message": "No comment with such an ID."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = CommentCreateSerializer(
+            data=request.data,
+            context={'submission': submission}
+        )
+        if serializer.is_valid():
+            comment = serializer.save(author=request.user, parent=parent_comment)
+            response_serializer = CommentSerializer(comment)  # Serializar la respuesta
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def check_permissions(self, request):
+        if request.method in ['POST', 'PUT', 'DELETE']:
+            super().check_permissions(request)
+
 class CommentDetailView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
