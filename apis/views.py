@@ -285,7 +285,7 @@ class CommentDetailView(APIView):
             404: openapi.Response(description="Not Found")
         }
     )
-    
+
     def get(self, request, submission_id, comment_id):
         # Buscar la Submission y el Comment por sus ID
         try:
@@ -653,6 +653,162 @@ class UserUpvotedComments(APIView):
         comments = Comment.objects.filter(id__in=upvoted_comments_ids).order_by('-created_at')
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)         
+
+class Comment_VoteAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    # Vote a comment
+    @swagger_auto_schema(
+        tags=['Comment'],
+        operation_description="Vote a comment",
+        responses={
+            200: openapi.Response(
+                description="Comment voted successfully",
+                examples={
+                    "application/json": {
+                        "message": "Comment voted successfully."
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Bad Request",
+                examples={
+                    "application/json": {
+                        "message": "You have already voted for this comment."
+                    }
+                }
+            ),
+            403: openapi.Response(
+                description="Forbidden",
+                examples={
+                    "application/json": {
+                        "message": "You cannot vote for your own comment."
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"message": "Invalid token."},
+                        {"message": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found",
+                examples={
+                    "application/json": {
+                        "message": "No comment with such an ID."
+                    }
+                }
+            )
+        }
+    )
+    def post(self, request, submission_id, comment_id):
+        self.check_permissions(request)
+        
+        try:
+            submission = get_object_or_404(Submission, id=submission_id)
+            comment = get_object_or_404(Comment, id=comment_id, submission=submission)
+        except Submission.DoesNotExist:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        except Comment.DoesNotExist:
+            return Response({'message': 'No comment with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Verificar si el usuario ya ha votado por este comentario
+        if UpvotedComment.objects.filter(user=request.user, comment=comment).exists():
+            return Response({'message': 'You have already voted for this comment.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Verificar que el usuario no esté votando su propio comentario
+        if comment.author == request.user:
+            return Response({'message': 'You cannot vote for your own comment.'}, status=status.HTTP_403_FORBIDDEN)
+
+        UpvotedComment.objects.create(user=request.user, comment=comment)
+        comment.add_point(1) 
+
+        return Response({'message': 'Comment voted successfully.'}, status=status.HTTP_200_OK)
+    
+    # Unvote a comment
+    @swagger_auto_schema(
+        tags=['Comment'],
+        operation_description="Delete a vote from a comment",
+        responses={
+            200: openapi.Response(
+                description="Vote removed successfully",
+                examples={
+                    "application/json": {
+                        "message": "Comment unvoted successfully."
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Bad Request",
+                examples={
+                    "application/json": {
+                        "message": "You have not voted for this comment yet."
+                    }
+                }
+            ),
+            403: openapi.Response(
+                description="Forbidden",
+                examples={
+                    "application/json": {
+                        "message": "You cannot unvote your own comment."
+                    }
+                }
+            ),
+            401: openapi.Response(
+                description="Unauthorized",
+                examples={
+                    "application/json": [
+                        {"message": "Invalid token."},
+                        {"message": "Invalid token header. No credentials provided."}
+                    ]
+                }
+            ),
+            404: openapi.Response(
+                description="Not Found",
+                examples={
+                    "application/json": {
+                        "message": "No comment with such an ID."
+                    }
+                }
+            )
+        }
+    )
+    
+    def delete(self, request, submission_id, comment_id):
+        self.check_permissions(request)
+
+        try:
+            submission = get_object_or_404(Submission, id=submission_id)
+            comment = get_object_or_404(Comment, id=comment_id, submission=submission)
+        except Submission.DoesNotExist:
+            return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+        except Comment.DoesNotExist:
+            return Response({'message': 'No comment with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Verificar si el usuario ha votado por este comentario
+        upvoted_comment = UpvotedComment.objects.filter(user=request.user, comment=comment).first()
+        if not upvoted_comment:
+            return Response({'message': 'You have not voted for this comment yet.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Verificar que el usuario no está intentando desvotar su propio comentario
+        if comment.author == request.user:
+            return Response({'message': 'You cannot unvote your own comment.'}, status=status.HTTP_403_FORBIDDEN)
+
+        upvoted_comment.delete()
+        comment.subtract_point(1)  
+
+        return Response({'message': 'Comment unvoted successfully.'}, status=status.HTTP_200_OK)
+    
+    def check_permissions(self, request):
+        if request.method in ['POST', 'PUT', 'DELETE']:
+            super().check_permissions(request)
 
 class Submission_VoteAPIView(APIView):
     permission_classes = [IsAuthenticated]

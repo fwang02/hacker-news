@@ -94,6 +94,14 @@ Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
 DELETE http://localhost:8000/api/submissions/1/comments/3
 Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
 
+### Vote a comment
+POST http://localhost:8000/api/submissions/1/comments/3/vote
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+
+### Unvote a comment
+DELETE http://localhost:8000/api/submissions/1/comments/3/vote
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+
 ### USERS
 
 ### Get user's profile
