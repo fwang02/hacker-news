@@ -21,21 +21,25 @@ from apis.views import *
 urlpatterns = [
     path('comments', Comment_APIView.as_view()),
     path('threads', ThreadView.as_view(), name='threads'),
-    path('asks', AskView.as_view(), name='asks'),
-  
+
+    # Submission related urls
+    path('submissions/asks', AskView.as_view(), name='asks'),
+
     path('submissions', Submission_APIView.as_view(), name='submit_submission'),
     path('submissions/<int:id>', SubmissionDetailView.as_view(), name='submission_detail'),
     path('submissions/<int:id>', SubmissionDetailView.as_view(), name='delete_submission'),
     path('submissions/<int:id>/vote', Submission_VoteAPIView.as_view(), name='vote_submission'),
     path('submissions/<int:id>/favorite', Submission_FavoriteAPIView.as_view(), name='favorite_submission'),
     path('submissions/<int:id>/hide', Submission_HideAPIView.as_view(), name='hide_submission'),
-    path('submissions/<int:id>/comments', Comment_APIView.as_view(), name='add_comment'),
+
+    # Comment related urls
+    path('submissions/<int:id>/comments', SubmissionCommentAPIView.as_view(), name='submit_comment'),
     path('submissions/<int:submission_id>/comments/<int:comment_id>/reply', Comment_ReplyAPIView.as_view(), name='reply_comment'),
-    path('submissions/<int:submission_id>/comments/<int:comment_id>', CommentDetailView.as_view(), name='edit_comment'),
-    path('submissions/<int:submission_id>/comments/<int:comment_id>', CommentDetailView.as_view(), name='delete_comment'),
-    path('submissions/<int:submission_id>/comments/<int:comment_id>', CommentDetailView.as_view(), name='view_comment'),
+    path('submissions/<int:submission_id>/comments/<int:comment_id>', CommentDetailView.as_view(), name='comment_detail'),
     path('submissions/<int:submission_id>/comments/<int:comment_id>/vote', Comment_VoteAPIView.as_view(), name='vote_comment'),
     path('submissions/<int:submission_id>/comments/<int:comment_id>/favorite', Comment_FavoriteAPIView.as_view(), name='favorite_comment'),
+
+    # User related urls
     path('users/<int:id>/profile', ProfileView.as_view(), name='profile'),
     path('users/<int:user_id>/submissions', UserSubmissions.as_view(), name='user_submissions'),
     path('users/<int:user_id>/comments', UserCommentsAPIView.as_view(), name='user_comments'),

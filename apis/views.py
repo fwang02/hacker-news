@@ -111,57 +111,17 @@ class Submission_APIView(APIView):
             super().check_permissions(request)
 
 class Comment_APIView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
 
-    # Get all comments
+    @swagger_auto_schema(
+        tags=['Comment'],
+        security=[],
+        operation_description="Get all comments",
+        responses={200: CommentSerializer(many=True)}
+    )
     def get(self, request):
         comments = Comment.objects.all()
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
-
-    # Agregar un comentario
-    @swagger_auto_schema(
-        tags=['Comment'],
-        operation_description="Add a comment",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'text': openapi.Schema(type=openapi.TYPE_STRING, description="Text of the comment"),
-            },
-            required=['text'],
-            example={
-                'text': "Este es un comentario de prueba."
-            }
-        ),
-        responses={
-            201: openapi.Response(description="Comment created successfully", schema=CommentSerializer),
-            400: openapi.Response(description="Validation error"),
-            401: openapi.Response(description="Unauthorized"),
-        }
-    )
-    def post(self, request, id):
-        self.authentication_classes = [TokenAuthentication]
-        
-        # Obtener la Submission correspondiente al ID proporcionado en la URL
-        try:
-            submission = Submission.objects.get(id=id)
-        except Submission.DoesNotExist:
-            return Response({"detail": "Submission not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Crear el comentario usando el serializer, pasando la submission al contexto
-        serializer = CommentCreateSerializer(data=request.data, context={'submission': submission})
-
-        if serializer.is_valid():
-            comment = serializer.save(author=request.user)
-            response_serializer = CommentSerializer(comment)  # Serializar para la respuesta
-            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def check_permissions(self, request):
-        if request.method in ['POST', 'PUT', 'DELETE']:
-            super().check_permissions(request)
 
 class Comment_ReplyAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -218,6 +178,49 @@ class Comment_ReplyAPIView(APIView):
     def check_permissions(self, request):
         if request.method in ['POST', 'PUT', 'DELETE']:
             super().check_permissions(request)
+
+class SubmissionCommentAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    # Agregar un comentario
+    @swagger_auto_schema(
+        tags=['Comment'],
+        operation_description="Add a comment",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'text': openapi.Schema(type=openapi.TYPE_STRING, description="Text of the comment"),
+            },
+            required=['text'],
+            example={
+                'text': "Este es un comentario de prueba."
+            }
+        ),
+        responses={
+            201: openapi.Response(description="Comment created successfully", schema=CommentSerializer),
+            400: openapi.Response(description="Validation error"),
+            401: openapi.Response(description="Unauthorized"),
+        }
+    )
+    def post(self, request, id):
+        self.authentication_classes = [TokenAuthentication]
+
+        # Obtener la Submission correspondiente al ID proporcionado en la URL
+        try:
+            submission = Submission.objects.get(id=id)
+        except Submission.DoesNotExist:
+            return Response({"detail": "Submission not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Crear el comentario usando el serializer, pasando la submission al contexto
+        serializer = CommentCreateSerializer(data=request.data, context={'submission': submission})
+
+        if serializer.is_valid():
+            comment = serializer.save(author=request.user)
+            response_serializer = CommentSerializer(comment)  # Serializar para la respuesta
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CommentDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -381,6 +384,7 @@ class SubmissionDetailView(APIView):
     #get submission with the given id
     @swagger_auto_schema(
         tags=['Submission'],
+        security=[],
         operation_description="Get a submission",
         responses={
             200: SubmissionSerializer,
@@ -517,12 +521,24 @@ class SubmissionDetailView(APIView):
 class ThreadView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
+
+    @swagger_auto_schema(
+        tags=['Comment'],
+        operation_description="Get all threads",
+        responses={200: ThreadSerializer(many=True)})
     def get(self, request):
         comments = Comment.objects.filter(author=request.user,parent__isnull=True).order_by('-created_at')
         serializer = ThreadSerializer(comments, many=True)
         return Response(serializer.data)
 
 class AskView(APIView):
+
+    @swagger_auto_schema(
+        tags=['Submission'],
+        security=[],
+        operation_description="Get all ASK submissions",
+        responses={200: SubmissionSerializer(many=True)}
+    )
     def get(self, request):
         asks = Submission_ASK.objects.all()
         serializer = SubmissionSerializer(asks, many=True)
@@ -533,6 +549,7 @@ class ProfileView(APIView):
 
     @swagger_auto_schema(
         tags=['User'],
+        security=[],
         operation_description="Get user profile",
         responses={
             200: openapi.Response(
@@ -607,6 +624,19 @@ class ProfileView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserSubmissions(APIView):
+
+    @swagger_auto_schema(
+        tags=['User'],
+        security=[],
+        operation_description="Get user's submissions",
+        responses={
+            200: SubmissionSerializer(many=True),
+            404: openapi.Response(description="User not found", examples={
+                    "application/json": {"detail": "No User matches the given query."}
+                }
+            )
+        }
+    )
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
         submissions = Submission.objects.filter(author=user)
@@ -614,6 +644,17 @@ class UserSubmissions(APIView):
         return Response(serializer.data)
 
 class UserCommentsAPIView(APIView):
+
+    @swagger_auto_schema(
+        tags=['User'],
+        security=[],
+        operation_description="Get user's comments",
+        responses={
+            200: CommentSerializer(many=True),
+            404: openapi.Response(description="User not found", examples={
+                    "application/json": {"detail": "No User matches the given query."}
+            })
+        })
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
         comments = Comment.objects.filter(author_id=user_id)
@@ -623,7 +664,22 @@ class UserCommentsAPIView(APIView):
 class UserHiddenSubmissions(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
-    
+
+    @swagger_auto_schema(
+        tags=['User'],
+        operation_description="Get user's hidden submissions",
+        responses={
+            200: SubmissionSerializer(many=True),
+            401: openapi.Response(description="Unauthorized", examples={
+                    "application/json": {"detail": "Authentication credentials were not provided."}
+                }
+            ),
+            403: openapi.Response(description="Forbidden", examples={
+                    "application/json": {"error": "You do not have permission to view other users' hidden submissions."}
+                }
+            )
+        }
+    )
     def get(self, request, user_id):
         if request.user.id != user_id:
             return Response(
@@ -639,10 +695,14 @@ class UserHiddenSubmissions(APIView):
 class UserFavoriteSubmissions(APIView):
     @swagger_auto_schema(
         tags=['User'],
+        security=[],
         operation_description="Get user's favorite submissions",
         responses={
             200: SubmissionSerializer(many=True),
-            404: "User not found"
+            404: openapi.Response(description="User not found", examples={
+                    "application/json": {"detail": "No User matches the given query."}
+                }
+            )
         }
     )
     def get(self, request, user_id):
@@ -655,10 +715,14 @@ class UserFavoriteSubmissions(APIView):
 class UserFavoriteComments(APIView):
     @swagger_auto_schema(
         tags=['User'],
+        security=[],
         operation_description="Get user's favorite comments",
         responses={
             200: CommentSerializer(many=True),
-            404: "User not found"
+            404: openapi.Response(description="User not found", examples={
+                    "application/json": {"detail": "No User matches the given query."}
+                }
+            )
         }
     )
     def get(self, request, user_id):
@@ -677,8 +741,13 @@ class UserUpvotedSubmissions(APIView):
         operation_description="Get user's upvoted submissions",
         responses={
             200: SubmissionSerializer(many=True),
-            403: "You can only view your own upvoted submissions",
-            404: "User not found"
+            403: openapi.Response(description="Forbidden", examples={
+                    "application/json": {"error": "You can only view your own upvoted submissions"}
+                }
+            ),
+            404: openapi.Response(description="User not found", examples={
+                    "application/json": {"detail": "No User matches the given query."}
+            })
         }
     )
     def get(self, request, user_id):
@@ -702,8 +771,13 @@ class UserUpvotedComments(APIView):
         operation_description="Get user's upvoted comments",
         responses={
             200: CommentSerializer(many=True),
-            403: "Forbidden - Can only view your own upvoted comments",
-            404: "User not found"
+            403: openapi.Response(description="Forbidden", examples={
+                    "application/json": {"error": "You can only view your own upvoted comments"}
+                }),
+            404: openapi.Response(description="User not found", examples={
+                    "application/json": {"detail": "No User matches the given query."}
+                }
+            )
         }
     )
     def get(self, request, user_id):
