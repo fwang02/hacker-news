@@ -4,13 +4,13 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+from rest_framework.authtoken.models import Token
 
 from news.models import Submission, HiddenSubmission, UpvotedSubmission, \
     Comment, UpvotedComment  # Assuming you have a Submission model in the news app
 from .forms import ProfileForm
 from .models import Favorite_submission, Favorite_comment
 from .utils import calculate_date
-from news.utils import calculate_score
 
 
 def profile(request):
@@ -38,13 +38,14 @@ def profile(request):
             return redirect('users:profile')
         else:
             form = ProfileForm(instance=user.profile)
-
-        return render(request, 'profile.html', {
-            'form': form,
-            'user': user,  # El perfil visualizado
-            'logged_in_user': logged_in_user, # El usuario autenticado
-            'account_age': account_age
-        })
+            token = Token.objects.filter(user=user).values_list('key', flat=True).first()
+            return render(request, 'profile.html', {
+                'form': form,
+                'user': user,  # El perfil visualizado
+                'logged_in_user': logged_in_user, # El usuario autenticado
+                'account_age': account_age,
+                'token': token
+            })
     else:
         return render(request, 'profile_public.html', {
             'user': user,

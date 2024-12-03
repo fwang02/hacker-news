@@ -204,6 +204,7 @@ def reply_to_comment(request, comment_id):
             reply.author = request.user
             reply.submission = submission
             reply.parent = original_comment
+            reply.level = original_comment.level + 1;
             reply.save()
             return redirect('news:submission_detail', submission_id=submission.id)
     else:

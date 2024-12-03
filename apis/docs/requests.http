@@ -1,0 +1,159 @@
+### GET all submissions
+GET http://localhost:8000/api/submissions
+
+### GET all comments
+GET http://localhost:8000/api/comments
+
+### GET newest submissions
+GET http://localhost:8000/api/submissions?sort=newest
+
+### Get threads
+GET http://localhost:8000/api/threads
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### Get asks
+GET http://localhost:8000/api/asks
+
+### Get submissions by domain
+GET http://localhost:8000/api/submissions?from=example.com
+
+### GET submission details by ID
+GET http://localhost:8000/api/submissions/2
+
+### Crear una nueva submission
+POST http://localhost:8000/api/submissions
+Content-Type: application/json
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+
+{
+    "title": "API test",
+    "url": "http://localhost:8000/swagger/"
+}
+
+### Update the title of an existing submission
+PUT http://localhost:8000/api/submissions/10
+Content-Type: application/json
+Authorization: Token 14744982b8c13b25923fa52ccaea639dbef3286b
+
+{
+  "title": "Updated Submission Title"
+}
+
+### Delete an existing submission
+DELETE http://localhost:8000/api/submissions/27
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
+
+### Vote a submission
+POST http://localhost:8000/api/submissions/28/vote
+Authorization: Token 4b5acbd77a85ff8c08268b2e7006b9200ddc2041 #a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### Unvote a submission
+DELETE http://localhost:8000/api/submissions/28/vote
+Authorization: Token 4b5acbd77a85ff8c08268b2e7006b9200ddc2041 #a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### Favorite a submission
+POST http://localhost:8000/api/submissions/28/favorite
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### Unfavorite a submission
+DELETE http://localhost:8000/api/submissions/28/favorite
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### Hide a submission
+POST http://localhost:8000/api/submissions/28/hide
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### Unhide a submission
+DELETE http://localhost:8000/api/submissions/28/hide
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+###COMMENTS
+
+### Add new comment
+POST http://localhost:8000/api/submissions/4/comments
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+Content-Type: application/json
+
+{
+  "text": "API comment"
+}
+
+### Reply comment
+POST http://localhost:8000/api/submissions/4/comments/56/reply
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+Content-Type: application/json
+
+{
+  "text": "Replying a comment API last"
+}
+
+### GET comment with their comments by ID
+GET http://localhost:8000/api/submissions/2/comments/33
+
+### Edit a comment
+PUT http://localhost:8000/api/submissions/1/comments/13
+Content-Type: application/json
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+
+{
+  "text": "Edit API comment"
+}
+
+### Delete an existing comment
+DELETE http://localhost:8000/api/submissions/4/comments/53
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+
+### Vote a comment
+POST http://localhost:8000/api/submissions/2/comments/35/vote
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+
+### Unvote a comment
+DELETE http://localhost:8000/api/submissions/2/comments/35/vote
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+
+### Favorite a comment
+POST http://localhost:8000/api/submissions/1/comments/32/favorite
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+
+### Unfavorite a comment
+DELETE http://localhost:8000/api/submissions/1/comments/3/favorite
+Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+
+### USERS
+
+### Get user's profile
+GET http://localhost:8000/api/users/9/profile
+Authorization: Token 2765422b9cdf4f1ba8b296122b58a1bb68c54bd1
+
+### Get user's submissions
+GET http://localhost:8000/api/users/6/submissions
+
+### Get user's comments
+GET http://localhost:8000/api/users/6/comments
+
+### Get user's hidden submissions
+GET http://localhost:8000/api/users/1/hidden
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
+
+### Get user's favorite submissions
+GET http://localhost:8000/api/users/4/submissions/favorites
+
+### Get user's favorite comments
+GET http://localhost:8000/api/users/3/comments/favorites
+
+### Get user's upvoted submissions
+GET http://localhost:8000/api/users/1/submissions/upvoted
+Authorization: Token 0d9f80ab61c69ce2f160bde2e3f81bb8b43d74ab
+
+### Get user's upvoted comments
+GET http://localhost:8000/api/users/1/comments/upvoted
+Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a #4b5acbd77a85ff8c08268b2e7006b9200ddc2041
+
+### Update about
+PUT http://localhost:8000/api/users/2/profile
+Authorization: Token f21efac3fd089c420fe7fc79df54e9c0b2b5a3e5
+Content-Type: application/json
+
+{
+    "about": "I'm a new user"
+}
