@@ -346,6 +346,7 @@ class CommentDetailView(APIView):
     # Obtener un comentario y sus replies
     @swagger_auto_schema(
         tags=['Comment'],
+        security=[],
         operation_description="Get a comment with all its replies",
         responses={
             200: CommentSerializer,
