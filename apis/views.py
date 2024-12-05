@@ -346,6 +346,7 @@ class CommentDetailView(APIView):
     # Obtener un comentario y sus replies
     @swagger_auto_schema(
         tags=['Comment'],
+        security=[],
         operation_description="Get a comment with all its replies",
         responses={
             200: CommentSerializer,
@@ -741,6 +742,10 @@ class UserUpvotedSubmissions(APIView):
         operation_description="Get user's upvoted submissions",
         responses={
             200: SubmissionSerializer(many=True),
+            401: openapi.Response(description="Unauthorized", examples={
+                "application/json": {"detail": "Authentication credentials were not provided."}
+                }
+            ),
             403: openapi.Response(description="Forbidden", examples={
                     "application/json": {"error": "You can only view your own upvoted submissions"}
                 }
@@ -771,6 +776,10 @@ class UserUpvotedComments(APIView):
         operation_description="Get user's upvoted comments",
         responses={
             200: CommentSerializer(many=True),
+            401: openapi.Response(description="Unauthorized", examples={
+                "application/json": {"detail": "Authentication credentials were not provided."}
+                        }
+            ),
             403: openapi.Response(description="Forbidden", examples={
                     "application/json": {"error": "You can only view your own upvoted comments"}
                 }),

@@ -99,6 +99,7 @@ INSTALLED_APPS = [
     'news',
     'users',
     'apis',
+    'corsheaders'
 ]
 
 REST_FRAMEWORK = {
@@ -113,6 +114,7 @@ REST_FRAMEWORK = {
 SITE_ID = 3 #1
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     # Django doesn't support serving static assets in a production-ready way, so we use the
     # excellent WhiteNoise package to do so instead. The WhiteNoise middleware must be listed
@@ -127,6 +129,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware'
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "https://editor.swagger.io",
+]
+
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'hacker_news.urls'
 
