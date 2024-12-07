@@ -80,7 +80,8 @@ class Submission_APIView(APIView):
                 examples={
                     "application/json": {
                         "non_field_errors": ["Either 'url' or 'text' must be provided."],
-                        "title": ["A submission with this title already exists."]
+                        "title": ["A submission with this title already exists."],
+                        "url": ["A submission with this url already exists."]
                     }
                 }
             ),
@@ -388,7 +389,7 @@ class SubmissionDetailView(APIView):
         security=[],
         operation_description="Get a submission",
         responses={
-            200: SubmissionSerializer,
+            200: SubmissionDetailSerializer,
             404: "No submission with such an ID."
         }
     )
@@ -397,30 +398,32 @@ class SubmissionDetailView(APIView):
             submission = get_object_or_404(Submission, id=id)
         except Http404:
             return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = SubmissionSerializer(submission)
+        serializer = SubmissionDetailSerializer(submission)
         return Response(serializer.data)
 
     #update a submission
     @swagger_auto_schema(
         tags=['Submission'],
         operation_description="Update a submission",
-        #request_body=SubmissionUpdateSerializer,
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                'title': openapi.Schema(type=openapi.TYPE_STRING, description='Title of the submission')
+                'title': openapi.Schema(type=openapi.TYPE_STRING, description='Title of the submission'),
+                'text': openapi.Schema(type=openapi.TYPE_STRING, description='Text of the submission')
             },
             example={
-                "title": "Title Updated"
+                "title": "Updated Title",
+                "text": "Updated Text."
             }
         ),
         responses={
-            200: SubmissionSerializer,
+            200: SubmissionDetailSerializer,
             400: openapi.Response(
                 description="Validation errors",
                 examples={
                     "application/json": {
-                        "title": ["A submission with this title already exists."]
+                        "title": ["A submission with this title already exists."],
+                        "text": ["Text is too short."]  # Ejemplo de error de validación para el texto
                     }
                 }
             ),
@@ -458,7 +461,7 @@ class SubmissionDetailView(APIView):
             #serializer.save()
             #return Response(serializer.data)
             submission = serializer.save()
-            response_serializer = SubmissionSerializer(submission)
+            response_serializer = SubmissionDetailSerializer(submission)
             return Response(response_serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

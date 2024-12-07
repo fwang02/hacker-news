@@ -47,4 +47,4 @@ class CommentForm(forms.ModelForm):
 class EditSubmissionForm(forms.ModelForm):
     class Meta:
         model = Submission
-        fields = ['title']
+        fields = ['title', 'text']

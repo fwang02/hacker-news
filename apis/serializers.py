@@ -30,6 +30,18 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Submission
+        fields = ['id', 'title', 'url', 'domain', 'text', 'point', 'comment_count', 'created', 'author']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if not instance.url:
+            representation.pop('url')
+            representation.pop('domain')
+        return representation
+
+class SubmissionDetailSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
 
     class Meta:
@@ -71,11 +83,17 @@ class SubmissionCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("A submission with this title already exists.")
         return value
 
+    def validate_url(self, value):
+        #Ensure the title is unique.
+        if Submission.objects.filter(url=value).exists():
+            raise serializers.ValidationError("A submission with this url already exists.")
+        return value
+
 
 class SubmissionUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission
-        fields = ['title']
+        fields = ['title', 'text']
 
     def validate_title(self, value):
         if Submission.objects.filter(title=value).exclude(id=self.instance.id).exists():
