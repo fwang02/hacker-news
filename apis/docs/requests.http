@@ -36,7 +36,8 @@ Content-Type: application/json
 Authorization: Token 4b5acbd77a85ff8c08268b2e7006b9200ddc2041
 
 {
-  "title": "Updated Submission Title"
+  "title": "Updated Submission Title3",
+  "text": "Updated Submission Text3"
 }
 
 ### Delete an existing submission

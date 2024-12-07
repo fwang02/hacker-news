@@ -93,7 +93,7 @@ class SubmissionCreateSerializer(serializers.ModelSerializer):
 class SubmissionUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission
-        fields = ['title']
+        fields = ['title', 'text']
 
     def validate_title(self, value):
         if Submission.objects.filter(title=value).exclude(id=self.instance.id).exists():

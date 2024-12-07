@@ -405,14 +405,15 @@ class SubmissionDetailView(APIView):
     @swagger_auto_schema(
         tags=['Submission'],
         operation_description="Update a submission",
-        #request_body=SubmissionUpdateSerializer,
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                'title': openapi.Schema(type=openapi.TYPE_STRING, description='Title of the submission')
+                'title': openapi.Schema(type=openapi.TYPE_STRING, description='Title of the submission'),
+                'text': openapi.Schema(type=openapi.TYPE_STRING, description='Text of the submission')
             },
             example={
-                "title": "Title Updated"
+                "title": "Updated Title",
+                "text": "Updated Text."
             }
         ),
         responses={
@@ -421,7 +422,8 @@ class SubmissionDetailView(APIView):
                 description="Validation errors",
                 examples={
                     "application/json": {
-                        "title": ["A submission with this title already exists."]
+                        "title": ["A submission with this title already exists."],
+                        "text": ["Text is too short."]  # Ejemplo de error de validación para el texto
                     }
                 }
             ),
