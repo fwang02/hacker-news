@@ -80,7 +80,8 @@ class Submission_APIView(APIView):
                 examples={
                     "application/json": {
                         "non_field_errors": ["Either 'url' or 'text' must be provided."],
-                        "title": ["A submission with this title already exists."]
+                        "title": ["A submission with this title already exists."],
+                        "url": ["A submission with this url already exists."]
                     }
                 }
             ),

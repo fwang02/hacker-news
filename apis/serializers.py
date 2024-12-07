@@ -83,6 +83,12 @@ class SubmissionCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("A submission with this title already exists.")
         return value
 
+    def validate_url(self, value):
+        #Ensure the title is unique.
+        if Submission.objects.filter(url=value).exists():
+            raise serializers.ValidationError("A submission with this url already exists.")
+        return value
+
 
 class SubmissionUpdateSerializer(serializers.ModelSerializer):
     class Meta:
