@@ -388,7 +388,7 @@ class SubmissionDetailView(APIView):
         security=[],
         operation_description="Get a submission",
         responses={
-            200: SubmissionSerializer,
+            200: SubmissionDetailSerializer,
             404: "No submission with such an ID."
         }
     )
@@ -397,7 +397,7 @@ class SubmissionDetailView(APIView):
             submission = get_object_or_404(Submission, id=id)
         except Http404:
             return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = SubmissionSerializer(submission)
+        serializer = SubmissionDetailSerializer(submission)
         return Response(serializer.data)
 
     #update a submission
@@ -415,7 +415,7 @@ class SubmissionDetailView(APIView):
             }
         ),
         responses={
-            200: SubmissionSerializer,
+            200: SubmissionDetailSerializer,
             400: openapi.Response(
                 description="Validation errors",
                 examples={
@@ -458,7 +458,7 @@ class SubmissionDetailView(APIView):
             #serializer.save()
             #return Response(serializer.data)
             submission = serializer.save()
-            response_serializer = SubmissionSerializer(submission)
+            response_serializer = SubmissionDetailSerializer(submission)
             return Response(response_serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

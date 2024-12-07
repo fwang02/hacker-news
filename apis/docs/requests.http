@@ -18,22 +18,22 @@ GET http://localhost:8000/api/asks
 GET http://localhost:8000/api/submissions?from=example.com
 
 ### GET submission details by ID
-GET http://localhost:8000/api/submissions/2
+GET http://localhost:8000/api/submissions/3
 
 ### Crear una nueva submission
 POST http://localhost:8000/api/submissions
 Content-Type: application/json
-Authorization: Token 291b51964b7a74751422ffac025c2017fabe9f4d
+Authorization: Token 4b5acbd77a85ff8c08268b2e7006b9200ddc2041
 
 {
-    "title": "API test",
+    "title": "API test 3",
     "url": "http://localhost:8000/swagger/"
 }
 
 ### Update the title of an existing submission
-PUT http://localhost:8000/api/submissions/10
+PUT http://localhost:8000/api/submissions/38
 Content-Type: application/json
-Authorization: Token 14744982b8c13b25923fa52ccaea639dbef3286b
+Authorization: Token 4b5acbd77a85ff8c08268b2e7006b9200ddc2041
 
 {
   "title": "Updated Submission Title"
