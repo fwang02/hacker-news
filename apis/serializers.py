@@ -30,6 +30,18 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Submission
+        fields = ['id', 'title', 'url', 'domain', 'text', 'point', 'comment_count', 'created', 'author']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if not instance.url:
+            representation.pop('url')
+            representation.pop('domain')
+        return representation
+
+class SubmissionDetailSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
 
     class Meta:
