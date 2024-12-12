@@ -10,6 +10,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.db import models
 
 from news.models import *
 from news.utils import calculate_score
@@ -1474,3 +1475,39 @@ class Submission_HideAPIView(APIView):
     def check_permissions(self, request):
         if request.method in ['POST', 'DELETE']:
             super().check_permissions(request)
+
+class SearchSubmissionsAPIView(APIView):
+    @swagger_auto_schema(
+        tags=['Submission'],
+        security=[],
+        operation_description="Search submissions by title or text",
+        manual_parameters=[
+            openapi.Parameter(
+                'q', 
+                openapi.IN_QUERY, 
+                description="Search query", 
+                type=openapi.TYPE_STRING,
+                required=True
+            )
+        ],
+        responses={
+            200: SubmissionSerializer(many=True),
+            400: "Invalid or missing search query"
+        }
+    )
+    def get(self, request):
+        query = request.query_params.get('q', '')
+        
+        if not query:
+            return Response(
+                {"error": "Search query is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        submissions = Submission.objects.filter(
+            models.Q(title__icontains=query) | 
+            models.Q(text__icontains=query)
+        ).order_by('-created')
+        
+        serializer = SubmissionSerializer(submissions, many=True)
+        return Response(serializer.data)

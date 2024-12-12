@@ -158,3 +158,6 @@ Content-Type: application/json
 {
     "about": "I'm a new user"
 }
+
+### Search submissions
+GET http://localhost:8000/api/submissions/search?q=o
