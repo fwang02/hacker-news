@@ -133,6 +133,8 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "https://editor.swagger.io",
+    "http://localhost:5173",
+    "https://hacker-news-hn11c.fly.dev"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
