@@ -30,6 +30,8 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(source='author.username')
+
     class Meta:
         model = Submission
         fields = ['id', 'title', 'url', 'domain', 'text', 'point', 'comment_count', 'created', 'author']
