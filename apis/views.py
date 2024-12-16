@@ -10,6 +10,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
 from django.db import models
 
 from news.models import *
@@ -551,6 +552,7 @@ class AskView(APIView):
 
 class ProfileView(APIView):
     authentication_classes = [TokenAuthentication]
+    parser_classes = [MultiPartParser, FormParser]
 
     @swagger_auto_schema(
         tags=['User'],
@@ -582,11 +584,19 @@ class ProfileView(APIView):
     @swagger_auto_schema(
         tags=['User'],
         operation_description="Update user profile",
-        request_body=ProfileUpdateSerializer,
+        manual_parameters=[
+            openapi.Parameter('about', openapi.IN_FORM, description='About the user', type=openapi.TYPE_STRING, required=False),
+            openapi.Parameter('avatar', openapi.IN_FORM, description='Profile picture', type=openapi.TYPE_FILE, required=False),
+            openapi.Parameter('banner', openapi.IN_FORM, description='Profile banner', type=openapi.TYPE_FILE, required=False)
+        ],
         responses={
-            200: openapi.Response(
+            201: openapi.Response(
                 description="Profile updated successfully",
-                schema=ProfileUpdateSerializer
+                examples={
+                    "application/json": {
+                        "about": "Updated about text."
+                    }
+                }
             ),
             401: openapi.Response(
                 description="Unauthorized",

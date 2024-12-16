@@ -110,7 +110,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['about']
+        fields = ['about', 'banner', 'avatar']
 
 class CommentCreateSerializer(serializers.ModelSerializer):
     class Meta:

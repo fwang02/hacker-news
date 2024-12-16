@@ -54,7 +54,7 @@ AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_SESSION_TOKEN = os.environ.get('AWS_SESSION_TOKEN')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 AWS_REGION_NAME = os.environ.get('AWS_REGION_NAME')
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_CUSTOM_DOMAIN = f's3.{AWS_REGION_NAME}.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}'
 
 SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
@@ -296,10 +296,10 @@ STORAGES = {
             "secret_key": AWS_SECRET_ACCESS_KEY,
             "region_name": AWS_REGION_NAME,
             "bucket_name": AWS_STORAGE_BUCKET_NAME,
-            "custom_domain": AWS_S3_CUSTOM_DOMAIN,
         },
         "LOCATION": "media",
         "DEFAULT_ACL": "public-read",
+        "custom_domain": AWS_S3_CUSTOM_DOMAIN,
     },
 }
 
