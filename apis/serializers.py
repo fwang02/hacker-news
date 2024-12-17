@@ -45,6 +45,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
 class SubmissionDetailSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
+    author = serializers.CharField(source='author.username')
 
     class Meta:
         model = Submission
