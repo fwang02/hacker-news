@@ -32,10 +32,11 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 class SubmissionSerializer(serializers.ModelSerializer):
     author = serializers.CharField(source='author.username')
+    author_id = serializers.IntegerField(source='author.id')
 
     class Meta:
         model = Submission
-        fields = ['id', 'title', 'url', 'domain', 'text', 'point', 'comment_count', 'created', 'author']
+        fields = ['id', 'title', 'url', 'domain', 'text', 'point', 'comment_count', 'created', 'author', 'author_id']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -106,10 +107,11 @@ class SubmissionUpdateSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
+    created_at = serializers.DateTimeField(source='user.date_joined', read_only=True)
 
     class Meta:
         model = Profile
-        fields = ['user_id', 'username', 'karma', 'about', 'banner', 'avatar']
+        fields = ['user_id', 'username', 'karma', 'about', 'banner', 'avatar', 'created_at']
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
