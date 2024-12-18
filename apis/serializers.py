@@ -7,6 +7,7 @@ from news.models import Submission, Comment, Submission_ASK, Submission_URL
 
 class CommentSerializer(serializers.ModelSerializer):
     replies = serializers.SerializerMethodField()
+    author = serializers.CharField(source='author.username')
 
     class Meta:
         model = Comment
