@@ -31,6 +31,7 @@ urlpatterns = [
     path('submissions/<int:id>/vote', Submission_VoteAPIView.as_view(), name='vote_submission'),
     path('submissions/<int:id>/favorite', Submission_FavoriteAPIView.as_view(), name='favorite_submission'),
     path('submissions/<int:id>/hide', Submission_HideAPIView.as_view(), name='hide_submission'),
+    path('submissions/search', SearchSubmissionsAPIView.as_view(), name='search-submissions'),
 
     # Comment related urls
     path('submissions/<int:id>/comments', SubmissionCommentAPIView.as_view(), name='submit_comment'),

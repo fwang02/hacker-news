@@ -12,7 +12,7 @@ GET http://localhost:8000/api/threads
 Authorization: Token a9aa8ca1bad68bd682684730496829d9f115fa8a
 
 ### Get asks
-GET http://localhost:8000/api/asks
+GET http://localhost:8000/api/submissions/asks
 
 ### Get submissions by domain
 GET http://localhost:8000/api/submissions?from=example.com
@@ -158,3 +158,6 @@ Content-Type: application/json
 {
     "about": "I'm a new user"
 }
+
+### Search submissions
+GET http://localhost:8000/api/submissions/search?q=o

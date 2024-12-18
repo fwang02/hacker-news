@@ -31,6 +31,8 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(source='author.username')
+
     class Meta:
         model = Submission
         fields = ['id', 'title', 'url', 'domain', 'text', 'point', 'comment_count', 'created', 'author']
@@ -44,6 +46,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
 class SubmissionDetailSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
+    author = serializers.CharField(source='author.username')
 
     class Meta:
         model = Submission
@@ -111,7 +114,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['about']
+        fields = ['about', 'banner', 'avatar']
 
 class CommentCreateSerializer(serializers.ModelSerializer):
     class Meta:
