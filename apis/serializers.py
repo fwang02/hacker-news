@@ -7,6 +7,7 @@ from news.models import Submission, Comment, Submission_ASK, Submission_URL
 
 class CommentSerializer(serializers.ModelSerializer):
     replies = serializers.SerializerMethodField()
+    author = serializers.CharField(source='author.username')
 
     class Meta:
         model = Comment
@@ -30,7 +31,23 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(source='author.username')
+    author_id = serializers.IntegerField(source='author.id')
+
+    class Meta:
+        model = Submission
+        fields = ['id', 'title', 'url', 'domain', 'text', 'point', 'comment_count', 'created', 'author', 'author_id']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if not instance.url:
+            representation.pop('url')
+            representation.pop('domain')
+        return representation
+
+class SubmissionDetailSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
+    author = serializers.CharField(source='author.username')
 
     class Meta:
         model = Submission
@@ -71,11 +88,17 @@ class SubmissionCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("A submission with this title already exists.")
         return value
 
+    def validate_url(self, value):
+        #Ensure the title is unique.
+        if Submission.objects.filter(url=value).exists():
+            raise serializers.ValidationError("A submission with this url already exists.")
+        return value
+
 
 class SubmissionUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission
-        fields = ['title']
+        fields = ['title', 'text']
 
     def validate_title(self, value):
         if Submission.objects.filter(title=value).exclude(id=self.instance.id).exists():
@@ -84,15 +107,16 @@ class SubmissionUpdateSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
+    created_at = serializers.DateTimeField(source='user.date_joined', read_only=True)
 
     class Meta:
         model = Profile
-        fields = ['user_id', 'username', 'karma', 'about', 'banner', 'avatar']
+        fields = ['user_id', 'username', 'karma', 'about', 'banner', 'avatar', 'created_at']
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['about']
+        fields = ['about', 'banner', 'avatar']
 
 class CommentCreateSerializer(serializers.ModelSerializer):
     class Meta:

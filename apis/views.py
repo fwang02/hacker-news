@@ -10,6 +10,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
+from django.db import models
 
 from news.models import *
 from news.utils import calculate_score
@@ -80,7 +82,8 @@ class Submission_APIView(APIView):
                 examples={
                     "application/json": {
                         "non_field_errors": ["Either 'url' or 'text' must be provided."],
-                        "title": ["A submission with this title already exists."]
+                        "title": ["A submission with this title already exists."],
+                        "url": ["A submission with this url already exists."]
                     }
                 }
             ),
@@ -388,7 +391,7 @@ class SubmissionDetailView(APIView):
         security=[],
         operation_description="Get a submission",
         responses={
-            200: SubmissionSerializer,
+            200: SubmissionDetailSerializer,
             404: "No submission with such an ID."
         }
     )
@@ -397,30 +400,32 @@ class SubmissionDetailView(APIView):
             submission = get_object_or_404(Submission, id=id)
         except Http404:
             return Response({'message': 'No submission with such an ID.'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = SubmissionSerializer(submission)
+        serializer = SubmissionDetailSerializer(submission)
         return Response(serializer.data)
 
     #update a submission
     @swagger_auto_schema(
         tags=['Submission'],
         operation_description="Update a submission",
-        #request_body=SubmissionUpdateSerializer,
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                'title': openapi.Schema(type=openapi.TYPE_STRING, description='Title of the submission')
+                'title': openapi.Schema(type=openapi.TYPE_STRING, description='Title of the submission'),
+                'text': openapi.Schema(type=openapi.TYPE_STRING, description='Text of the submission')
             },
             example={
-                "title": "Title Updated"
+                "title": "Updated Title",
+                "text": "Updated Text."
             }
         ),
         responses={
-            200: SubmissionSerializer,
+            200: SubmissionDetailSerializer,
             400: openapi.Response(
                 description="Validation errors",
                 examples={
                     "application/json": {
-                        "title": ["A submission with this title already exists."]
+                        "title": ["A submission with this title already exists."],
+                        "text": ["Text is too short."]  # Ejemplo de error de validación para el texto
                     }
                 }
             ),
@@ -458,7 +463,7 @@ class SubmissionDetailView(APIView):
             #serializer.save()
             #return Response(serializer.data)
             submission = serializer.save()
-            response_serializer = SubmissionSerializer(submission)
+            response_serializer = SubmissionDetailSerializer(submission)
             return Response(response_serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -547,6 +552,7 @@ class AskView(APIView):
 
 class ProfileView(APIView):
     authentication_classes = [TokenAuthentication]
+    parser_classes = [MultiPartParser, FormParser]
 
     @swagger_auto_schema(
         tags=['User'],
@@ -578,11 +584,19 @@ class ProfileView(APIView):
     @swagger_auto_schema(
         tags=['User'],
         operation_description="Update user profile",
-        request_body=ProfileUpdateSerializer,
+        manual_parameters=[
+            openapi.Parameter('about', openapi.IN_FORM, description='About the user', type=openapi.TYPE_STRING, required=False),
+            openapi.Parameter('avatar', openapi.IN_FORM, description='Profile picture', type=openapi.TYPE_FILE, required=False),
+            openapi.Parameter('banner', openapi.IN_FORM, description='Profile banner', type=openapi.TYPE_FILE, required=False)
+        ],
         responses={
-            200: openapi.Response(
+            201: openapi.Response(
                 description="Profile updated successfully",
-                schema=ProfileUpdateSerializer
+                examples={
+                    "application/json": {
+                        "about": "Updated about text."
+                    }
+                }
             ),
             401: openapi.Response(
                 description="Unauthorized",
@@ -1471,3 +1485,39 @@ class Submission_HideAPIView(APIView):
     def check_permissions(self, request):
         if request.method in ['POST', 'DELETE']:
             super().check_permissions(request)
+
+class SearchSubmissionsAPIView(APIView):
+    @swagger_auto_schema(
+        tags=['Submission'],
+        security=[],
+        operation_description="Search submissions by title or text",
+        manual_parameters=[
+            openapi.Parameter(
+                'q', 
+                openapi.IN_QUERY, 
+                description="Search query", 
+                type=openapi.TYPE_STRING,
+                required=True
+            )
+        ],
+        responses={
+            200: SubmissionSerializer(many=True),
+            400: "Invalid or missing search query"
+        }
+    )
+    def get(self, request):
+        query = request.query_params.get('q', '')
+        
+        if not query:
+            return Response(
+                {"error": "Search query is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        submissions = Submission.objects.filter(
+            models.Q(title__icontains=query) | 
+            models.Q(text__icontains=query)
+        ).order_by('-created')
+        
+        serializer = SubmissionSerializer(submissions, many=True)
+        return Response(serializer.data)
