@@ -11,9 +11,9 @@
 
 ## Membres de l'equip
 (Cognoms, Nom - Usuari GitHub)
-- **Santiago Clerigo, Angella Mae** - [angellamaecs](https://github.com/angellamaecs)
-- **González Ortega, David** - [davigo2411](https://github.com/davigo2411)
-- **Comino Muriano, David** - [trvdex](https://github.com/trvdex)
-- **Wang, Feiyang** - [fwang02](https://github.com/fwang02)
+- [angellamaecs](https://github.com/angellamaecs)
+- [davigo2411](https://github.com/davigo2411)
+- [trvdex](https://github.com/trvdex)
+- [fwang02](https://github.com/fwang02)
 ---
 (Fes clic a la icona de Heroku o Taiga per accedir a la pàgina web)
