@@ -10,7 +10,7 @@
 </div>
 
 ## Membres de l'equip
-(Cognoms, Nom - Usuari GitHub)
+(Usuari GitHub)
 - [angellamaecs](https://github.com/angellamaecs)
 - [davigo2411](https://github.com/davigo2411)
 - [trvdex](https://github.com/trvdex)
