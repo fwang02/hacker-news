@@ -2,7 +2,7 @@
 
 # Hacker News
 ### Team HN11C
-### Projecte ASW - Primer Lliurament
+### Projecte ASW - Segon Lliurament
 [![Heroku](https://img.shields.io/badge/heroku-%23430098.svg?style=for-the-badge&logo=heroku&logoColor=white)](https://projecte-asw-cdd22f32d84c.herokuapp.com)
 [![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
 
